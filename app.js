@@ -108,12 +108,17 @@ let playbackLessonId = null;
 let intervalArmed = false;
 let routeFinished = false;
 const $ = (id) => document.getElementById(id);
-const completed = new Set(readProgress());
+const FAVORITES_KEY = 'ia58-favorites-v1';
+const SPEED_KEY = 'ia58-speed-v1';
+const completed = new Set(readLessonIds(STORAGE_KEY));
+const favorites = new Set(readLessonIds(FAVORITES_KEY));
+let awaitingCue = true;
+let playbackSpeed = readSpeed();
 
 // Preserve the original storage key and reject corrupt or unrelated IDs.
-function readProgress() {
+function readLessonIds(key) {
   try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const saved = JSON.parse(localStorage.getItem(key) || '[]');
     return Array.isArray(saved) ? saved.filter((id) => lessons.some((lesson) => lesson.id === id)) : [];
   } catch { return []; }
 }
@@ -127,26 +132,21 @@ function formatTime(seconds) {
   const value = Math.max(0, Math.floor(seconds));
   return `${String(Math.floor(value / 60)).padStart(2, '0')}:${String(value % 60).padStart(2, '0')}`;
 }
-function setState(state, label) {
-  $('playbackState').dataset.state = state;
-  $('playbackState').textContent = label;
-}
 function renderClipProgress(videoTime = currentLesson().start) {
   const lesson = currentLesson();
   const duration = lesson.end - lesson.start;
-  const elapsed = Math.min(duration, Math.max(0, videoTime - lesson.start));
-  const percent = Math.round(elapsed / duration * 100);
-  $('clipTime').textContent = `${formatTime(elapsed)} / ${formatTime(duration)}`;
-  $('clipPercent').textContent = `${percent} %`;
-  $('clipProgressBar').style.width = `${percent}%`;
-  $('clipProgress').setAttribute('aria-valuenow', String(percent));
-  $('clipProgress').setAttribute('aria-valuetext', `${formatTime(elapsed)} de ${formatTime(duration)}, ${percent} %`);
+  const ratio = Math.min(1, Math.max(0, (videoTime - lesson.start) / duration));
+  const pill = $('lessonTime');
+  pill.style.setProperty('--lesson-progress', (ratio * 100) + '%');
+  // No live region: assistive technology can query progress without constant announcements.
+  const percent = String(Math.round(ratio * 100));
+  if (pill.getAttribute('aria-valuenow') !== percent) pill.setAttribute('aria-valuenow', percent);
+  pill.setAttribute('aria-valuetext', formatTime(ratio * duration) + ' de ' + formatTime(duration));
 }
 function renderProgress() {
   $('progressText').textContent = `${completed.size} de ${lessons.length} completados`;
   $('progressBar').style.width = `${completed.size / lessons.length * 100}%`;
   $('completeCheckbox').checked = completed.has(currentLesson().id);
-  $('completionState').textContent = completed.has(currentLesson().id) ? '✓ Ya completada' : 'Pendiente';
 }
 function renderList() {
   $('lessonList').innerHTML = lessons.map((lesson) => `
@@ -159,9 +159,8 @@ function renderList() {
 }
 function renderLesson() {
   const lesson = currentLesson();
-  $('lessonCounter').textContent = `Lección ${activeIndex + 1} de ${route().length}`;
-  $('playerTopic').textContent = lesson.title;
-  $('lessonNumber').textContent = String(lesson.id).padStart(2, '0');
+  $('lessonCounter').textContent = `${activeIndex + 1} de ${route().length}`;
+  $('lessonNumber').textContent = 'Microlección ' + String(lesson.id).padStart(2, '0');
   $('lessonTime').textContent = lesson.time;
   $('priorityBadge').hidden = !lesson.priority;
   $('lessonTitle').textContent = lesson.title;
@@ -169,50 +168,30 @@ function renderLesson() {
   $('lessonTakeaways').innerHTML = lesson.takeaways.map((item) => `<li>${item}</li>`).join('');
   $('promptBlock').hidden = !lesson.prompt;
   $('lessonPrompt').textContent = lesson.prompt || '';
-  $('prevButton').disabled = activeIndex === 0;
-  $('nextButton').disabled = activeIndex === route().length - 1;
+  updateNavigation('prev', route()[activeIndex - 1], 'Anterior');
+  updateNavigation('next', route()[activeIndex + 1], 'Siguiente');
+  renderFavorite();
   renderProgress();
   renderList();
 }
 function cueCurrentLesson() {
   if (!playerReady) return;
   const lesson = currentLesson();
+  awaitingCue = true;
   player.pauseVideo();
   player.cueVideoById({ videoId: VIDEO_ID, startSeconds: lesson.start, endSeconds: lesson.end });
 }
 function prepareLesson(focus = true, message = '') {
-  // Revoke playback permission before calling YouTube: old events may arrive late.
+  // Revoke the old interval before cueing: YouTube events can arrive asynchronously.
   playbackLessonId = null;
   intervalArmed = false;
+  awaitingCue = true;
   routeFinished = false;
   cueCurrentLesson();
   renderLesson();
   renderClipProgress();
-  setState('prepared', 'Preparada para comenzar');
-  const lesson = currentLesson();
-  $('transitionPanel').hidden = false;
-  $('transitionNumber').textContent = `Microlección ${lesson.id} · ${activeIndex + 1} de ${route().length}`;
-  $('transitionTitle').textContent = lesson.title;
-  $('transitionSummary').textContent = lesson.summary;
-  $('transitionDuration').textContent = `Duración: ${formatTime(lesson.end - lesson.start)}`;
-  $('startButton').hidden = false;
-  $('startButton').disabled = !playerReady;
-  $('skipButton').hidden = false;
-  $('statusMessage').textContent = message || 'Lee la presentación y decide cuándo comenzar.';
-  if (focus) $('transitionTitle').focus({ preventScroll: true });
-}
-function playActiveLesson() {
-  if (!playerReady || routeFinished) return;
-  const lesson = currentLesson();
-  intervalArmed = false;
-  playbackLessonId = lesson.id;
-  $('transitionPanel').hidden = true;
-  renderClipProgress();
-  setState('loading', 'Preparando reproducción…');
-  // Only this explicit user action may load and play a new interval.
-  player.loadVideoById({ videoId: VIDEO_ID, startSeconds: lesson.start, endSeconds: lesson.end });
-  $('statusMessage').textContent = 'Al terminar, la siguiente microlección quedará en espera.';
-  player.getIframe().focus();
+  $('statusMessage').textContent = message || 'Pulsa Play en YouTube cuando quieras comenzar.';
+  if (focus) $('lessonTitle').focus({ preventScroll: true });
 }
 function moveLesson(direction) {
   const index = activeIndex + direction;
@@ -220,23 +199,14 @@ function moveLesson(direction) {
   activeIndex = index;
   prepareLesson();
 }
-function showRouteSummary(skipped) {
+function showRouteSummary() {
   playbackLessonId = null;
   intervalArmed = false;
   routeFinished = true;
   if (playerReady) player.pauseVideo();
   renderLesson();
-  if (!skipped) renderClipProgress(currentLesson().end);
-  setState(skipped ? 'skipped' : 'completed', skipped ? 'Omitida' : 'Completada');
-  $('transitionPanel').hidden = false;
-  $('transitionNumber').textContent = 'Resumen del recorrido';
-  $('transitionTitle').textContent = 'Has llegado al final del recorrido';
-  $('transitionSummary').textContent = `${route().filter((lesson) => completed.has(lesson.id)).length} de ${route().length} microlecciones completadas. Puedes revisar las pendientes desde el mapa.`;
-  $('transitionDuration').textContent = skipped ? `Microlección ${currentLesson().id} omitida; no se ha añadido al progreso.` : 'Última microlección completada.';
-  $('startButton').hidden = true;
-  $('skipButton').hidden = true;
-  $('statusMessage').textContent = 'Recorrido finalizado.';
-  $('transitionTitle').focus({ preventScroll: true });
+  renderClipProgress(currentLesson().end);
+  $('statusMessage').textContent = 'Recorrido finalizado: ' + route().filter((lesson) => completed.has(lesson.id)).length + ' de ' + route().length + ' completadas. Selecciona una microlección en el mapa para revisarla.';
 }
 function finishLesson() {
   const lesson = currentLesson();
@@ -248,15 +218,8 @@ function finishLesson() {
   if (activeIndex < route().length - 1) {
     activeIndex += 1;
     prepareLesson(true, `Microlección ${lesson.id} completada. La siguiente está preparada y en pausa.`);
-  } else { showRouteSummary(false); }
+  } else { showRouteSummary(); }
   persistProgress();
-}
-function skipLesson() {
-  const id = currentLesson().id;
-  if (activeIndex < route().length - 1) {
-    activeIndex += 1;
-    prepareLesson(true, `Microlección ${id} omitida; no se ha añadido al progreso.`);
-  } else { showRouteSummary(true); }
 }
 function updatePlayerProgress() {
   if (!playerReady || playbackLessonId !== currentLesson().id || !intervalArmed) return;
@@ -274,43 +237,39 @@ window.onYouTubeIframeAPIReady = function () {
       onReady: () => {
         playerReady = true;
         cueCurrentLesson();
-        $('startButton').disabled = false;
         player.getIframe().title = 'Reproductor de YouTube: microlección actual';
         window.setInterval(updatePlayerProgress, 250);
       },
       onStateChange: (event) => {
         const lesson = currentLesson();
-        if (playbackLessonId !== lesson.id) {
-          if (event.data === YT.PlayerState.PLAYING) player.pauseVideo();
+        if (event.data === YT.PlayerState.CUED) {
+          awaitingCue = false;
           return;
         }
         if (event.data === YT.PlayerState.PLAYING) {
+          if (awaitingCue || routeFinished) { player.pauseVideo(); return; }
           const time = player.getCurrentTime();
-          if (!intervalArmed && time >= lesson.start - 1 && time < lesson.start + 2) {
+          // A native Play after CUED starts the selected interval; stale events cannot arm it.
+          if (!intervalArmed && time >= lesson.start - 1 && time < lesson.end) {
+            playbackLessonId = lesson.id;
             intervalArmed = true;
-            player.setPlaybackRate(Number($('speedSelect').value));
+            player.setPlaybackRate(playbackSpeed);
+            $('statusMessage').textContent = '';
           }
-          if (intervalArmed) { setState('playing', 'Reproduciéndose'); updatePlayerProgress(); }
+          updatePlayerProgress();
         } else if (event.data === YT.PlayerState.PAUSED && intervalArmed) {
           renderClipProgress(player.getCurrentTime());
-          setState('paused', 'Pausada');
-        } else if (event.data === YT.PlayerState.BUFFERING) {
-          setState('loading', 'Cargando…');
         } else if (event.data === YT.PlayerState.ENDED) { finishLesson(); }
       },
-      onAutoplayBlocked: () => {
-        $('statusMessage').textContent = 'El navegador detuvo el inicio. Pulsa reproducir en los controles de YouTube.';
-        setState('paused', 'Pausada');
+      onPlaybackRateChange: (event) => {
+        if (intervalArmed && !awaitingCue) saveSpeed(event.data);
       },
       onError: () => {
         $('statusMessage').textContent = 'No se pudo reproducir el video. Puedes volver a seleccionar la lección o visitar la fuente original desde su tarjeta.';
-        setState('paused', 'Pausada · error del reproductor');
       }
     }
   });
 };
-$('startButton').addEventListener('click', playActiveLesson);
-$('skipButton').addEventListener('click', skipLesson);
 $('prevButton').addEventListener('click', () => moveLesson(-1));
 $('nextButton').addEventListener('click', () => moveLesson(1));
 $('lessonList').addEventListener('click', (event) => {
@@ -320,7 +279,7 @@ $('lessonList').addEventListener('click', (event) => {
   if (index < 0) return;
   activeIndex = index;
   prepareLesson();
-  $('transitionPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  $('lessonTitle').scrollIntoView({ behavior: 'smooth', block: 'center' });
 });
 document.querySelectorAll('.mode-button').forEach((button) => {
   button.addEventListener('click', () => {
@@ -333,7 +292,11 @@ document.querySelectorAll('.mode-button').forEach((button) => {
     prepareLesson();
   });
 });
-$('speedSelect').addEventListener('change', () => { if (playerReady) player.setPlaybackRate(Number($('speedSelect').value)); });
+$('speedSelect').value = String(playbackSpeed);
+$('speedSelect').addEventListener('change', () => {
+  saveSpeed(Number($('speedSelect').value));
+  if (playerReady) player.setPlaybackRate(playbackSpeed);
+});
 $('completeCheckbox').addEventListener('change', () => {
   const id = currentLesson().id;
   $('completeCheckbox').checked ? completed.add(id) : completed.delete(id);
@@ -354,4 +317,48 @@ document.querySelectorAll('[data-source-link]').forEach((link) => {
 });
 $('cancelSource').addEventListener('click', () => $('sourceDialog').close());
 $('continueSource').addEventListener('click', () => $('sourceDialog').close());
+function updateNavigation(prefix, destination, action) {
+  const button = $(prefix + 'Button');
+  const tooltip = $(prefix + 'Tooltip');
+  button.disabled = !destination;
+  tooltip.hidden = !destination;
+  tooltip.textContent = destination ? action + ': ' + destination.title : '';
+  button.setAttribute('aria-label', destination ? action + ': ' + destination.title : action + ' (no disponible)');
+}
+function renderFavorite() {
+  const id = currentLesson().id;
+  const selected = favorites.has(id);
+  const label = (selected ? 'Quitar' : 'Añadir') + ' microlección ' + id + ' ' + (selected ? 'de' : 'a') + ' favoritas';
+  $('favoriteButton').setAttribute('aria-pressed', String(selected));
+  $('favoriteButton').setAttribute('aria-label', label);
+  $('favoriteTooltip').textContent = label;
+}
+$('favoriteButton').addEventListener('click', () => {
+  const id = currentLesson().id;
+  favorites.has(id) ? favorites.delete(id) : favorites.add(id);
+  renderFavorite();
+  try { localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favorites])); }
+  catch { $('statusMessage').textContent = 'No se pueden guardar las favoritas; se conservarán solo durante esta sesión.'; }
+});
+function readSpeed() {
+  try {
+    const speed = Number(localStorage.getItem(SPEED_KEY));
+    return [1, 1.25, 1.5, 1.75, 2].includes(speed) ? speed : 1.5;
+  } catch { return 1.5; }
+}
+function saveSpeed(speed) {
+  if (![1, 1.25, 1.5, 1.75, 2].includes(speed)) return;
+  playbackSpeed = speed;
+  $('speedSelect').value = String(speed);
+  try { localStorage.setItem(SPEED_KEY, String(speed)); }
+  catch { $('statusMessage').textContent = 'No se puede guardar la velocidad; se conservará solo durante esta sesión.'; }
+}
+// Tooltips support hover, keyboard focus and Escape without moving focus.
+document.querySelectorAll('.tooltip-wrap').forEach((wrapper) => {
+  wrapper.addEventListener('pointerenter', () => wrapper.classList.remove('tooltip-dismissed'));
+  wrapper.addEventListener('focusin', () => wrapper.classList.remove('tooltip-dismissed'));
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') document.querySelectorAll('.tooltip-wrap').forEach((wrapper) => wrapper.classList.add('tooltip-dismissed'));
+});
 prepareLesson(false);
