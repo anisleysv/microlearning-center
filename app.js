@@ -104,252 +104,254 @@ let player;
 let playerReady = false;
 let activeMode = 'full';
 let activeIndex = 0;
-let monitorId;
-let started = false;
+let playbackLessonId = null;
 let intervalArmed = false;
+let routeFinished = false;
+const $ = (id) => document.getElementById(id);
+const completed = new Set(readProgress());
 
-// Invalid or unavailable storage must not prevent startup.
+// Preserve the original storage key and reject corrupt or unrelated IDs.
 function readProgress() {
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     return Array.isArray(saved) ? saved.filter((id) => lessons.some((lesson) => lesson.id === id)) : [];
   } catch { return []; }
 }
-const completed = new Set(readProgress());
-const elements = {
-  cover: document.querySelector('#playerCover'),
-  start: document.querySelector('#startButton'),
-  prev: document.querySelector('#prevButton'),
-  next: document.querySelector('#nextButton'),
-  counter: document.querySelector('#lessonCounter'),
-  playerTopic: document.querySelector('#playerTopic'),
-  number: document.querySelector('#lessonNumber'),
-  time: document.querySelector('#lessonTime'),
-  badge: document.querySelector('#priorityBadge'),
-  title: document.querySelector('#lessonTitle'),
-  summary: document.querySelector('#lessonSummary'),
-  takeaways: document.querySelector('#lessonTakeaways'),
-  promptBlock: document.querySelector('#promptBlock'),
-  prompt: document.querySelector('#lessonPrompt'),
-  copyPrompt: document.querySelector('#copyPromptButton'),
-  checkbox: document.querySelector('#completeCheckbox'),
-  list: document.querySelector('#lessonList'),
-  progressText: document.querySelector('#progressText'),
-  progressBar: document.querySelector('#progressBar'),
-  speed: document.querySelector('#speedSelect'),
-  reset: document.querySelector('#resetButton'),
-  status: document.querySelector('#statusMessage')
-};
-
-function route() {
-  return activeMode === 'priority' ? lessons.filter((lesson) => lesson.priority) : lessons;
-}
-
-function currentLesson() {
-  return route()[activeIndex];
-}
-
 function persistProgress() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...completed]));
-  } catch {
-    elements.status.textContent = 'El navegador no permite guardar el progreso; se conservará solo durante esta sesión.';
-  }
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...completed])); }
+  catch { $('statusMessage').textContent = 'El navegador no permite guardar el progreso; se conservará solo durante esta sesión.'; }
 }
-
+function route() { return activeMode === 'priority' ? lessons.filter((lesson) => lesson.priority) : lessons; }
+function currentLesson() { return route()[activeIndex]; }
+function formatTime(seconds) {
+  const value = Math.max(0, Math.floor(seconds));
+  return `${String(Math.floor(value / 60)).padStart(2, '0')}:${String(value % 60).padStart(2, '0')}`;
+}
+function setState(state, label) {
+  $('playbackState').dataset.state = state;
+  $('playbackState').textContent = label;
+}
+function renderClipProgress(videoTime = currentLesson().start) {
+  const lesson = currentLesson();
+  const duration = lesson.end - lesson.start;
+  const elapsed = Math.min(duration, Math.max(0, videoTime - lesson.start));
+  const percent = Math.round(elapsed / duration * 100);
+  $('clipTime').textContent = `${formatTime(elapsed)} / ${formatTime(duration)}`;
+  $('clipPercent').textContent = `${percent} %`;
+  $('clipProgressBar').style.width = `${percent}%`;
+  $('clipProgress').setAttribute('aria-valuenow', String(percent));
+  $('clipProgress').setAttribute('aria-valuetext', `${formatTime(elapsed)} de ${formatTime(duration)}, ${percent} %`);
+}
 function renderProgress() {
-  const count = completed.size;
-  elements.progressText.textContent = `${count} de ${lessons.length} completados`;
-  elements.progressBar.style.width = `${(count / lessons.length) * 100}%`;
+  $('progressText').textContent = `${completed.size} de ${lessons.length} completados`;
+  $('progressBar').style.width = `${completed.size / lessons.length * 100}%`;
+  $('completeCheckbox').checked = completed.has(currentLesson().id);
+  $('completionState').textContent = completed.has(currentLesson().id) ? '✓ Ya completada' : 'Pendiente';
 }
-
 function renderList() {
-  elements.list.innerHTML = lessons.map((lesson) => `
-    <button class="lesson-item ${lesson.id === currentLesson().id ? 'active' : ''} ${completed.has(lesson.id) ? 'completed' : ''} ${activeMode === 'priority' && !lesson.priority ? 'filtered' : ''}" data-lesson-id="${lesson.id}">
+  $('lessonList').innerHTML = lessons.map((lesson) => `
+    <button class="lesson-item ${lesson.id === currentLesson().id ? 'active' : ''} ${completed.has(lesson.id) ? 'completed' : ''} ${activeMode === 'priority' && !lesson.priority ? 'filtered' : ''}" data-lesson-id="${lesson.id}" ${lesson.id === currentLesson().id ? 'aria-current="step"' : ''}>
       <span class="item-number">${String(lesson.id).padStart(2, '0')}</span>
-      <span class="item-copy">
-        <strong>${lesson.title}</strong>
-        <span>${lesson.time}</span>
-        ${lesson.priority ? '<span class="item-priority">Alta prioridad</span>' : ''}
-      </span>
-    </button>
-  `).join('');
-
-  elements.list.querySelectorAll('.lesson-item').forEach((button) => {
-    button.addEventListener('click', () => selectLesson(Number(button.dataset.lessonId), true));
-  });
+      <span class="item-copy"><strong>${lesson.title}</strong><span>${lesson.time}</span>
+      ${lesson.priority ? '<span class="item-priority">Alta prioridad</span>' : ''}
+      <span>${completed.has(lesson.id) ? 'Completada' : 'Pendiente'}</span></span>
+    </button>`).join('');
 }
-
 function renderLesson() {
   const lesson = currentLesson();
-  const currentRoute = route();
-  elements.counter.textContent = `Lección ${activeIndex + 1} de ${currentRoute.length}`;
-  elements.playerTopic.textContent = lesson.title;
-  elements.number.textContent = String(lesson.id).padStart(2, '0');
-  elements.time.textContent = lesson.time;
-  elements.badge.hidden = !lesson.priority;
-  elements.title.textContent = lesson.title;
-  elements.summary.textContent = lesson.summary;
-  elements.takeaways.innerHTML = lesson.takeaways.map((item) => `<li>${item}</li>`).join('');
-  elements.promptBlock.hidden = !lesson.prompt;
-  elements.prompt.textContent = lesson.prompt || '';
-  elements.checkbox.checked = completed.has(lesson.id);
-  elements.prev.disabled = activeIndex === 0;
-  elements.next.disabled = activeIndex === currentRoute.length - 1;
+  $('lessonCounter').textContent = `Lección ${activeIndex + 1} de ${route().length}`;
+  $('playerTopic').textContent = lesson.title;
+  $('lessonNumber').textContent = String(lesson.id).padStart(2, '0');
+  $('lessonTime').textContent = lesson.time;
+  $('priorityBadge').hidden = !lesson.priority;
+  $('lessonTitle').textContent = lesson.title;
+  $('lessonSummary').textContent = lesson.summary;
+  $('lessonTakeaways').innerHTML = lesson.takeaways.map((item) => `<li>${item}</li>`).join('');
+  $('promptBlock').hidden = !lesson.prompt;
+  $('lessonPrompt').textContent = lesson.prompt || '';
+  $('prevButton').disabled = activeIndex === 0;
+  $('nextButton').disabled = activeIndex === route().length - 1;
+  renderProgress();
   renderList();
 }
-
+function cueCurrentLesson() {
+  if (!playerReady) return;
+  const lesson = currentLesson();
+  player.pauseVideo();
+  player.cueVideoById({ videoId: VIDEO_ID, startSeconds: lesson.start, endSeconds: lesson.end });
+}
+function prepareLesson(focus = true, message = '') {
+  // Revoke playback permission before calling YouTube: old events may arrive late.
+  playbackLessonId = null;
+  intervalArmed = false;
+  routeFinished = false;
+  cueCurrentLesson();
+  renderLesson();
+  renderClipProgress();
+  setState('prepared', 'Preparada para comenzar');
+  const lesson = currentLesson();
+  $('transitionPanel').hidden = false;
+  $('transitionNumber').textContent = `Microlección ${lesson.id} · ${activeIndex + 1} de ${route().length}`;
+  $('transitionTitle').textContent = lesson.title;
+  $('transitionSummary').textContent = lesson.summary;
+  $('transitionDuration').textContent = `Duración: ${formatTime(lesson.end - lesson.start)}`;
+  $('startButton').hidden = false;
+  $('startButton').disabled = !playerReady;
+  $('skipButton').hidden = false;
+  $('statusMessage').textContent = message || 'Lee la presentación y decide cuándo comenzar.';
+  if (focus) $('transitionTitle').focus({ preventScroll: true });
+}
 function playActiveLesson() {
-  if (!playerReady) {
-    elements.status.textContent = 'Preparando el reproductor…';
-    return;
-  }
-
+  if (!playerReady || routeFinished) return;
   const lesson = currentLesson();
-  // Ignore stale events while the next interval loads.
   intervalArmed = false;
-  player.loadVideoById({
-    videoId: VIDEO_ID,
-    startSeconds: lesson.start,
-    endSeconds: lesson.end
-  });
-  player.setPlaybackRate(Number(elements.speed.value));
-  elements.cover.classList.add('hidden');
-  elements.status.textContent = 'El siguiente fragmento comenzará automáticamente.';
-  started = true;
+  playbackLessonId = lesson.id;
+  $('transitionPanel').hidden = true;
+  renderClipProgress();
+  setState('loading', 'Preparando reproducción…');
+  // Only this explicit user action may load and play a new interval.
+  player.loadVideoById({ videoId: VIDEO_ID, startSeconds: lesson.start, endSeconds: lesson.end });
+  $('statusMessage').textContent = 'Al terminar, la siguiente microlección quedará en espera.';
+  player.getIframe().focus();
 }
-
-function selectLesson(lessonId, play = false) {
-  const currentRoute = route();
-  const nextIndex = currentRoute.findIndex((lesson) => lesson.id === lessonId);
-  if (nextIndex < 0) return;
-  activeIndex = nextIndex;
-  renderLesson();
-  if (play || started) playActiveLesson();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
 function moveLesson(direction) {
-  const nextIndex = activeIndex + direction;
-  if (nextIndex < 0 || nextIndex >= route().length) return;
-  activeIndex = nextIndex;
-  renderLesson();
-  playActiveLesson();
+  const index = activeIndex + direction;
+  if (index < 0 || index >= route().length) return;
+  activeIndex = index;
+  prepareLesson();
 }
-
-function finishLesson() {
-  if (!started || !intervalArmed) return;
+function showRouteSummary(skipped) {
+  playbackLessonId = null;
   intervalArmed = false;
+  routeFinished = true;
+  if (playerReady) player.pauseVideo();
+  renderLesson();
+  if (!skipped) renderClipProgress(currentLesson().end);
+  setState(skipped ? 'skipped' : 'completed', skipped ? 'Omitida' : 'Completada');
+  $('transitionPanel').hidden = false;
+  $('transitionNumber').textContent = 'Resumen del recorrido';
+  $('transitionTitle').textContent = 'Has llegado al final del recorrido';
+  $('transitionSummary').textContent = `${route().filter((lesson) => completed.has(lesson.id)).length} de ${route().length} microlecciones completadas. Puedes revisar las pendientes desde el mapa.`;
+  $('transitionDuration').textContent = skipped ? `Microlección ${currentLesson().id} omitida; no se ha añadido al progreso.` : 'Última microlección completada.';
+  $('startButton').hidden = true;
+  $('skipButton').hidden = true;
+  $('statusMessage').textContent = 'Recorrido finalizado.';
+  $('transitionTitle').focus({ preventScroll: true });
+}
+function finishLesson() {
   const lesson = currentLesson();
+  // A late ENDED event must never complete a newly prepared lesson.
+  if (playbackLessonId !== lesson.id || !intervalArmed || player.getCurrentTime() < lesson.end - 0.25) return;
+  playbackLessonId = null;
+  intervalArmed = false;
   completed.add(lesson.id);
-  persistProgress();
-  renderProgress();
-
   if (activeIndex < route().length - 1) {
     activeIndex += 1;
-    renderLesson();
-    playActiveLesson();
-  } else {
-    started = false;
-    player.pauseVideo();
-    renderLesson();
-    elements.status.textContent = 'Recorrido completado. Puedes revisar cualquier lección desde el mapa.';
-  }
+    prepareLesson(true, `Microlección ${lesson.id} completada. La siguiente está preparada y en pausa.`);
+  } else { showRouteSummary(false); }
+  persistProgress();
 }
-
-function startMonitor() {
-  window.clearInterval(monitorId);
-  monitorId = window.setInterval(() => {
-    if (!playerReady || !started || !intervalArmed || player.getPlayerState() !== YT.PlayerState.PLAYING) return;
-    const lesson = currentLesson();
-    if (player.getCurrentTime() >= lesson.end - 0.2) finishLesson();
-  }, 250);
+function skipLesson() {
+  const id = currentLesson().id;
+  if (activeIndex < route().length - 1) {
+    activeIndex += 1;
+    prepareLesson(true, `Microlección ${id} omitida; no se ha añadido al progreso.`);
+  } else { showRouteSummary(true); }
 }
-
-window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
+function updatePlayerProgress() {
+  if (!playerReady || playbackLessonId !== currentLesson().id || !intervalArmed) return;
+  // Use media time only; wall time, pauses and loading never add progress.
+  if (player.getPlayerState() !== YT.PlayerState.PLAYING) return;
+  const time = player.getCurrentTime();
+  renderClipProgress(time);
+  if (time >= currentLesson().end) finishLesson();
+}
+window.onYouTubeIframeAPIReady = function () {
   player = new YT.Player('player', {
     videoId: VIDEO_ID,
-    playerVars: {
-      playsinline: 1,
-      rel: 0,
-      modestbranding: 1,
-      start: lessons[0].start
-    },
+    playerVars: { playsinline: 1, rel: 0, autoplay: 0, controls: 1, cc_load_policy: 1, cc_lang_pref: 'es', hl: 'es', start: lessons[0].start, origin: window.location.origin },
     events: {
       onReady: () => {
         playerReady = true;
-        elements.status.textContent = 'Reproductor preparado.';
-        player.setPlaybackRate(Number(elements.speed.value));
-        startMonitor();
+        cueCurrentLesson();
+        $('startButton').disabled = false;
+        player.getIframe().title = 'Reproductor de YouTube: microlección actual';
+        window.setInterval(updatePlayerProgress, 250);
       },
       onStateChange: (event) => {
-        if (event.data === YT.PlayerState.PLAYING && started) {
-          const time = player.getCurrentTime();
-          const lesson = currentLesson();
-          if (time >= lesson.start - 1 && time < lesson.end) {
-            intervalArmed = true;
-            // Loading a video can reset the playback rate.
-            player.setPlaybackRate(Number(elements.speed.value));
-          }
-        } else if (event.data === YT.PlayerState.ENDED) {
-          finishLesson();
+        const lesson = currentLesson();
+        if (playbackLessonId !== lesson.id) {
+          if (event.data === YT.PlayerState.PLAYING) player.pauseVideo();
+          return;
         }
+        if (event.data === YT.PlayerState.PLAYING) {
+          const time = player.getCurrentTime();
+          if (!intervalArmed && time >= lesson.start - 1 && time < lesson.start + 2) {
+            intervalArmed = true;
+            player.setPlaybackRate(Number($('speedSelect').value));
+          }
+          if (intervalArmed) { setState('playing', 'Reproduciéndose'); updatePlayerProgress(); }
+        } else if (event.data === YT.PlayerState.PAUSED && intervalArmed) {
+          renderClipProgress(player.getCurrentTime());
+          setState('paused', 'Pausada');
+        } else if (event.data === YT.PlayerState.BUFFERING) {
+          setState('loading', 'Cargando…');
+        } else if (event.data === YT.PlayerState.ENDED) { finishLesson(); }
+      },
+      onAutoplayBlocked: () => {
+        $('statusMessage').textContent = 'El navegador detuvo el inicio. Pulsa reproducir en los controles de YouTube.';
+        setState('paused', 'Pausada');
       },
       onError: () => {
-        elements.status.innerHTML = 'No se pudo cargar el reproductor. <a href="https://www.youtube.com/watch?v=S6up3AnyARo" target="_blank" rel="noopener noreferrer">Abre el video original</a>.';
+        $('statusMessage').textContent = 'No se pudo reproducir el video. Puedes volver a seleccionar la lección o visitar la fuente original desde su tarjeta.';
+        setState('paused', 'Pausada · error del reproductor');
       }
     }
   });
 };
-
-elements.start.addEventListener('click', playActiveLesson);
-elements.prev.addEventListener('click', () => moveLesson(-1));
-elements.next.addEventListener('click', () => moveLesson(1));
-
+$('startButton').addEventListener('click', playActiveLesson);
+$('skipButton').addEventListener('click', skipLesson);
+$('prevButton').addEventListener('click', () => moveLesson(-1));
+$('nextButton').addEventListener('click', () => moveLesson(1));
+$('lessonList').addEventListener('click', (event) => {
+  const button = event.target.closest('[data-lesson-id]');
+  if (!button) return;
+  const index = route().findIndex((lesson) => lesson.id === Number(button.dataset.lessonId));
+  if (index < 0) return;
+  activeIndex = index;
+  prepareLesson();
+  $('transitionPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
 document.querySelectorAll('.mode-button').forEach((button) => {
   button.addEventListener('click', () => {
     activeMode = button.dataset.mode;
     activeIndex = 0;
     document.querySelectorAll('.mode-button').forEach((item) => {
-      const selected = item === button;
-      item.classList.toggle('active', selected);
-      item.setAttribute('aria-pressed', String(selected));
+      item.classList.toggle('active', item === button);
+      item.setAttribute('aria-pressed', String(item === button));
     });
-    renderLesson();
-    if (started) playActiveLesson();
+    prepareLesson();
   });
 });
-
-elements.speed.addEventListener('change', () => {
-  if (playerReady) player.setPlaybackRate(Number(elements.speed.value));
+$('speedSelect').addEventListener('change', () => { if (playerReady) player.setPlaybackRate(Number($('speedSelect').value)); });
+$('completeCheckbox').addEventListener('change', () => {
+  const id = currentLesson().id;
+  $('completeCheckbox').checked ? completed.add(id) : completed.delete(id);
+  persistProgress(); renderProgress(); renderList();
 });
-
-elements.checkbox.addEventListener('change', () => {
-  const lessonId = currentLesson().id;
-  elements.checkbox.checked ? completed.add(lessonId) : completed.delete(lessonId);
-  persistProgress();
-  renderProgress();
-  renderList();
-});
-
-elements.copyPrompt.addEventListener('click', async () => {
+$('copyPromptButton').addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(currentLesson().prompt || '');
-  } catch {
-    elements.status.textContent = 'No se pudo copiar. Selecciona la plantilla y copia el texto manualmente.';
-    return;
-  }
-  const originalText = elements.copyPrompt.textContent;
-  elements.copyPrompt.textContent = 'Copiado';
-  window.setTimeout(() => { elements.copyPrompt.textContent = originalText; }, 1200);
+    $('statusMessage').textContent = 'Plantilla copiada.';
+  } catch { $('statusMessage').textContent = 'No se pudo copiar. Selecciona la plantilla y copia el texto manualmente.'; }
 });
-
-elements.reset.addEventListener('click', () => {
-  completed.clear();
-  persistProgress();
-  renderProgress();
-  renderLesson();
+$('resetButton').addEventListener('click', () => {
+  completed.clear(); prepareLesson(); persistProgress();
 });
-
-renderProgress();
-renderLesson();
+// Native dialog provides modal focus containment, Escape and focus restoration.
+document.querySelectorAll('[data-source-link]').forEach((link) => {
+  link.addEventListener('click', (event) => { event.preventDefault(); $('sourceDialog').showModal(); });
+});
+$('cancelSource').addEventListener('click', () => $('sourceDialog').close());
+$('continueSource').addEventListener('click', () => $('sourceDialog').close());
+prepareLesson(false);

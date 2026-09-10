@@ -46,15 +46,23 @@
 
         <div class="video-shell">
           <div id="player"></div>
-          <div id="playerCover" class="player-cover">
-            <div>
-              <span class="eyebrow">LISTO PARA EMPEZAR</span>
-              <h1>Aprende solo lo que importa</h1>
-              <p>El reproductor saltará automáticamente entre los fragmentos seleccionados.</p>
-              <button id="startButton" class="primary-button">Comenzar recorrido</button>
-            </div>
-          </div>
         </div>
+        <section id="transitionPanel" class="transition-panel" aria-labelledby="transitionTitle">
+          <span id="transitionNumber" class="eyebrow"></span>
+          <h1 id="transitionTitle" tabindex="-1"></h1>
+          <p id="transitionSummary"></p>
+          <p id="transitionDuration"></p>
+          <div class="transition-actions">
+            <button id="startButton" class="primary-button" disabled>Reproducir microlección</button>
+            <button id="skipButton" class="icon-button">Saltar esta microlección</button>
+          </div>
+        </section>
+        <div class="clip-progress">
+          <div class="clip-progress-label"><span id="playbackState" data-state="prepared" role="status">Preparada para comenzar</span><span id="completionState"></span></div>
+          <div id="clipProgress" class="progress-track" role="progressbar" aria-label="Progreso de la microlección" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="clipProgressBar"></span></div>
+          <div class="clip-progress-label"><span id="clipTime"></span><span id="clipPercent">0 %</span></div>
+        </div>
+        <p class="captions-help">Puedes activar, ocultar o cambiar el idioma de los subtítulos mediante CC y Configuración ⚙ en el reproductor de YouTube. Las opciones disponibles dependen del video original.</p>
 
         <div class="transport">
           <button id="prevButton" class="icon-button" aria-label="Fragmento anterior">← <span>Anterior</span></button>
@@ -90,6 +98,13 @@
           <input id="completeCheckbox" type="checkbox" />
           <span>Marcar esta lección como completada</span>
         </label>
+        <aside class="source-card" aria-labelledby="sourceHeading">
+          <h3 id="sourceHeading">Fuente original</h3>
+          <p id="sourceTitle">🚀 CLASE 1: Conviértete en el 1% Capaz de Comunicarse Correctamente con la IA</p>
+          <p>Canal: <strong id="sourceAuthor">CenteIA Education</strong></p>
+          <p>Todas las microlecciones proceden de este video.</p>
+          <a data-source-link href="https://www.youtube.com/watch?v=S6up3AnyARo" target="_blank" rel="noopener noreferrer">Ver video original y canal en YouTube</a>
+        </aside>
       </article>
     </section>
 
@@ -107,9 +122,17 @@
 
   <footer>
     <p>Contenido seleccionado del video original. La IA acelera el trabajo; tu criterio valida el resultado.</p>
-    <a href="https://www.youtube.com/watch?v=S6up3AnyARo" target="_blank" rel="noopener noreferrer">Abrir video original ↗</a>
+    <a data-source-link href="https://www.youtube.com/watch?v=S6up3AnyARo" target="_blank" rel="noopener noreferrer">Abrir video original ↗</a>
   </footer>
 
+  <dialog id="sourceDialog" aria-labelledby="sourceDialogTitle" aria-describedby="sourceDialogText">
+    <h2 id="sourceDialogTitle">Abrir YouTube</h2>
+    <p id="sourceDialogText">Vas a salir de Microlearning Center para visitar la fuente original en YouTube. Allí podrás ver el video completo, acceder al canal y suscribirte al autor.</p>
+    <div class="transition-actions">
+      <button id="cancelSource" class="icon-button" autofocus>Cancelar</button>
+      <a id="continueSource" class="primary-button" href="https://www.youtube.com/watch?v=S6up3AnyARo" target="_blank" rel="noopener noreferrer">Continuar a YouTube</a>
+    </div>
+  </dialog>
   <script src="./app.js"></script>
   <script src="https://www.youtube.com/iframe_api"></script>
 </body>

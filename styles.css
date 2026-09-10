@@ -162,3 +162,27 @@ button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
 }
+
+/* Transition details stay outside the iframe so native controls remain visible. */
+[hidden] { display: none !important; }
+.transition-panel { margin-top: 1rem; padding: 1.25rem; border: 1px solid var(--cyan); border-radius: 16px; background: var(--surface-strong); }
+.transition-panel h1 { margin: .6rem 0; font-size: clamp(1.3rem, 2.5vw, 1.9rem); line-height: 1.2; }
+.transition-panel p { color: #c6d2e2; }
+.transition-actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+.transition-actions a { display: inline-block; text-decoration: none; }
+.primary-button:disabled { opacity: .5; cursor: wait; }
+.clip-progress { margin-top: 1rem; padding: 1rem; background: var(--surface); border-radius: 12px; }
+.clip-progress .progress-track { height: 10px; margin: .65rem 0; }
+.clip-progress-label { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; font-size: .85rem; }
+#playbackState { font-weight: 800; color: var(--cyan); }
+#playbackState[data-state="paused"], #playbackState[data-state="skipped"] { color: var(--amber); }
+#playbackState[data-state="playing"] { color: #a7f4b8; }
+#playbackState[data-state="completed"] { color: #a7f4b8; }
+#completionState, .captions-help { color: #c6d2e2; }
+.captions-help { font-size: .85rem; }
+.source-card { margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid var(--border); overflow-wrap: anywhere; }
+.source-card p { margin: .5rem 0; font-size: .9rem; }
+.source-card a { color: var(--cyan); }
+dialog { width: min(540px, calc(100% - 2rem)); max-height: calc(100dvh - 2rem); overflow: auto; padding: 1.5rem; border: 1px solid var(--cyan); border-radius: 16px; background: var(--surface); color: var(--text); }
+dialog::backdrop { background: rgba(0, 0, 0, .75); }
+@media (max-width: 640px) { .transition-actions > * { width: 100%; justify-content: center; text-align: center; } }
