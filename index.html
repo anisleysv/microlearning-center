@@ -81,36 +81,43 @@
         </div>
         <h2 id="lessonTitle" tabindex="-1">Auditar tareas candidatas para IA</h2>
         <p id="lessonSummary" class="lesson-summary"></p>
-        <div class="takeaway-block">
+        <div class="lesson-tabs" role="tablist" aria-label="Información de la microlección">
+          <button id="takeawayTab" role="tab" aria-controls="takeawayPanel" aria-selected="true">Qué debes retener</button>
+          <button id="promptTab" role="tab" aria-controls="promptBlock" aria-selected="false" tabindex="-1" hidden>Plantilla útil</button>
+          <button id="sourceTab" role="tab" aria-controls="sourcePanel" aria-selected="false" tabindex="-1">Fuente original</button>
+        </div>
+        <div class="lesson-panels">
+        <div id="takeawayPanel" class="takeaway-block" role="tabpanel" aria-labelledby="takeawayTab" tabindex="0">
           <div class="takeaway-heading">
             <h3>Qué debes retener</h3>
             <div class="tooltip-wrap tooltip-end">
               <button id="likeButton" class="like-button" aria-pressed="false" aria-label="Marcar la microlección 1 como útil" aria-describedby="likeTooltip">
-                <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M8 10v11H3V10h5Zm0 1 5-8c.5-.8 2-.5 2 1v5h4a2 2 0 0 1 2 2.4l-1.4 7A3 3 0 0 1 16.7 21H8" /></svg>
+                <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path class="like-hand" d="M10 20V10l3.6-6.5c.6-1.1 2.4-.7 2.4.7V9h3a2 2 0 0 1 2 2.4l-1.3 6.2A3 3 0 0 1 16.8 20Z" /><rect class="like-cuff" x="3" y="10" width="4" height="10" rx="1" /></svg>
               </button>
               <span id="likeTooltip" class="tooltip" role="tooltip">Me resulta útil</span>
             </div>
           </div>
           <ul id="lessonTakeaways"></ul>
         </div>
-        <div id="promptBlock" class="prompt-block" hidden>
+        <div id="promptBlock" class="prompt-block" role="tabpanel" aria-labelledby="promptTab" tabindex="0" hidden>
           <div class="prompt-heading">
             <h3>Plantilla útil</h3>
             <button id="copyPromptButton" class="copy-button">Copiar</button>
           </div>
           <pre id="lessonPrompt"></pre>
         </div>
-        <label class="complete-control">
-          <input id="completeCheckbox" type="checkbox" />
-          <span>Marcar esta lección como completada</span>
-        </label>
-        <aside class="source-card" aria-labelledby="sourceHeading">
+        <aside id="sourcePanel" class="source-card" role="tabpanel" aria-labelledby="sourceTab" tabindex="0" hidden>
           <h3 id="sourceHeading">Fuente original</h3>
           <p id="sourceTitle">🚀 CLASE 1: Conviértete en el 1% Capaz de Comunicarse Correctamente con la IA</p>
           <p>Canal: <strong id="sourceAuthor">CenteIA Education</strong></p>
           <p>Todas las microlecciones proceden de este video.</p>
           <a data-source-link href="https://www.youtube.com/watch?v=S6up3AnyARo" target="_blank" rel="noopener noreferrer">Ver video original y canal en YouTube</a>
         </aside>
+        </div>
+        <label class="complete-control">
+          <input id="completeCheckbox" type="checkbox" />
+          <span>Marcar esta lección como completada</span>
+        </label>
       </article>
     </section>
 

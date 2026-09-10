@@ -167,7 +167,8 @@ function renderLesson() {
   $('lessonTitle').textContent = lesson.title;
   $('lessonSummary').textContent = lesson.summary;
   $('lessonTakeaways').innerHTML = lesson.takeaways.map((item) => `<li>${item}</li>`).join('');
-  $('promptBlock').hidden = !lesson.prompt;
+  $('promptTab').hidden = !lesson.prompt;
+  selectLessonTab('takeawayTab');
   $('lessonPrompt').textContent = lesson.prompt || '';
   updateNavigation('prev', route()[activeIndex - 1], 'Anterior');
   updateNavigation('next', route()[activeIndex + 1], 'Siguiente');
@@ -363,3 +364,28 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') document.querySelectorAll('.tooltip-wrap').forEach((wrapper) => wrapper.classList.add('tooltip-dismissed'));
 });
 prepareLesson(false);
+
+function selectLessonTab(id, focus = false) {
+  document.querySelectorAll('.lesson-tabs [role="tab"]').forEach((tab) => {
+    const selected = tab.id === id;
+    tab.setAttribute('aria-selected', String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+    $(tab.getAttribute('aria-controls')).hidden = !selected;
+    if (selected && focus) tab.focus();
+  });
+  document.querySelector('.lesson-panels').scrollTop = 0;
+}
+document.querySelector('.lesson-tabs').addEventListener('click', (event) => {
+  const tab = event.target.closest('[role="tab"]');
+  if (tab) selectLessonTab(tab.id);
+});
+// Follow the horizontal tab pattern, excluding unavailable optional content.
+document.querySelector('.lesson-tabs').addEventListener('keydown', (event) => {
+  if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+  const tabs = [...document.querySelectorAll('.lesson-tabs [role="tab"]')].filter((tab) => !tab.hidden);
+  const current = tabs.indexOf(document.activeElement);
+  if (current < 0) return;
+  event.preventDefault();
+  const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (current + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+  selectLessonTab(tabs[next].id, true);
+});

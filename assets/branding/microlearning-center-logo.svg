@@ -46,8 +46,8 @@
   <path d="M268 416A160 160 0 0 1 126 364" fill="none" stroke="url(#violet)" stroke-width="20" stroke-linecap="round"/>
   <path d="M98 322A160 160 0 0 1 208 102" fill="none" stroke="#2A3D66" stroke-width="16" stroke-linecap="round"/>
 
-  <!-- The puzzle piece replaces the generic sparkle and signals modular learning. -->
-  <path d="M349 118h16c0-9 7-16 16-16s16 7 16 16h17v17c9 0 16 7 16 16s-7 16-16 16v17h-17c0-9-7-16-16-16s-16 7-16 16h-16v-17c9 0 16-7 16-16s-7-16-16-16z" fill="url(#amber)" stroke="#FFF0B3" stroke-width="3" stroke-linejoin="round" filter="url(#puzzle-shadow)"/>
+  <!-- Oversized rounded tabs and sockets remain distinct at small display sizes. -->
+  <path d="M336 112H357V104a18 18 0 0 1 36 0v8h25q10 0 10 10v20h8a18 18 0 0 1 0 36h-8v24q0 10-10 10h-25v-8a18 18 0 0 0-36 0v8h-21q-10 0-10-10v-24h8a18 18 0 0 0 0-36h-8v-20q0-10 10-10Z" fill="url(#amber)" stroke="#0A122A" stroke-width="10" stroke-linejoin="round" paint-order="stroke fill" filter="url(#puzzle-shadow)"/>
 
   <!-- Central play mark keeps the product recognizable at favicon sizes. -->
   <circle cx="256" cy="256" r="88" fill="#101A38" stroke="#2A3D66" stroke-width="4"/>

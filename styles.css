@@ -139,7 +139,7 @@ pre { max-height: 220px; overflow: auto; margin: 0.6rem 0 0; padding: 0.9rem; bo
 .complete-control { display: flex; align-items: center; gap: 0.7rem; margin-top: 1.35rem; padding: 0.85rem; border-radius: 12px; background: var(--surface-strong); color: var(--text); cursor: pointer; }
 .complete-control input { width: 20px; height: 20px; accent-color: var(--accent-solid); }
 
-.curriculum { margin-top: 4.5rem; }
+.curriculum { margin-top: 2rem; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 1.2rem; }
 .section-heading h2 { margin: 0.25rem 0 0; font-size: clamp(1.7rem, 3vw, 2.5rem); letter-spacing: -0.04em; }
 .lesson-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
@@ -199,8 +199,10 @@ dialog::backdrop { background: var(--backdrop); }
 .takeaway-heading { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
 .takeaway-heading h3 { margin: 0; }
 .like-button { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--border); border-radius: 10px; background: transparent; color: var(--accent); cursor: pointer; }
-.like-button svg { fill: none; stroke: currentColor; stroke-width: 1.8; }
-.like-button[aria-pressed="true"] svg { fill: currentColor; }
+.like-button svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+/* Keep the cuff outlined and separate from the filled hand in both themes. */
+.like-button[aria-pressed="true"] .like-hand { fill: currentColor; }
+.like-button .like-cuff { fill: var(--surface); }
 .tooltip-wrap { position: relative; width: fit-content; }
 .tooltip-end { justify-self: end; }
 .tooltip { position: absolute; top: 100%; left: 0; z-index: 30; width: max-content; max-width: min(270px, calc(100vw - 64px)); padding: .6rem .75rem; border: 1px solid var(--accent); border-radius: 8px; background: var(--surface); color: var(--text); font-size: .85rem; font-weight: 400; white-space: normal; overflow-wrap: anywhere; visibility: hidden; box-shadow: var(--shadow); }
@@ -240,3 +242,13 @@ button:not(:disabled):active { transform: translateY(1px); }
 @media (prefers-reduced-motion: reduce) { button:not(:disabled):active, .lesson-item:hover { transform: none; } }
 
 @media (max-width: 640px) { .lesson-card { padding: 1rem; } }
+
+.lesson-tabs { display: flex; gap: .2rem; margin-top: 1rem; border-bottom: 1px solid var(--border); }
+.lesson-tabs [role="tab"] { flex: 1; min-width: 0; padding: .65rem .25rem; border: 0; border-bottom: 3px solid transparent; background: transparent; color: var(--muted); font: inherit; font-size: .8rem; font-weight: 600; line-height: 1.35; }
+.lesson-tabs [aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); background: var(--surface-active); }
+.lesson-panels { height: 220px; overflow-y: auto; scrollbar-gutter: stable; overscroll-behavior-y: contain; padding: .85rem .4rem .4rem 0; }
+.lesson-panels > [role="tabpanel"] { margin: 0; padding: 0; border: 0; }
+.lesson-panels pre { max-height: none; overflow: visible; overflow-wrap: anywhere; }
+.lesson-panels [role="tabpanel"]:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.lesson-card .complete-control { margin-top: .85rem; }
+@media (max-width: 1023px) { .lesson-panels { height: auto; max-height: 280px; min-height: 140px; } }
