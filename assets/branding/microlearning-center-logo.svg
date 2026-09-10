@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="logo-title logo-description">
+  <title id="logo-title">Microlearning Center</title>
+  <desc id="logo-description">A play symbol surrounded by modular learning segments and an amber puzzle piece.</desc>
+
+  <defs>
+    <linearGradient id="background" x1="64" y1="48" x2="448" y2="464" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0E1838"/>
+      <stop offset="0.55" stop-color="#0A122A"/>
+      <stop offset="1" stop-color="#050C20"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="305" y1="97" x2="423" y2="276" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#26E6EC"/>
+      <stop offset="1" stop-color="#00ADB5"/>
+    </linearGradient>
+    <linearGradient id="amber" x1="408" y1="299" x2="315" y2="406" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD56B"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="violet" x1="286" y1="420" x2="123" y2="362" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4F46E5"/>
+      <stop offset="1" stop-color="#818CF8"/>
+    </linearGradient>
+    <linearGradient id="play" x1="230" y1="191" x2="313" y2="321" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#26E6EC"/>
+      <stop offset="1" stop-color="#00ADB5"/>
+    </linearGradient>
+    <filter id="cyan-glow" x="-35%" y="-35%" width="170%" height="170%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="puzzle-shadow" x="-35%" y="-35%" width="170%" height="170%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#050C20" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <!-- Stable dark badge works on both light and dark application themes. -->
+  <rect x="24" y="24" width="464" height="464" rx="104" fill="url(#background)" stroke="#253152" stroke-width="6"/>
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#162244" stroke-width="2" stroke-dasharray="6 8"/>
+
+  <!-- Segments represent selected micro-lessons assembled into a focused route. -->
+  <path d="M256 96A160 160 0 0 1 416 256" fill="none" stroke="url(#cyan)" stroke-width="22" stroke-linecap="round" filter="url(#cyan-glow)"/>
+  <path d="M404 296A160 160 0 0 1 316 404" fill="none" stroke="url(#amber)" stroke-width="22" stroke-linecap="round"/>
+  <path d="M268 416A160 160 0 0 1 126 364" fill="none" stroke="url(#violet)" stroke-width="20" stroke-linecap="round"/>
+  <path d="M98 322A160 160 0 0 1 208 102" fill="none" stroke="#2A3D66" stroke-width="16" stroke-linecap="round"/>
+
+  <!-- The puzzle piece replaces the generic sparkle and signals modular learning. -->
+  <path d="M349 118h16c0-9 7-16 16-16s16 7 16 16h17v17c9 0 16 7 16 16s-7 16-16 16v17h-17c0-9-7-16-16-16s-16 7-16 16h-16v-17c9 0 16-7 16-16s-7-16-16-16z" fill="url(#amber)" stroke="#FFF0B3" stroke-width="3" stroke-linejoin="round" filter="url(#puzzle-shadow)"/>
+
+  <!-- Central play mark keeps the product recognizable at favicon sizes. -->
+  <circle cx="256" cy="256" r="88" fill="#101A38" stroke="#2A3D66" stroke-width="4"/>
+  <path d="M234 200c0-7 8-12 14-8l62 56c6 4 6 12 0 16l-62 56c-6 4-14-1-14-8z" fill="url(#play)" filter="url(#cyan-glow)"/>
+</svg>

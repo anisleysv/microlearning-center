@@ -108,10 +108,11 @@ let playbackLessonId = null;
 let intervalArmed = false;
 let routeFinished = false;
 const $ = (id) => document.getElementById(id);
-const FAVORITES_KEY = 'ia58-favorites-v1';
+// Reuse the previous favorites key so existing selections become likes without data loss.
+const LIKES_KEY = 'ia58-favorites-v1';
 const SPEED_KEY = 'ia58-speed-v1';
 const completed = new Set(readLessonIds(STORAGE_KEY));
-const favorites = new Set(readLessonIds(FAVORITES_KEY));
+const likes = new Set(readLessonIds(LIKES_KEY));
 let awaitingCue = true;
 let playbackSpeed = readSpeed();
 
@@ -170,7 +171,7 @@ function renderLesson() {
   $('lessonPrompt').textContent = lesson.prompt || '';
   updateNavigation('prev', route()[activeIndex - 1], 'Anterior');
   updateNavigation('next', route()[activeIndex + 1], 'Siguiente');
-  renderFavorite();
+  renderLike();
   renderProgress();
   renderList();
 }
@@ -325,20 +326,20 @@ function updateNavigation(prefix, destination, action) {
   tooltip.textContent = destination ? action + ': ' + destination.title : '';
   button.setAttribute('aria-label', destination ? action + ': ' + destination.title : action + ' (no disponible)');
 }
-function renderFavorite() {
+function renderLike() {
   const id = currentLesson().id;
-  const selected = favorites.has(id);
-  const label = (selected ? 'Quitar' : 'Añadir') + ' microlección ' + id + ' ' + (selected ? 'de' : 'a') + ' favoritas';
-  $('favoriteButton').setAttribute('aria-pressed', String(selected));
-  $('favoriteButton').setAttribute('aria-label', label);
-  $('favoriteTooltip').textContent = label;
+  const selected = likes.has(id);
+  const label = selected ? 'Quitar la valoración de la microlección ' + id : 'Marcar la microlección ' + id + ' como útil';
+  $('likeButton').setAttribute('aria-pressed', String(selected));
+  $('likeButton').setAttribute('aria-label', label);
+  $('likeTooltip').textContent = selected ? 'Quitar Me gusta' : 'Me resulta útil';
 }
-$('favoriteButton').addEventListener('click', () => {
+$('likeButton').addEventListener('click', () => {
   const id = currentLesson().id;
-  favorites.has(id) ? favorites.delete(id) : favorites.add(id);
-  renderFavorite();
-  try { localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favorites])); }
-  catch { $('statusMessage').textContent = 'No se pueden guardar las favoritas; se conservarán solo durante esta sesión.'; }
+  likes.has(id) ? likes.delete(id) : likes.add(id);
+  renderLike();
+  try { localStorage.setItem(LIKES_KEY, JSON.stringify([...likes])); }
+  catch { $('statusMessage').textContent = 'No se pueden guardar las valoraciones; se conservarán solo durante esta sesión.'; }
 });
 function readSpeed() {
   try {

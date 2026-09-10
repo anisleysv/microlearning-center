@@ -7,21 +7,31 @@
   <title>Microlearning Center · IA en 58 minutos</title>
   <link rel="preconnect" href="https://www.youtube.com" />
   <link rel="preconnect" href="https://www.google.com" />
+  <script src="./theme.js"></script>
+  <link rel="icon" type="image/svg+xml" sizes="any" href="./assets/branding/microlearning-center-logo.svg" />
+  <link rel="preload" href="./assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <span class="brand-mark" aria-hidden="true">IA</span>
+      <img class="brand-logo" src="./assets/branding/microlearning-center-logo.svg" width="48" height="48" alt="" />
       <div>
-        <strong>IA en 58 minutos</strong>
-        <span>Microaprendizaje práctico</span>
+        <strong>Microlearning Center</strong>
+        <span>IA en 58 minutos</span>
       </div>
     </div>
     <div class="progress-summary" aria-live="polite">
       <span id="progressText">0 de 15 completados</span>
       <div class="progress-track"><span id="progressBar"></span></div>
     </div>
+    <label class="theme-control">Tema
+      <select id="themeSelect" aria-label="Tema de color">
+        <option value="system">Sistema</option>
+        <option value="light">Claro</option>
+        <option value="dark">Oscuro</option>
+      </select>
+    </label>
   </header>
 
   <main>
@@ -75,10 +85,10 @@
           <div class="takeaway-heading">
             <h3>Qué debes retener</h3>
             <div class="tooltip-wrap tooltip-end">
-              <button id="favoriteButton" class="favorite-button" aria-pressed="false" aria-label="Añadir microlección 1 a favoritas" aria-describedby="favoriteTooltip">
-                <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 21s-9-5.7-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.3-9 12-9 12Z" /></svg>
+              <button id="likeButton" class="like-button" aria-pressed="false" aria-label="Marcar la microlección 1 como útil" aria-describedby="likeTooltip">
+                <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M8 10v11H3V10h5Zm0 1 5-8c.5-.8 2-.5 2 1v5h4a2 2 0 0 1 2 2.4l-1.4 7A3 3 0 0 1 16.7 21H8" /></svg>
               </button>
-              <span id="favoriteTooltip" class="tooltip" role="tooltip">Añadir microlección 1 a favoritas</span>
+              <span id="likeTooltip" class="tooltip" role="tooltip">Me resulta útil</span>
             </div>
           </div>
           <ul id="lessonTakeaways"></ul>

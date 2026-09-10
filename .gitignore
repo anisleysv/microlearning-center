@@ -1,4 +1,5 @@
 /context/
+/design/
 /.openai/
 *.tar.gz
 *.zip
