@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Recorrido de microaprendizaje con los 15 fragmentos esenciales de IA en 3 en 4." />
-  <title>Microlearning Center · IA en 58 minutos</title>
+  <meta name="description" content="Convertir videos seleccionados de YouTube en recorridos de microaprendizaje." />
+  <title>Microlearning Center</title>
   <link rel="preconnect" href="https://www.youtube.com" />
   <link rel="preconnect" href="https://www.google.com" />
+  <script src="./preferences.js"></script>
   <script src="./theme.js"></script>
   <link rel="icon" type="image/svg+xml" sizes="any" href="./assets/branding/microlearning-center-logo.svg" />
   <link rel="preload" href="./assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
@@ -18,11 +19,11 @@
       <img class="brand-logo" src="./assets/branding/microlearning-center-logo.svg" width="48" height="48" alt="" />
       <div>
         <strong>Microlearning Center</strong>
-        <span>IA en 58 minutos</span>
+        <span id="brandSubtitle">Microaprendizaje con videos</span>
       </div>
     </div>
     <div class="progress-summary" aria-live="polite">
-      <span id="progressText">0 de 15 completados</span>
+      <span id="progressText">—</span>
       <div class="progress-track"><span id="progressBar"></span></div>
     </div>
     <label class="theme-control">Tema
@@ -35,12 +36,26 @@
   </header>
 
   <main>
-    <section class="workspace" aria-label="Reproductor y lección activa">
+    <section class="material-bar" aria-labelledby="materialTitle">
+      <div class="material-heading">
+        <h1 id="materialTitle">Microlearning Center</h1>
+        <label id="materialChooser" hidden>Material
+          <select id="materialSelect" aria-label="Seleccionar material" disabled></select>
+        </label>
+      </div>
+      <p id="materialDescription"></p>
+      <p id="fileNotice" hidden>Abre esta aplicación mediante un servidor HTTP local; no se admite file://. Consulta las instrucciones del README.</p>
+      <p id="loadMessage" role="status">Cargando materiales…</p>
+      <p id="storageMessage" role="status"></p>
+      <button id="retryButton" class="icon-button" hidden>Reintentar carga</button>
+      <noscript>Activa JavaScript para cargar los materiales.</noscript>
+    </section>
+    <section id="workspace" hidden class="workspace" aria-label="Reproductor y lección activa">
       <div class="player-column">
         <div class="mode-row">
           <div class="segmented-control" role="group" aria-label="Recorrido">
-            <button class="mode-button active" data-mode="full" aria-pressed="true">Completo · 58:16</button>
-            <button class="mode-button" data-mode="priority" aria-pressed="false">Prioritario · 17:19</button>
+            <button class="mode-button active" data-mode="full" aria-pressed="true">Completo</button>
+            <button class="mode-button" data-mode="priority" aria-describedby="priorityHelp" aria-pressed="false">Prioritario</button>
           </div>
           <label class="speed-control">
             Velocidad
@@ -54,7 +69,8 @@
           </label>
         </div>
 
-        <div class="video-shell">
+        <p id="priorityHelp" class="captions-help" hidden>Este material no contiene microlecciones de alta prioridad.</p>
+        <div id="playerHost" class="video-shell">
           <div id="player"></div>
         </div>
         <p class="captions-help">Puedes activar, ocultar o cambiar el idioma de los subtítulos mediante CC y Configuración ⚙ en el reproductor de YouTube. Las opciones disponibles dependen del video original.</p>
@@ -64,7 +80,7 @@
             <button id="prevButton" class="icon-button" aria-label="Microlección anterior" aria-describedby="prevTooltip">← <span>Anterior</span></button>
             <span id="prevTooltip" class="tooltip" role="tooltip" hidden></span>
           </div>
-          <span id="lessonCounter" class="lesson-counter">1 de 15</span>
+          <span id="lessonCounter" class="lesson-counter">—</span>
           <div class="tooltip-wrap tooltip-end">
             <button id="nextButton" class="icon-button" aria-label="Siguiente microlección" aria-describedby="nextTooltip"><span>Siguiente</span> →</button>
             <span id="nextTooltip" class="tooltip" role="tooltip"></span>
@@ -75,11 +91,11 @@
 
       <article class="lesson-card" aria-labelledby="lessonTitle">
         <div class="lesson-meta">
-          <span id="lessonNumber" class="lesson-number">Microlección 01</span>
-          <span id="lessonTime" class="time-pill" role="progressbar" aria-label="Progreso de la microlección" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">00:26:37–00:29:07</span>
+          <span id="lessonNumber" class="lesson-number">Microlección</span>
+          <span id="lessonTime" class="time-pill" role="progressbar" aria-label="Progreso de la microlección" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">—</span>
           <span id="priorityBadge" class="priority-badge">Alta prioridad</span>
         </div>
-        <h2 id="lessonTitle" tabindex="-1">Auditar tareas candidatas para IA</h2>
+        <h2 id="lessonTitle" tabindex="-1">Microlección</h2>
         <p id="lessonSummary" class="lesson-summary"></p>
         <div class="lesson-tabs" role="tablist" aria-label="Información de la microlección">
           <button id="takeawayTab" role="tab" aria-controls="takeawayPanel" aria-selected="true">Qué debes retener</button>
@@ -98,6 +114,8 @@
             </div>
           </div>
           <ul id="lessonTakeaways"></ul>
+          <div id="stepsBlock" class="lesson-extra" hidden><h3>Pasos</h3><ol id="lessonSteps"></ol></div>
+          <div id="toolsBlock" class="lesson-extra" hidden><h3>Herramientas</h3><ul id="lessonTools"></ul></div>
         </div>
         <div id="promptBlock" class="prompt-block" role="tabpanel" aria-labelledby="promptTab" tabindex="0" hidden>
           <div class="prompt-heading">
@@ -108,10 +126,11 @@
         </div>
         <aside id="sourcePanel" class="source-card" role="tabpanel" aria-labelledby="sourceTab" tabindex="0" hidden>
           <h3 id="sourceHeading">Fuente original</h3>
-          <p id="sourceTitle">🚀 CLASE 1: Conviértete en el 1% Capaz de Comunicarse Correctamente con la IA</p>
-          <p>Canal: <strong id="sourceAuthor">CenteIA Education</strong></p>
+          <p id="sourceTitle"></p>
+          <p>Canal: <strong id="sourceAuthor"></strong></p>
           <p>Todas las microlecciones proceden de este video.</p>
-          <a data-source-link href="https://www.youtube.com/watch?v=S6up3AnyARo" target="_blank" rel="noopener noreferrer">Ver video original y canal en YouTube</a>
+          <p id="sourceAttribution"></p>
+          <a data-source-link hidden target="_blank" rel="noopener noreferrer">Ver video original y canal en YouTube</a>
         </aside>
         </div>
         <label class="complete-control">
@@ -121,11 +140,11 @@
       </article>
     </section>
 
-    <section class="curriculum" aria-labelledby="curriculumTitle">
+    <section id="curriculum" hidden class="curriculum" aria-labelledby="curriculumTitle">
       <div class="section-heading">
         <div>
           <span class="eyebrow">MAPA DEL RECORRIDO</span>
-          <h2 id="curriculumTitle">15 ideas, una ruta clara</h2>
+          <h2 id="curriculumTitle">Mapa del recorrido</h2>
         </div>
         <button id="resetButton" class="text-button">Reiniciar progreso</button>
       </div>
@@ -134,8 +153,8 @@
   </main>
 
   <footer>
-    <p>Contenido seleccionado del video original. La IA acelera el trabajo; tu criterio valida el resultado.</p>
-    <a data-source-link href="https://www.youtube.com/watch?v=S6up3AnyARo" target="_blank" rel="noopener noreferrer">Abrir video original ↗</a>
+    <p id="footerAttribution"></p>
+    <a data-source-link hidden target="_blank" rel="noopener noreferrer">Abrir video original ↗</a>
   </footer>
 
   <dialog id="sourceDialog" aria-labelledby="sourceDialogTitle" aria-describedby="sourceDialogText">
@@ -143,10 +162,9 @@
     <p id="sourceDialogText">Vas a salir de Microlearning Center para visitar la fuente original en YouTube. Allí podrás ver el video completo, acceder al canal y suscribirte al autor.</p>
     <div class="dialog-actions">
       <button id="cancelSource" class="icon-button" autofocus>Cancelar</button>
-      <a id="continueSource" class="primary-button" href="https://www.youtube.com/watch?v=S6up3AnyARo" target="_blank" rel="noopener noreferrer">Continuar a YouTube</a>
+      <a id="continueSource" class="primary-button" target="_blank" rel="noopener noreferrer">Continuar a YouTube</a>
     </div>
   </dialog>
-  <script src="./app.js"></script>
-  <script src="https://www.youtube.com/iframe_api"></script>
+  <script type="module" src="./app.js"></script>
 </body>
 </html>

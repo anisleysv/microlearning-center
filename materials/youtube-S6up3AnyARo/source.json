@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0.0",
+  "contentVersion": 1,
+  "id": "youtube:S6up3AnyARo",
+  "type": "youtube",
+  "videoId": "S6up3AnyARo",
+  "url": "https://www.youtube.com/watch?v=S6up3AnyARo",
+  "officialTitle": "🚀 CLASE 1: Conviértete en el 1% Capaz de Comunicarse Correctamente con la IA",
+  "author": {
+    "name": "CenteIA Education",
+    "url": "https://www.youtube.com/@centeia-education"
+  },
+  "language": "es",
+  "attribution": {
+    "text": "Contenido seleccionado del video original. La IA acelera el trabajo; tu criterio valida el resultado."
+  }
+}

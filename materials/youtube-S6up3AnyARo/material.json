@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "1.0.0",
+  "contentVersion": 1,
+  "id": "youtube-S6up3AnyARo",
+  "sourceId": "youtube:S6up3AnyARo",
+  "title": "IA en 58 minutos",
+  "description": "15 microlecciones prácticas para identificar tareas automatizables, estructurar prompts, analizar documentos y crear agentes de IA aplicables al trabajo diario.",
+  "language": "es",
+  "sourceFile": "./source.json",
+  "lessonsFile": "./lessons.json"
+}

@@ -252,3 +252,17 @@ button:not(:disabled):active { transform: translateY(1px); }
 .lesson-panels [role="tabpanel"]:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
 .lesson-card .complete-control { margin-top: .85rem; }
 @media (max-width: 1023px) { .lesson-panels { height: auto; max-height: 280px; min-height: 140px; } }
+
+/* Keep material selection compact and preserve the existing player layout. */
+.material-bar { margin-bottom: 1.25rem; overflow-wrap: anywhere; }
+.material-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.material-heading h1 { margin: 0; font-size: 1.25rem; line-height: 1.3; }
+.material-heading label { display: flex; align-items: center; gap: .5rem; min-width: 0; color: var(--muted); }
+.material-heading select { min-width: 0; max-width: 360px; width: 100%; padding: .55rem; border: 1px solid var(--control-border); border-radius: 8px; color: var(--text); background: var(--surface); }
+.material-bar p { margin: .4rem 0; color: var(--muted); font-size: .85rem; }
+.material-bar p:empty { display: none; }
+.lesson-extra { margin-top: 1rem; }
+.lesson-extra a { color: var(--accent); overflow-wrap: anywhere; }
+.brand span { overflow-wrap: anywhere; }
+button:disabled { cursor: default; opacity: .55; }
+@media (max-width: 720px) { .material-heading { align-items: stretch; flex-direction: column; gap: .65rem; } .material-heading select { max-width: none; } }

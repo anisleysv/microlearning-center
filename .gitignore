@@ -1,6 +1,8 @@
 /context/
 /design/
+/skills/
 /.openai/
 *.tar.gz
 *.zip
 *.tmp
+/.local-review/

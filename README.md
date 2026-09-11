@@ -1,71 +1,145 @@
 # Microlearning Center
 Interactive microlearning hub that transforms selected YouTube videos into focused learning paths with automated clips, actionable summaries, reusable prompts, priority routes, and progress tracking.
 
-## Propósito y versión 1.3
+## Propósito
 
-Convertir videos seleccionados de YouTube en recorridos de microaprendizaje. Esta versión contiene un material con 15 fragmentos relevantes del video S6up3AnyARo.
+Convertir videos seleccionados de YouTube en recorridos de microaprendizaje.
 
-- Recorrido completo: **58:16**.
-- Recorrido prioritario: lecciones **1, 7, 10, 12 y 14**, con duración de **17:19**.
-- Transiciones en pausa: Anterior, Siguiente, el mapa y los cambios de recorrido preparan el intervalo sin reproducción automática. Se comienza exclusivamente con Play dentro de YouTube; la información permanece en el panel lateral.
-- Siguiente permite omitir una microlección sin completarla. Al terminar la última, el mensaje de estado muestra un resumen del recorrido.
-- El fondo del rango temporal lateral se llena con el progreso del intervalo. El texto conserva su tamaño y contraste; no hay porcentaje ni contador adicional visible. El valor accesible se actualiza sin una región de anuncios continuos.
-- Tooltips de navegación disponibles con ratón y foco de teclado; Escape los oculta.
-- «Me gusta» mediante el pulgar de «Qué debes retener»: valora la selección y síntesis de cada microlección, con estado independiente de completada y persistencia por ID estable.
-- Temas Sistema, Claro y Oscuro con preferencia local; Sistema responde a cambios del dispositivo en tiempo real.
-- Logotipo SVG aprobado en la cabecera y como favicon; tipografía Inter alojada localmente.
-- Velocidad ajustable y persistente.
-- Resúmenes, aprendizajes clave, prompts reutilizables y seguimiento del progreso mediante almacenamiento local.
+La aplicación carga un catálogo explícito y paquetes JSON. Añadir otro material compatible no requiere editar el contenido de `app.js`. El catálogo actual contiene únicamente el material original **IA en 58 minutos**, del video `S6up3AnyARo`:
 
-Actualmente el primer material está definido dentro de app.js. En una fase posterior, videos, intervalos y lecciones se convertirán en datos configurables para admitir múltiples materiales.
+- 15 microlecciones y **58:16** de intervalos seleccionados.
+- Alta prioridad: lecciones **1, 7, 10, 12 y 14**, con **17:19**.
+- Textos editoriales, aprendizajes, prompts e intervalos preservados de la versión publicada.
 
 ## Ejecución local
 
-1. Instala Python 3 si no lo tienes.
-2. Abre una terminal en esta carpeta y ejecuta: `python -m http.server 8000`.
-3. Visita http://localhost:8000 y pulsa **Play en el reproductor de YouTube**.
+Se necesita un servidor HTTP; abrir `index.html` mediante `file://` no está soportado.
 
-El video requiere conexión a Internet y acceso a YouTube. El progreso se guarda por navegador y origen; no se sincroniza entre dispositivos. Si el navegador bloquea el almacenamiento, la aplicación funciona sin conservar el progreso al recargar.
+Desde la raíz del proyecto, con Python 3 disponible:
 
-## Publicación
+```powershell
+python -m http.server 8000 --bind 127.0.0.1
+```
 
-GitHub Pages publica desde main, carpeta / (root). La aplicación utiliza index.html, styles.css, app.js, theme.js, los recursos de assets y .nojekyll, sin compilación ni backend.
+Abre [la aplicación local](http://127.0.0.1:8000). Si Windows no encuentra `python`, usa la ruta completa de tu ejecutable Python o un servidor HTTP estático equivalente. No hacen falta módulos de Python adicionales. Detén el servidor con Ctrl+C.
 
-Las carpetas locales context y design son referencias excluidas mediante .gitignore. No se publican ni se modifican. De design se incorporó únicamente una copia idéntica del SVG aprobado en assets/branding/microlearning-center-logo.svg, usada también como favicon.
+YouTube requiere conexión a Internet. La aplicación funciona con HTML, CSS y JavaScript, sin compilación, backend, autenticación ni base de datos.
 
-## Reproducción, progreso y accesibilidad
+## Paquetes y contrato 1.0.0
 
-Al terminar un intervalo se añade únicamente esa lección al progreso persistente. Las lecciones ya completadas se identifican en el mapa y en la casilla manual; al volver a prepararlas, el fondo del rango temporal comienza vacío. Se conserva la opción de marcar o desmarcar manualmente una lección. El resumen cuenta las completadas del recorrido seleccionado, incluidas las de sesiones anteriores.
+```text
+materials/
+├── catalog.json
+├── schema/
+│   ├── source.schema.json
+│   ├── material.schema.json
+│   └── lessons.schema.json
+└── youtube-S6up3AnyARo/
+    ├── source.json
+    ├── material.json
+    └── lessons.json
+```
 
-El reproductor nativo muestra los estados de reproducción y pausa. El mensaje compacto avisa de la preparación de un nuevo intervalo y del final del recorrido. La navegación no marca como completado el intervalo omitido. El progreso utiliza exclusivamente el tiempo interno del video: no hay cronómetro de pared ni detección de anuncios.
+Los tres esquemas son copias exactas de los entregados por `microlearning-app-content-packager`. No se han alterado. Son JSON Schema 2020-12; el validador compartido implementa las palabras utilizadas por estos tres esquemas y rechaza palabras nuevas no soportadas. No pretende ser un motor general de JSON Schema. Tanto el navegador como el script usan este mismo validador, sin dependencias de producción.
 
-## Subtítulos y fuente
+- Carpeta/material: `youtube-<videoId>`; fuente: `youtube:<videoId>`.
+- Lección: `<materialId>-lesson-<stableSuffix>`. Los IDs nunca se renumeran al reordenar; `order` controla presentación.
+- Los tres documentos comparten `schemaVersion: "1.0.0"` y `contentVersion`, entero positivo.
+- `material.json` contiene el título, descripción e idioma editorial, con referencias exactas `./source.json` y `./lessons.json`.
+- `source.json` contiene la identidad y atribución audiovisual.
+- `lessons.json` es un objeto con `materialId` y `lessons`.
+- Los intervalos son enteros `[startSeconds, endSeconds)`, cronológicos, sin solapamientos; se permiten huecos.
+- La prioridad es exclusivamente `high` o `standard`. El recorrido prioritario se deriva mediante comparación explícita con `high`.
+- Cantidades, duraciones y etiquetas temporales se calculan. No se guardan listas prioritarias paralelas.
+- `prompt`, `steps` y `tools` son opcionales. Pasos y herramientas aparecen debajo de los aprendizajes; la plantilla tiene su pestaña cuando existe.
+- Todo texto editorial se presenta mediante `textContent` y creación de elementos, sin interpretar HTML.
 
-Se solicitan controles nativos y subtítulos inicialmente en español mediante controls: 1, cc_load_policy: 1, cc_lang_pref: es y hl: es. Las pistas disponibles y la preferencia final dependen de YouTube y del video original. La API pública documenta fontSize y reload para el módulo captions, pero no un selector fiable de pistas ni controles propios para activar u ocultar subtítulos; se utilizan CC y Configuración del reproductor.
+Las comprobaciones entre archivos validan identidades, revisiones, orden, rutas, URLs web y límites temporales. Los enlaces de video y canal deben corresponder a YouTube; no se admiten esquemas ejecutables en enlaces de herramientas o licencias. La presencia de atribución no certifica que el título o autor sean oficiales: esa comprobación pertenece al proceso editorial y QA. Si falta la duración completa del video, se informa que no se pudo comprobar ese límite superior.
 
-- [Parámetros oficiales de YouTube](https://developers.google.com/youtube/player_parameters)
-- [API oficial del reproductor](https://developers.google.com/youtube/iframe_api_reference#onApiChange)
+## Incorporar materiales
 
-Fuente verificada mediante oEmbed de YouTube el 10 de septiembre de 2026: **🚀 CLASE 1: Conviértete en el 1% Capaz de Comunicarse Correctamente con la IA**, del canal **CenteIA Education** ([canal](https://www.youtube.com/@centeia-education), [video](https://www.youtube.com/watch?v=S6up3AnyARo)). Todas las microlecciones proceden de ese video. La atribución permanece en la información de cada lección. Los enlaces externos de la aplicación muestran un diálogo accesible antes de abrir YouTube en otra pestaña; la aplicación no realiza suscripciones.
+1. Copia un paquete revisado a `materials/youtube-VIDEO_ID/`. Incluye únicamente sus tres JSON, sin transcripciones ni notas internas.
+2. Ejecuta desde la raíz, con Node.js 20 o posterior:
 
-## Preferencias locales
+```powershell
+node scripts/materials.mjs check
+node scripts/materials.mjs sync --dry-run
+node scripts/materials.mjs sync --dry-run --include youtube-VIDEO_ID
+node scripts/materials.mjs sync --include youtube-VIDEO_ID
+```
 
-«Me gusta» reutiliza ia58-favorites-v1 para conservar las selecciones de versiones anteriores sin crear otro sistema paralelo; almacena IDs estables y únicos. La velocidad usa ia58-speed-v1, el progreso mantiene ia58-progress-v1 y el tema usa ia58-theme-v1. Reiniciar progreso no elimina valoraciones, velocidad ni tema. No hay cuenta, sincronización, analítica ni recorrido de favoritas. Si el almacenamiento está bloqueado, las preferencias funcionan durante la sesión; el tema inicial vuelve a Sistema y los datos inválidos se descartan.
+`check` no escribe y valida catálogo y todas las carpetas de paquetes. `sync --dry-run` muestra candidatos, catálogo resultante y diferencias sin escribir. La inclusión exige IDs explícitos mediante `--include`, repetible para varios materiales. El orden existente se conserva y los nuevos IDs se añaden ordenados de forma determinista.
 
-## Validación de la versión 1.3
+`sync` actualiza también las revisiones de los materiales ya incluidos. Si una revisión cambió, `check` detecta la discrepancia; revísala con `sync --dry-run`. Para aplicar solo esa actualización puedes indicar el ID existente con `--include`.
 
-Pruebas en navegador con eventos simulados y regresiones de las versiones anteriores adaptadas a Play nativo: 15 intervalos completos, preparación sin reproducción automática, navegación y ambas rutas, omisión, progreso integrado en 0/50/100 y límites, pausa/carga sin avance artificial, persistencia y recuperación de almacenamiento corrupto o bloqueado, valoraciones independientes, velocidad, tooltips (hover, foco y Escape), subtítulos, atribución y diálogo externo.
+Todos los paquetes deben pasar las validaciones antes de escribir. Un error, un archivo ausente o una carpeta catalogada que desapareció deja el catálogo intacto. La escritura utiliza un archivo temporal y reemplazo final, con comprobación de que el catálogo no cambió mientras se validaba.
 
-Los datos editoriales y rangos se compararon íntegramente con la versión anterior. Se revisaron anchos de 320, 390, 768, 1024 y 1440 px, encabezados y tooltips largos, y contraste del rango vacío, medio y lleno. Con el reproductor real se comprobó Play nativo, finalización de la primera microlección, preparación pausada de la segunda y su inicio mediante Play nativo. Las nuevas pruebas y capturas se ejecutan en una carpeta temporal externa al proyecto; las referencias de context y design se conservan sin cambios.
+El catálogo contiene `schemaVersion` y entradas con `id`, `manifest`, `order`, `status: "published"` y `contentVersion`. Los metadatos editoriales permanecen en el material. Una carpeta fuera del catálogo no es privada si sus archivos se publican: conserva borradores internos fuera de `materials/`.
 
-## Temas e identidad
+El script nunca hace commit, push ni despliegue. Revisa el diff y prueba la aplicación antes de autorizar la publicación.
 
-Las paletas se inspiran en los materiales locales de Stitch: superficies azul marino y cian en oscuro, blanco y pizarra con cian oscuro en claro, ámbar para prioridad y verde para completadas. Los tokens CSS semánticos controlan superficies, texto, bordes, estados, foco y progreso. Se mantiene la estructura compacta y no se incorpora código ni recursos remotos del prototipo.
+## Carga, selección y reproducción
 
-theme.js se ejecuta antes de la hoja de estilos para aplicar la preferencia antes del renderizado visible. Si la preferencia es Sistema, escucha prefers-color-scheme; Claro y Oscuro no cambian al modificar el dispositivo. El selector nativo tiene etiqueta visible y accesible.
+El tema se aplica antes de CSS. Después se cargan catálogo, manifiestos y paquete seleccionado, se recupera su estado y se prepara YouTube cuando la API y el material están listos. El selector se muestra cuando hay varios materiales; con uno se muestran solamente título y descripción.
 
-El logo es una copia sin alterar del SVG aprobado, con Play central, anillo segmentado y pieza de rompecabezas ámbar. La imagen de cabecera es decorativa porque el nombre Microlearning Center permanece visible. El mismo SVG sirve de favicon; a 16 px se reconoce sobre todo el símbolo central y los detalles se aprecian mejor a 32 px o más.
+Las cargas comprueban HTTP, JSON, esquema y relaciones. Durante una carga no se puede actuar sobre el contenido anterior; hay reintento para errores. Un catálogo vacío muestra un aviso. La selección se representa mediante `?material=...`, compatible con recargas de GitHub Pages. Si el ID no está en el catálogo, se carga el primer material disponible, se corrige la URL y se muestra un aviso no bloqueante. Los errores de red, JSON, esquema o integridad conservan su mensaje de error y no activan este fallback. Todas las rutas de datos son relativas a sus documentos.
 
-Inter se aloja en assets/fonts/InterVariable.woff2 con su licencia SIL OFL en assets/fonts/OFL.txt, obtenido del [proyecto oficial Inter](https://github.com/rsms/inter). No se cargan fuentes desde un CDN.
+Cambiar de material pausa y destruye el reproductor anterior. Un identificador de generación y la identidad del reproductor descartan eventos atrasados incluso al volver al mismo video. Existe un único temporizador para actualizar el progreso. Las peticiones anteriores se cancelan y sus resultados se descartan.
 
-Validación adicional: temas en vivo, recarga, preferencia inválida y almacenamiento bloqueado; aplicación antes de CSS; continuidad de selecciones anteriores; contraste AA en textos y controles importantes, incluido el rango vacío y lleno; logo a 16/32/48/64 px; diez combinaciones de tema y ancho; integridad del SVG y de las referencias locales. La captura oscura de Stitch contiene un mensaje de error en lugar de una imagen: se consultaron su HTML y DESIGN.md, junto con la captura clara válida.
+Anterior, Siguiente, el mapa, el cambio de recorrido y la finalización de un intervalo preparan la siguiente lección mediante `cueVideoById`, en pausa. El inicio se realiza con Play dentro de YouTube. Omitir una lección no la marca como completada. El progreso integrado usa exclusivamente tiempo interno del video; no tiempo de pared ni detección de anuncios.
+
+Se conservan tooltips, casilla manual, «Me gusta», copia de prompts, diálogo de fuente externa y navegación de pestañas mediante flechas, Home y End. Fuente original permanece al final. Un material sin `high` muestra el recorrido prioritario deshabilitado y explica el motivo.
+
+Subtítulos y controles siguen siendo nativos. Se solicita el idioma de `source.language`; las pistas y velocidades disponibles dependen del video y de YouTube. La fuente, autor, canal, enlaces, diálogo y pie se actualizan con el material. El nombre del canal se muestra como texto; su URL se conserva y valida en los datos. El único enlace externo del panel es «Ver video original y canal en YouTube»; tanto este enlace como el del pie abren el diálogo de confirmación.
+
+## Persistencia y migración
+
+Preferencias globales:
+
+```text
+microlearning-center:preferences:v2
+```
+
+Contiene `storageVersion: 2`, `theme` y `playbackSpeed`. El tema admite Sistema, Claro y Oscuro; la velocidad admite 1, 1.25, 1.5, 1.75 y 2.
+
+Estado por material:
+
+```text
+microlearning-center:state:v2:<materialId>
+```
+
+Contiene `storageVersion: 2`, `completedLessonIds` y `likedLessonIds`. No se guardan recorrido, lección activa ni posición parcial. Cambiar `contentVersion` no modifica estas claves ni borra el progreso.
+
+La migración utiliza un mapa explícito de los antiguos números 1–15 a IDs estables, solo para `youtube-S6up3AnyARo`. Se deduplican y validan IDs. `ia58-progress-v1` e `ia58-favorites-v1` migran a ese material; `ia58-speed-v1` e `ia58-theme-v1` migran a preferencias globales.
+
+Un registro v2 ya existente nunca se sustituye por una nueva importación del legado. La escritura satisfactoria del registro v2 sirve como marcador de migración; las claves antiguas se conservan. Reiniciar progreso escribe una lista vacía en v2 y conserva «Me gusta», tema y velocidad, evitando reimportar completadas en la siguiente carga.
+
+Si el almacenamiento falla, el estado sigue funcionando en memoria durante la sesión, incluso al cambiar de material. Un origen diferente tiene almacenamiento diferente: la vista local y GitHub Pages no comparten progreso. No hay sincronización entre dispositivos.
+
+## Pruebas
+
+```powershell
+node --test tests/materials.test.mjs
+```
+
+Las pruebas de contrato y almacenamiento usan únicamente Node.js. Para las de navegador se necesita Playwright y un navegador compatible ya instalados:
+
+```powershell
+node tests/browser.cjs
+```
+
+Si Playwright está fuera de las rutas normales de Node, `PLAYWRIGHT_MODULE` puede señalar su ruta. `BROWSER_CHANNEL` selecciona el navegador; el valor predeterminado es `msedge`. No se descargan dependencias automáticamente.
+
+Los fixtures del segundo material se sirven solo en memoria y no se añaden al catálogo. Las copias de trabajo para pruebas del validador, capturas y puntos recuperables están en `.local-review/`, ignorada. Las pruebas comprueban errores de JSON, esquemas, identidades, referencias, tiempos, catálogo, migración y aislamiento; el navegador cubre reproducción simulada, estados de carga, reintento, pestañas, temas y tamaños de 320 a 1440 px.
+
+La regresión editorial compara las 15 lecciones con el commit publicado `a8c826966d9e11cd9e23096b5961b08aea558812`. Durante esta migración se comprobó además con YouTube real: Play del primer intervalo, finalización, preparación de la segunda lección en pausa y su inicio mediante Play nativo.
+
+## Publicación e identidad
+
+GitHub Pages continúa configurado desde `main`, carpeta `/ (root)`. Esta migración se mantiene local hasta revisión y autorización; no requiere cambiar Pages.
+
+`context/`, `design/`, `skills/`, `.local-review/`, archivos ZIP y metadatos de alojamiento permanecen ignorados. Solo los tres esquemas del empaquetador se copian a `materials/schema/`. Los paquetes dentro de `materials/` sí son contenido público versionado.
+
+El logotipo SVG actual conserva Play y el aro segmentado e incorpora el ajuste aprobado de la pieza de rompecabezas ámbar. Ya no es una copia idéntica del SVG de referencia. Esta migración no modifica el logo ni el favicon.
+
+Inter se aloja localmente en `assets/fonts/InterVariable.woff2`, con su licencia en `assets/fonts/OFL.txt`. Se mantienen los temas y el diseño compacto aprobados.

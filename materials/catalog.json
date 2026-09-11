@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0.0",
+  "materials": [
+    {
+      "id": "youtube-S6up3AnyARo",
+      "manifest": "./youtube-S6up3AnyARo/material.json",
+      "order": 1,
+      "status": "published",
+      "contentVersion": 1
+    }
+  ]
+}

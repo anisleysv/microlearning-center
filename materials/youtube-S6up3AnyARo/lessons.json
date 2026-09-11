@@ -1,0 +1,224 @@
+{
+  "schemaVersion": "1.0.0",
+  "contentVersion": 1,
+  "materialId": "youtube-S6up3AnyARo",
+  "lessons": [
+    {
+      "id": "youtube-S6up3AnyARo-lesson-01",
+      "order": 1,
+      "title": "Auditar tareas candidatas para IA",
+      "startSeconds": 1597,
+      "endSeconds": 1747,
+      "priority": "high",
+      "summary": "Localiza primero las tareas repetitivas, lentas y de poco valor. La herramienta viene después del problema.",
+      "retentionPoints": [
+        "Enumera tareas diarias y semanales.",
+        "Marca repetición, demora y bajo valor diferencial.",
+        "Prioriza un proceso delimitado y medible."
+      ]
+    },
+    {
+      "id": "youtube-S6up3AnyARo-lesson-02",
+      "order": 2,
+      "title": "Automatizar el procesamiento de facturas",
+      "startSeconds": 2263,
+      "endSeconds": 2458,
+      "priority": "standard",
+      "summary": "Un flujo puede revisar Gmail, procesar facturas con IA y registrar campos estructurados en Google Sheets.",
+      "retentionPoints": [
+        "Usa Make.com como orquestador.",
+        "Extrae campos definidos, no texto libre.",
+        "Mantén revisión contable humana."
+      ],
+      "prompt": "Extrae número, fecha de emisión, razón social, concepto, base imponible, porcentaje y cuota de IVA e importe total. Devuelve únicamente los campos solicitados."
+    },
+    {
+      "id": "youtube-S6up3AnyARo-lesson-03",
+      "order": 3,
+      "title": "Crear un sistema de diseño reutilizable",
+      "startSeconds": 2467,
+      "endSeconds": 2659,
+      "priority": "standard",
+      "summary": "Proporciona identidad visual, referencias y reglas para producir materiales consistentes sin reconstruir el contexto.",
+      "retentionPoints": [
+        "Aporta logotipo, colores, tipografías y piezas aprobadas.",
+        "Define la estructura de cada entregable.",
+        "Revisa coherencia antes de publicar."
+      ]
+    },
+    {
+      "id": "youtube-S6up3AnyARo-lesson-04",
+      "order": 4,
+      "title": "Construir un agente ejecutivo diario",
+      "startSeconds": 2764,
+      "endSeconds": 3003,
+      "priority": "standard",
+      "summary": "Consolida Slack, Notion, Calendar y Gmail para recibir prioridades, compromisos y comunicaciones relevantes.",
+      "retentionPoints": [
+        "Define fuentes y frecuencia del reporte.",
+        "Explica tus criterios de urgencia e importancia.",
+        "Autoriza respuestas automáticas solo cuando sea seguro."
+      ],
+      "prompt": "Revisa mis fuentes, identifica lo pendiente y prioriza lo que requiere mi atención según urgencia, importancia y posibilidad de delegación."
+    },
+    {
+      "id": "youtube-S6up3AnyARo-lesson-05",
+      "order": 5,
+      "title": "Automatizar llamadas y reservaciones",
+      "startSeconds": 3126,
+      "endSeconds": 3394,
+      "priority": "standard",
+      "summary": "Un agente de voz puede responder consultas acotadas, comprobar disponibilidad y reservar una cita.",
+      "retentionPoints": [
+        "Recoge solo los datos necesarios.",
+        "Consulta el calendario antes de confirmar.",
+        "Ofrece alternativas cuando el horario no esté disponible."
+      ]
+    },
+    {
+      "id": "youtube-S6up3AnyARo-lesson-06",
+      "order": 6,
+      "title": "Mejorar el resultado controlando la entrada",
+      "startSeconds": 4569,
+      "endSeconds": 4715,
+      "priority": "standard",
+      "summary": "La salida mejora cuando el prompt funciona como una especificación clara del trabajo.",
+      "retentionPoints": [
+        "Evalúa precisión, utilidad y adecuación.",
+        "Corrige la instrucción cuando el resultado falla.",
+        "No confundas una mala dirección con una herramienta incapaz."
+      ]
+    },
+    {
+      "id": "youtube-S6up3AnyARo-lesson-07",
+      "order": 7,
+      "title": "Aplicar el método ROCE",
+      "startSeconds": 4720,
+      "endSeconds": 4946,
+      "priority": "high",
+      "summary": "Estructura cada petición con Rol, Objetivo, Contexto y Estructura para obtener una respuesta controlable.",
+      "retentionPoints": [
+        "Rol: especialidad pertinente.",
+        "Objetivo: una meta principal.",
+        "Contexto: datos, restricciones y fuentes.",
+        "Estructura: formato exacto de salida."
+      ],
+      "prompt": "ROL\nActúa como [especialista pertinente].\n\nOBJETIVO\nRealiza [resultado concreto y verificable].\n\nCONTEXTO\nConsidera [situación, datos, restricciones y documentos].\n\nESTRUCTURA\nDevuelve: 1) [sección], 2) [sección], 3) [recomendación y próximos pasos]."
+    },
+    {
+      "id": "youtube-S6up3AnyARo-lesson-08",
+      "order": 8,
+      "title": "Elegir funciones y modelos según la tarea",
+      "startSeconds": 5074,
+      "endSeconds": 5345,
+      "priority": "standard",
+      "summary": "Combina el modelo, las fuentes y la modalidad de entrada de acuerdo con la complejidad real del trabajo.",
+      "retentionPoints": [
+        "Modelo rápido para tareas rutinarias.",
+        "Razonamiento para análisis complejos.",
+        "Usa archivos, búsqueda o voz cuando aporten contexto."
+      ]
+    },
+    {
+      "id": "youtube-S6up3AnyARo-lesson-09",
+      "order": 9,
+      "title": "Aplicar ROCE a un informe profesional",
+      "startSeconds": 5354,
+      "endSeconds": 5787,
+      "priority": "standard",
+      "summary": "Una solicitud con destinatario, restricciones, criterios y formato produce un informe mucho más utilizable.",
+      "retentionPoints": [
+        "Identifica al destinatario.",
+        "Incluye restricciones y criterios de comparación.",
+        "Pide recomendación razonada y próximos pasos."
+      ],
+      "prompt": "Redacta un informe personalizado para [destinatario]. Considera sus prioridades, restricciones y alternativas. Devuelve un resumen ejecutivo, una tabla comparativa, una recomendación razonada y tres próximos pasos."
+    },
+    {
+      "id": "youtube-S6up3AnyARo-lesson-10",
+      "order": 10,
+      "title": "Analizar documentos y generar cuadros de mando",
+      "startSeconds": 5794,
+      "endSeconds": 6188,
+      "priority": "high",
+      "summary": "Combina instrucciones estructuradas con archivos reales para extraer indicadores, riesgos y acciones prioritarias.",
+      "retentionPoints": [
+        "Adjunta el histórico pertinente.",
+        "Define KPI, alertas y horizonte temporal.",
+        "Exige que indique los datos ausentes."
+      ],
+      "prompt": "Analiza el histórico adjunto. Devuelve KPI con valor y tendencia, semáforos de alerta, principales riesgos y tres acciones prioritarias. No inventes datos: señala expresamente cualquier información ausente."
+    },
+    {
+      "id": "youtube-S6up3AnyARo-lesson-11",
+      "order": 11,
+      "title": "Crear un artefacto interactivo con datos",
+      "startSeconds": 6259,
+      "endSeconds": 6608,
+      "priority": "standard",
+      "summary": "Transforma documentos conectados en un panel visual con escenarios, métricas y decisiones próximas.",
+      "retentionPoints": [
+        "Confirma primero qué archivos fueron leídos.",
+        "Solicita escenarios con supuestos explícitos.",
+        "Valida cifras y recomendaciones antes de usarlas."
+      ]
+    },
+    {
+      "id": "youtube-S6up3AnyARo-lesson-12",
+      "order": 12,
+      "title": "Crear agentes para tareas recurrentes",
+      "startSeconds": 6632,
+      "endSeconds": 6854,
+      "priority": "high",
+      "summary": "Convierte una tarea repetida en un asistente con instrucciones, conocimiento y herramientas permanentes.",
+      "retentionPoints": [
+        "Selecciona una tarea estable y repetitiva.",
+        "Separa instrucciones, conocimiento y herramientas.",
+        "Concede únicamente los accesos necesarios."
+      ]
+    },
+    {
+      "id": "youtube-S6up3AnyARo-lesson-13",
+      "order": 13,
+      "title": "Construir un agente editorial especializado",
+      "startSeconds": 6863,
+      "endSeconds": 7134,
+      "priority": "standard",
+      "summary": "Un agente que conoce tu catálogo, tono y método puede planificar contenido sin recibir todo el contexto otra vez.",
+      "retentionPoints": [
+        "Carga conocimiento aprobado y vigente.",
+        "Define tono, audiencia y método editorial.",
+        "Exige variedad y verifica hechos antes de publicar."
+      ],
+      "prompt": "Planifica siete publicaciones sobre [producto] usando ángulos distintos. Devuelve una tabla con día, objetivo, audiencia, gancho e idea visual. Evita repeticiones."
+    },
+    {
+      "id": "youtube-S6up3AnyARo-lesson-14",
+      "order": 14,
+      "title": "Usar la experiencia humana como control de calidad",
+      "startSeconds": 8059,
+      "endSeconds": 8106,
+      "priority": "high",
+      "summary": "La experiencia profesional permite detectar respuestas convincentes pero incorrectas antes de utilizarlas.",
+      "retentionPoints": [
+        "Contrasta la respuesta con evidencia.",
+        "No entregues una salida sin revisarla.",
+        "Reserva la decisión y la responsabilidad para una persona."
+      ]
+    },
+    {
+      "id": "youtube-S6up3AnyARo-lesson-15",
+      "order": 15,
+      "title": "No perseguir siempre el modelo más nuevo",
+      "startSeconds": 8144,
+      "endSeconds": 8237,
+      "priority": "standard",
+      "summary": "Elige una herramienta suficiente, prueba con tareas reales e itera antes de pagar por más capacidad.",
+      "retentionPoints": [
+        "Selecciona por necesidad, no por novedad.",
+        "Prueba tres a cinco iteraciones.",
+        "Usa voz cuando describir el contexto sea más rápido."
+      ]
+    }
+  ]
+}
