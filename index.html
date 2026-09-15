@@ -16,10 +16,11 @@
 <body>
   <header class="topbar">
     <div class="brand">
+      <button id="libraryToggle" class="library-toggle" aria-label="Abrir biblioteca" aria-expanded="false" aria-controls="libraryPanel"><span aria-hidden="true">☰</span></button>
       <img class="brand-logo" src="./assets/branding/microlearning-center-logo.svg" width="48" height="48" alt="" />
       <div>
         <strong>Microlearning Center</strong>
-        <span id="brandSubtitle">Microaprendizaje con videos</span>
+        <span id="brandSubtitle">Biblioteca de microaprendizaje</span>
       </div>
     </div>
     <div class="progress-summary" aria-live="polite">
@@ -35,13 +36,31 @@
     </label>
   </header>
 
+  <dialog id="libraryDrawer" class="library-drawer" aria-labelledby="libraryTitle"></dialog>
+  <div class="app-layout">
+    <div id="libraryDock">
+      <aside id="libraryPanel" class="library-panel" aria-labelledby="libraryTitle">
+        <div class="library-heading"><h2 id="libraryTitle">Biblioteca</h2><button id="libraryClose" class="library-toggle" aria-label="Cerrar biblioteca"><span aria-hidden="true">✕</span></button></div>
+        <p class="library-intro">Encuentra tu próxima ruta</p>
+        <label class="library-search">Buscar<input id="librarySearch" type="search" placeholder="Material, canal o microlección" /></label>
+        <div class="library-filters">
+          <label>Idioma<select id="languageFilter"><option value="">Todos los idiomas</option></select></label>
+          <label>Temática<select id="topicFilter"><option value="">Todas las temáticas</option></select></label>
+          <label>Estado<select id="statusFilter"><option value="">Todos los estados</option><option value="not-started">No iniciado</option><option value="in-progress">En progreso</option><option value="completed">Completado</option></select></label>
+          <label class="library-likes"><input id="likedFilter" type="checkbox" /> Con microlecciones que me gustan</label>
+          <button id="clearFilters" class="text-button">Limpiar filtros</button>
+        </div>
+        <p id="libraryCount" class="library-count" role="status">Cargando biblioteca…</p>
+        <p id="libraryEmpty" hidden>No hay resultados. Prueba otra búsqueda o limpia los filtros.</p>
+        <ul id="libraryResults" class="library-results"></ul>
+      </aside>
+    </div>
+    <div class="content-shell">
   <main>
     <section class="material-bar" aria-labelledby="materialTitle">
       <div class="material-heading">
         <h1 id="materialTitle">Microlearning Center</h1>
-        <label id="materialChooser" hidden>Material
-          <select id="materialSelect" aria-label="Seleccionar material" disabled></select>
-        </label>
+
       </div>
       <p id="materialDescription"></p>
       <p id="fileNotice" hidden>Abre esta aplicación mediante un servidor HTTP local; no se admite file://. Consulta las instrucciones del README.</p>
@@ -156,6 +175,8 @@
     <p id="footerAttribution"></p>
     <a data-source-link hidden target="_blank" rel="noopener noreferrer">Abrir video original ↗</a>
   </footer>
+    </div>
+  </div>
 
   <dialog id="sourceDialog" aria-labelledby="sourceDialogTitle" aria-describedby="sourceDialogText">
     <h2 id="sourceDialogTitle">Abrir YouTube</h2>

@@ -1,0 +1,226 @@
+{
+  "schemaVersion": "1.0.0",
+  "contentVersion": 1,
+  "materialId": "youtube-V60Xr0jbthE",
+  "lessons": [
+    {
+      "id": "youtube-V60Xr0jbthE-lesson-ruta-competencias-ia",
+      "order": 1,
+      "title": "Ordena el aprendizaje de IA por capas",
+      "startSeconds": 3211,
+      "endSeconds": 3298,
+      "priority": "high",
+      "summary": "Sigue una progresión: fundamentos, comunicación con modelos, creación audiovisual, productividad, agentes, soluciones no-code, automatización, aplicación profesional, ética y proyecto final.",
+      "retentionPoints": [
+        "Los fundamentos preceden a las herramientas.",
+        "La práctica avanza de piezas aisladas a sistemas.",
+        "Ética y validación forman parte del recorrido, no son anexos."
+      ],
+      "steps": [
+        "Evalúa tu nivel en cada capa.",
+        "Empieza por el primer vacío relevante.",
+        "Cierra cada etapa con un entregable práctico."
+      ],
+      "tools": [
+        {
+          "name": "n8n",
+          "url": "https://n8n.io/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-V60Xr0jbthE-lesson-modelos-antes-prompts",
+      "order": 2,
+      "title": "Comprende los modelos antes de diseñar prompts y agentes",
+      "startSeconds": 3318,
+      "endSeconds": 3368,
+      "priority": "high",
+      "summary": "Aprende cómo se comportan los modelos y después practica la comunicación, el diseño de prompts, las conexiones y las skills para construir un camino trazable.",
+      "retentionPoints": [
+        "Entender capacidades y límites mejora las instrucciones.",
+        "Diseña prompts después de definir el resultado.",
+        "Conecta herramientas solo cuando el flujo base funcione."
+      ],
+      "steps": [
+        "Compara entradas y límites de varios modelos.",
+        "Practica instrucciones con criterios de aceptación.",
+        "Añade conexiones o skills y vuelve a probar."
+      ],
+      "tools": [
+        {
+          "name": "Claude",
+          "url": "https://claude.ai/"
+        },
+        {
+          "name": "ChatGPT",
+          "url": "https://chatgpt.com/"
+        },
+        {
+          "name": "Gemini",
+          "url": "https://gemini.google.com/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-V60Xr0jbthE-lesson-etica-antes-proyecto",
+      "order": 3,
+      "title": "Incluye ética y gobernanza antes del proyecto final",
+      "startSeconds": 3585,
+      "endSeconds": 3605,
+      "priority": "standard",
+      "summary": "Antes de considerar terminada una solución, revisa ética, seguridad y gobernanza; después valida el aprendizaje mediante un proyecto o evaluación.",
+      "retentionPoints": [
+        "La seguridad se revisa antes de publicar.",
+        "Define responsables y reglas de uso.",
+        "Demuestra la competencia con un resultado verificable."
+      ],
+      "steps": [
+        "Identifica riesgos y datos sensibles.",
+        "Documenta controles y responsable humano.",
+        "Ejecuta una evaluación o proyecto final."
+      ],
+      "tools": []
+    },
+    {
+      "id": "youtube-V60Xr0jbthE-lesson-retos-entregables",
+      "order": 4,
+      "title": "Aprende mediante retos con entregables",
+      "startSeconds": 3609,
+      "endSeconds": 3638,
+      "priority": "standard",
+      "summary": "Convierte cada bloque de teoría en un reto concreto, como crear un agente, un chatbot, un avatar o una transición visual.",
+      "retentionPoints": [
+        "Cada etapa debe producir algo observable.",
+        "Los retos hacen visible el progreso.",
+        "Revisa el resultado contra criterios previos."
+      ],
+      "steps": [
+        "Define un entregable pequeño.",
+        "Establece criterios de aceptación.",
+        "Constrúyelo, pruébalo y registra el aprendizaje."
+      ],
+      "tools": []
+    },
+    {
+      "id": "youtube-V60Xr0jbthE-lesson-problemas-como-oportunidades",
+      "order": 5,
+      "title": "Observa problemas cotidianos como oportunidades de solución",
+      "startSeconds": 4141,
+      "endSeconds": 4173,
+      "priority": "high",
+      "summary": "Busca fricciones reales del trabajo diario y evalúa si la IA puede resolverlas; el valor nace del problema solucionado, no de la herramienta utilizada.",
+      "retentionPoints": [
+        "Observa tareas, esperas y errores frecuentes.",
+        "Valora la dificultad y el impacto del problema.",
+        "Prueba una solución pequeña antes de convertirla en servicio."
+      ],
+      "steps": [
+        "Registra problemas durante una semana.",
+        "Prioriza por frecuencia, dolor y riesgo.",
+        "Diseña un piloto medible."
+      ],
+      "tools": []
+    },
+    {
+      "id": "youtube-V60Xr0jbthE-lesson-fundamentos-agentes-tareas",
+      "order": 6,
+      "title": "Pasa de fundamentos a asistentes que retiren trabajo de poco valor",
+      "startSeconds": 4181,
+      "endSeconds": 4237,
+      "priority": "standard",
+      "summary": "Construye la capacidad en escalones: comprende el mapa, aprende a dirigir modelos y crea asistentes para apoyar tareas repetitivas sin delegar el criterio.",
+      "retentionPoints": [
+        "El método precede al agente.",
+        "Los asistentes deben tener una tarea y un límite claros.",
+        "Reserva a las personas las decisiones y excepciones."
+      ],
+      "steps": [
+        "Define la tarea repetitiva.",
+        "Especifica entradas, salida y límites.",
+        "Prueba con supervisión y mide calidad."
+      ],
+      "tools": []
+    },
+    {
+      "id": "youtube-V60Xr0jbthE-lesson-dirigir-a-operar-agentes",
+      "order": 7,
+      "title": "Evoluciona de dirigir modelos a operar agentes",
+      "startSeconds": 4264,
+      "endSeconds": 4292,
+      "priority": "standard",
+      "summary": "Cuando las instrucciones aisladas ya sean fiables, integra agentes en el trabajo y opera el proceso completo, incluso con herramientas no-code.",
+      "retentionPoints": [
+        "Un agente implica continuidad y acciones, no solo una respuesta.",
+        "Opera con permisos mínimos.",
+        "Mantén registros, supervisión y recuperación ante fallos."
+      ],
+      "steps": [
+        "Estabiliza primero la tarea con instrucciones.",
+        "Añade herramientas y permisos mínimos.",
+        "Supervisa ejecuciones y define puntos de aprobación."
+      ],
+      "tools": []
+    },
+    {
+      "id": "youtube-V60Xr0jbthE-lesson-diagnostico-oportunidad-ia",
+      "order": 8,
+      "title": "Diagnostica dónde aplicar IA antes de elegir la solución",
+      "startSeconds": 5414,
+      "endSeconds": 5477,
+      "priority": "high",
+      "summary": "Identifica la dificultad dominante —información, herramientas ineficientes, integración, creatividad o tiempo— y describe con calma el caso prioritario del trabajo o negocio.",
+      "retentionPoints": [
+        "Nombra el tipo de dificultad.",
+        "Escoge un área prioritaria.",
+        "Describe situación, resultado deseado y restricciones."
+      ],
+      "prompt": "¿Cuál es la dificultad que más limita hoy tu trabajo: falta de información, herramientas ineficientes, integración de sistemas, falta de creatividad o tiempo improductivo? ¿En qué área sería prioritario mejorar o automatizar con IA? Describe el caso actual, el resultado deseado, las personas afectadas y las restricciones.",
+      "steps": [
+        "Clasifica la dificultad principal.",
+        "Selecciona un único caso prioritario.",
+        "Redáctalo con hechos, impacto y resultado esperado."
+      ],
+      "tools": []
+    },
+    {
+      "id": "youtube-V60Xr0jbthE-lesson-rutas-aplicacion-profesional",
+      "order": 9,
+      "title": "Elige una ruta de aplicación profesional",
+      "startSeconds": 5590,
+      "endSeconds": 5619,
+      "priority": "standard",
+      "summary": "Decide si aplicarás la IA para mejorar tu función actual o para resolver problemas de terceros mediante agentes, chatbots, automatizaciones o miniaplicaciones.",
+      "retentionPoints": [
+        "Elige una ruta principal para empezar.",
+        "Ofrece resultados, no herramientas.",
+        "Valida demanda antes de ampliar el servicio."
+      ],
+      "steps": [
+        "Selecciona trabajo actual o servicio externo.",
+        "Define un problema concreto y un entregable.",
+        "Prueba con un caso pequeño y documenta el resultado."
+      ],
+      "tools": []
+    },
+    {
+      "id": "youtube-V60Xr0jbthE-lesson-sistema-no-coleccion-prompts",
+      "order": 10,
+      "title": "Deja de coleccionar prompts y construye un sistema",
+      "startSeconds": 7020,
+      "endSeconds": 7043,
+      "priority": "high",
+      "summary": "Sustituye el consumo disperso de herramientas y prompts por un sistema estable en el que diriges modelos y operas agentes para un resultado concreto.",
+      "retentionPoints": [
+        "Un prompt guardado no genera valor por sí solo.",
+        "Conecta instrucciones, contexto, herramientas y revisión.",
+        "Mide el resultado del sistema completo."
+      ],
+      "steps": [
+        "Elige un resultado recurrente.",
+        "Documenta el flujo desde la entrada hasta la revisión.",
+        "Integra solo los componentes que puedas probar."
+      ],
+      "tools": []
+    }
+  ]
+}

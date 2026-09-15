@@ -1,0 +1,89 @@
+{
+  "indexVersion": 1,
+  "topics": [
+    {
+      "id": "productividad-ia",
+      "label": "Productividad con IA"
+    },
+    {
+      "id": "agentes-ia",
+      "label": "Agentes de IA"
+    },
+    {
+      "id": "generacion-imagenes",
+      "label": "Generación de imágenes"
+    },
+    {
+      "id": "generacion-video",
+      "label": "Generación de vídeo"
+    },
+    {
+      "id": "marketing-contenido",
+      "label": "Marketing y contenido"
+    },
+    {
+      "id": "prompts",
+      "label": "Diseño de prompts"
+    },
+    {
+      "id": "analisis-documentos",
+      "label": "Análisis de documentos"
+    },
+    {
+      "id": "automatizacion-flujos",
+      "label": "Automatización de flujos con IA"
+    },
+    {
+      "id": "aprendizaje-ia",
+      "label": "Aprendizaje aplicado de IA"
+    }
+  ],
+  "materials": [
+    {
+      "id": "youtube-S6up3AnyARo",
+      "topics": [
+        "productividad-ia",
+        "agentes-ia",
+        "prompts",
+        "analisis-documentos"
+      ],
+      "tags": [],
+      "editorialStatus": "approved"
+    },
+    {
+      "id": "youtube-6h6306mA3bQ",
+      "topics": [
+        "productividad-ia",
+        "agentes-ia",
+        "generacion-imagenes",
+        "generacion-video",
+        "marketing-contenido"
+      ],
+      "tags": [],
+      "editorialStatus": "approved"
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY",
+      "topics": [
+        "productividad-ia",
+        "prompts",
+        "agentes-ia",
+        "marketing-contenido",
+        "automatizacion-flujos"
+      ],
+      "tags": [],
+      "editorialStatus": "approved"
+    },
+    {
+      "id": "youtube-V60Xr0jbthE",
+      "topics": [
+        "aprendizaje-ia",
+        "productividad-ia",
+        "prompts",
+        "agentes-ia"
+      ],
+      "tags": [],
+      "editorialStatus": "approved"
+    }
+  ]
+}

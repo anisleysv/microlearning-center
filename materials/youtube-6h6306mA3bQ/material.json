@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "1.0.0",
+  "contentVersion": 1,
+  "id": "youtube-6h6306mA3bQ",
+  "sourceId": "youtube:6h6306mA3bQ",
+  "title": "Agentes, imágenes y vídeos profesionales con IA",
+  "description": "Una ruta práctica para dar contexto a la IA, crear asistentes reutilizables y producir imágenes, vídeos y contenido comercial con procesos consistentes.",
+  "language": "es",
+  "sourceFile": "./source.json",
+  "lessonsFile": "./lessons.json"
+}

@@ -1,0 +1,875 @@
+{
+  "schemaVersion": "1.0.0",
+  "contentVersion": 1,
+  "materialId": "youtube-2BoTWGq0vjY",
+  "lessons": [
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-problema-antes-herramienta",
+      "order": 1,
+      "title": "Empieza por el problema, no por la herramienta",
+      "startSeconds": 1304,
+      "endSeconds": 1363,
+      "priority": "standard",
+      "summary": "Define primero el problema y el método de trabajo; selecciona la herramienta solo cuando sepas qué resultado necesitas y cómo encaja en el sistema.",
+      "retentionPoints": [
+        "Formula el problema con claridad.",
+        "Diseña el método antes de comparar herramientas.",
+        "Evalúa la sostenibilidad del flujo, no solo la novedad."
+      ],
+      "steps": [
+        "Escribe el resultado que buscas.",
+        "Identifica entradas, decisiones y salida.",
+        "Elige la herramienta que cubra ese tramo."
+      ],
+      "tools": []
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-herramientas-especializadas",
+      "order": 2,
+      "title": "Usa herramientas especializadas para acelerar una tarea",
+      "startSeconds": 1387,
+      "endSeconds": 1452,
+      "priority": "standard",
+      "summary": "Aprovecha aplicaciones creadas para un resultado concreto —como presentaciones o infografías— cuando combinen modelos y reduzcan pasos manuales.",
+      "retentionPoints": [
+        "Una herramienta especializada puede orquestar varios modelos.",
+        "Selecciona por resultado, no por popularidad.",
+        "Compara el ahorro de pasos con la pérdida de control."
+      ],
+      "steps": [
+        "Identifica una tarea repetible.",
+        "Busca una aplicación centrada en esa salida.",
+        "Prueba el resultado antes de integrarla."
+      ],
+      "tools": [
+        {
+          "name": "Gamma",
+          "url": "https://gamma.app/"
+        },
+        {
+          "name": "Napkin AI",
+          "url": "https://www.napkin.ai/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-mapa-sistema-activos",
+      "order": 3,
+      "title": "Dibuja el sistema completo antes de producir activos",
+      "startSeconds": 1489,
+      "endSeconds": 1662,
+      "priority": "high",
+      "summary": "Convierte una necesidad real en un sistema conectado: oferta, presentación, web, contenido visual, chatbot, calificación de leads y CRM.",
+      "retentionPoints": [
+        "Parte de una necesidad comercial concreta.",
+        "Relaciona cada activo con el siguiente.",
+        "Evita crear piezas aisladas que no alimenten el proceso."
+      ],
+      "steps": [
+        "Define la oferta y las preguntas que debe responder.",
+        "Ordena los activos por dependencia.",
+        "Añade captación, calificación y seguimiento."
+      ],
+      "tools": []
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-prompt-roce-oferta",
+      "order": 4,
+      "title": "Redacta una oferta con un prompt ROCE",
+      "startSeconds": 1667,
+      "endSeconds": 1800,
+      "priority": "high",
+      "summary": "Estructura una petición con rol, objetivo, contexto y formato de entrega para convertir documentación del negocio en una oferta comercial de una página.",
+      "retentionPoints": [
+        "Asigna un rol experto relevante.",
+        "Declara el objetivo y el público.",
+        "Adjunta contexto verificable y exige una estructura concreta."
+      ],
+      "prompt": "Actúa como consultor prémium del sector inmobiliario. Crea una oferta de captación dirigida a propietarios a partir de los documentos de contexto de Aurora. Entrégala como un documento comercial de una página, claro, convincente y estructurado.",
+      "steps": [
+        "Conecta o adjunta los documentos autorizados.",
+        "Define rol, objetivo, contexto y entrega.",
+        "Revisa que ninguna afirmación exceda la evidencia disponible."
+      ],
+      "tools": [
+        {
+          "name": "Claude",
+          "url": "https://claude.ai/"
+        },
+        {
+          "name": "Google Drive",
+          "url": "https://drive.google.com/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-trabajo-paralelo-contexto",
+      "order": 5,
+      "title": "Trabaja en paralelo sin perder el contexto",
+      "startSeconds": 1832,
+      "endSeconds": 2045,
+      "priority": "high",
+      "summary": "Divide entregables independientes entre dos asistentes: uno genera el documento de oferta y otro prepara el guion de diez diapositivas, ambos basados en el mismo contexto.",
+      "retentionPoints": [
+        "Paraleliza entregables independientes.",
+        "Comparte la misma fuente de verdad.",
+        "Activa explícitamente el conector o adjunta el archivo necesario."
+      ],
+      "prompt": "A partir del mismo contexto y de la oferta de captación, crea el esquema de una presentación comercial de 10 diapositivas. Indica para cada diapositiva su título y los puntos esenciales.",
+      "steps": [
+        "Separa documento y presentación.",
+        "Da a ambos asistentes el mismo contexto.",
+        "Verifica permisos y referencias antes de aceptar la salida."
+      ],
+      "tools": [
+        {
+          "name": "Claude",
+          "url": "https://claude.ai/"
+        },
+        {
+          "name": "ChatGPT",
+          "url": "https://chatgpt.com/"
+        },
+        {
+          "name": "Google Drive",
+          "url": "https://drive.google.com/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-orden-dependencias",
+      "order": 6,
+      "title": "Respeta las dependencias entre entregables",
+      "startSeconds": 2130,
+      "endSeconds": 2163,
+      "priority": "standard",
+      "summary": "Produce primero los activos que otros necesitan: por ejemplo, publica la página antes de cerrar la presentación si esta debe enlazarla.",
+      "retentionPoints": [
+        "Identifica qué salida alimenta a otra.",
+        "No cierres un entregable con enlaces aún inexistentes.",
+        "Trabaja en paralelo solo donde no haya dependencia."
+      ],
+      "steps": [
+        "Dibuja dependencias.",
+        "Genera primero los activos base.",
+        "Inserta enlaces y realiza la revisión final."
+      ],
+      "tools": []
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-gamma-metodo-entrada",
+      "order": 7,
+      "title": "Elige correctamente cómo alimentar Gamma",
+      "startSeconds": 2176,
+      "endSeconds": 2418,
+      "priority": "standard",
+      "summary": "Selecciona la vía de creación de Gamma según el material disponible: idea, texto pegado, archivo, URL o documento conectado.",
+      "retentionPoints": [
+        "La entrada determina cuánto debe interpretar la herramienta.",
+        "Usa texto estructurado cuando ya tengas el guion.",
+        "Confirma que estás en el sitio oficial."
+      ],
+      "steps": [
+        "Abre la opción de creación adecuada.",
+        "Importa o pega el contenido fuente.",
+        "Comprueba la estructura antes de generar."
+      ],
+      "tools": [
+        {
+          "name": "Gamma",
+          "url": "https://gamma.app/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-gamma-estructura-separadores",
+      "order": 8,
+      "title": "Controla la estructura de una presentación en Gamma",
+      "startSeconds": 2421,
+      "endSeconds": 2634,
+      "priority": "high",
+      "summary": "Pega el guion, separa las diapositivas con tres guiones y define si Gamma debe conservar, condensar o ampliar el texto, además del idioma y la concisión.",
+      "retentionPoints": [
+        "Usa --- como separador explícito entre diapositivas.",
+        "Conserva el texto cuando ya esté validado.",
+        "Configura idioma y densidad antes de generar."
+      ],
+      "steps": [
+        "Pega el esquema de diez diapositivas.",
+        "Inserta --- entre bloques.",
+        "Elige el modo de tratamiento del texto y configura español y concisión."
+      ],
+      "tools": [
+        {
+          "name": "Gamma",
+          "url": "https://gamma.app/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-gamma-identidad-visual",
+      "order": 9,
+      "title": "Configura identidad visual antes de generar",
+      "startSeconds": 2634,
+      "endSeconds": 2784,
+      "priority": "standard",
+      "summary": "Selecciona tema, colores, logotipo y estilo de imagen coherentes con la marca antes de producir la presentación.",
+      "retentionPoints": [
+        "La coherencia visual se decide antes de generar.",
+        "Usa una paleta y un logotipo autorizados.",
+        "El estilo de imagen debe apoyar el mensaje."
+      ],
+      "steps": [
+        "Selecciona o crea el tema.",
+        "Carga los activos de marca.",
+        "Define estilo y modelo de imagen."
+      ],
+      "tools": [
+        {
+          "name": "Gamma",
+          "url": "https://gamma.app/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-gamma-edicion-exportacion",
+      "order": 10,
+      "title": "Edita, enlaza y exporta la presentación",
+      "startSeconds": 2784,
+      "endSeconds": 3011,
+      "priority": "standard",
+      "summary": "Ajusta texto, imágenes y diseño; añade vínculos o video y exporta en el formato que requiere el flujo de trabajo.",
+      "retentionPoints": [
+        "Revisa cada diapositiva después de generar.",
+        "Inserta enlaces solo cuando el destino esté listo.",
+        "Elige PDF, imágenes, PowerPoint o web según el uso."
+      ],
+      "steps": [
+        "Corrige contenido y composición.",
+        "Añade enlaces y recursos multimedia.",
+        "Exporta o incrusta la versión aprobada."
+      ],
+      "tools": [
+        {
+          "name": "Gamma",
+          "url": "https://gamma.app/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-lovable-contexto-marca",
+      "order": 11,
+      "title": "Entrega a Lovable un paquete de contexto completo",
+      "startSeconds": 3047,
+      "endSeconds": 3253,
+      "priority": "high",
+      "summary": "Para crear una web coherente, aporta identidad corporativa, logotipo, paleta, documento del negocio y oferta, además de la instrucción escrita.",
+      "retentionPoints": [
+        "El prompt no sustituye al contexto fuente.",
+        "Adjunta marca, negocio y oferta en un mismo encargo.",
+        "Revisa privacidad y derechos de cada archivo."
+      ],
+      "steps": [
+        "Reúne logotipo, paleta y guía de marca.",
+        "Adjunta el contexto del negocio y la oferta validada.",
+        "Describe estructura y comportamiento de la web."
+      ],
+      "tools": [
+        {
+          "name": "Lovable",
+          "url": "https://lovable.dev/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-voz-a-prompt",
+      "order": 12,
+      "title": "Convierte una explicación hablada en un prompt",
+      "startSeconds": 3255,
+      "endSeconds": 3368,
+      "priority": "standard",
+      "summary": "Cuando dictar directamente en una aplicación sea incómodo, graba la explicación en ChatGPT, obtén la transcripción y úsala como borrador del encargo.",
+      "retentionPoints": [
+        "Hablar puede ser más rápido para contexto complejo.",
+        "La transcripción es un borrador, no la instrucción final.",
+        "Elimina repeticiones y datos sensibles antes de copiar."
+      ],
+      "steps": [
+        "Graba una explicación estructurada.",
+        "Transcribe y limpia el texto.",
+        "Pega la versión revisada en la herramienta destino."
+      ],
+      "tools": [
+        {
+          "name": "ChatGPT",
+          "url": "https://chatgpt.com/"
+        },
+        {
+          "name": "Lovable",
+          "url": "https://lovable.dev/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-brief-web-cinco-secciones",
+      "order": 13,
+      "title": "Especifica la arquitectura de la web en el prompt",
+      "startSeconds": 3368,
+      "endSeconds": 3609,
+      "priority": "high",
+      "summary": "Define navegación, secciones, formulario, marca y fuentes de contexto para que el generador produzca una web alineada con el proceso comercial.",
+      "retentionPoints": [
+        "Enumera las secciones y su propósito.",
+        "Detalla los campos y acciones del formulario.",
+        "Referencia los documentos adjuntos como fuente de verdad."
+      ],
+      "prompt": "Crea una web inmobiliaria coherente con la identidad y los documentos adjuntos. Incluye cinco áreas de navegación: inicio, sobre nosotros, inmuebles en venta, landing de captación de propiedades y contacto. En contacto, incorpora un formulario interactivo con los campos necesarios para calificar la solicitud. Usa el logotipo, la paleta y la oferta aportados y no inventes datos del negocio.",
+      "steps": [
+        "Enumera páginas y objetivos.",
+        "Describe el formulario y el recorrido del usuario.",
+        "Adjunta marca, contexto del negocio y oferta."
+      ],
+      "tools": [
+        {
+          "name": "Lovable",
+          "url": "https://lovable.dev/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-frame-to-flow",
+      "order": 14,
+      "title": "Genera imágenes y transiciones como un flujo reutilizable",
+      "startSeconds": 3649,
+      "endSeconds": 3880,
+      "priority": "standard",
+      "summary": "Analiza un documento del negocio para producir prompts coordinados de imagen y video, adaptados a distintos formatos y reutilizables en web, redes y anuncios.",
+      "retentionPoints": [
+        "Parte de un documento de negocio validado.",
+        "Genera imagen inicial y final coherentes.",
+        "Adapta la relación de aspecto al canal."
+      ],
+      "steps": [
+        "Extrae concepto visual y restricciones.",
+        "Genera prompts para imágenes de referencia.",
+        "Crea la transición y exporta variantes 9:16, 4:5 o 16:9."
+      ],
+      "tools": [
+        {
+          "name": "Nano Banana Pro"
+        },
+        {
+          "name": "Kling AI",
+          "url": "https://klingai.com/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-revisar-publicar-web",
+      "order": 15,
+      "title": "Revisa el recorrido antes de publicar la web",
+      "startSeconds": 4551,
+      "endSeconds": 4742,
+      "priority": "standard",
+      "summary": "Inspecciona navegación, filtros, fichas y formulario; publica solo después de verificar que cada elemento apoya el objetivo comercial.",
+      "retentionPoints": [
+        "Prueba el recorrido como usuario.",
+        "Valida filtros y formularios.",
+        "Conserva la URL publicada como activo del sistema."
+      ],
+      "steps": [
+        "Recorre todas las secciones.",
+        "Envía una prueba del formulario.",
+        "Publica y registra la URL definitiva."
+      ],
+      "tools": [
+        {
+          "name": "Lovable",
+          "url": "https://lovable.dev/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-chatbot-multicanal",
+      "order": 16,
+      "title": "Diseña el chatbot para varios canales",
+      "startSeconds": 4751,
+      "endSeconds": 4837,
+      "priority": "standard",
+      "summary": "Planifica un asistente capaz de atender desde la web o canales de mensajería y, cuando proceda, facilitar una reserva de calendario.",
+      "retentionPoints": [
+        "La misma base de conocimiento puede servir a varios canales.",
+        "Cada canal necesita pruebas propias.",
+        "Define cuándo escalar a una persona."
+      ],
+      "steps": [
+        "Selecciona canales prioritarios.",
+        "Define alcance y escalado humano.",
+        "Prueba respuestas y reservas en cada canal."
+      ],
+      "tools": [
+        {
+          "name": "WhatsApp"
+        },
+        {
+          "name": "Telegram"
+        },
+        {
+          "name": "Messenger"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-system-prompt-chatbot",
+      "order": 17,
+      "title": "Limita el chatbot a su conocimiento autorizado",
+      "startSeconds": 4988,
+      "endSeconds": 5079,
+      "priority": "high",
+      "summary": "Configura nombre, descripción, aspecto e instrucción de sistema para que el asistente responda únicamente con la información proporcionada.",
+      "retentionPoints": [
+        "Declara el alcance permitido.",
+        "No dejes que improvise datos del negocio.",
+        "Haz visible una vía de contacto humano."
+      ],
+      "prompt": "Eres un asistente servicial. Responde únicamente con la información disponible en tu base de conocimiento. Si no encuentras la respuesta, indícalo y deriva la consulta a una persona.",
+      "steps": [
+        "Nombra y describe el asistente.",
+        "Añade la instrucción de sistema.",
+        "Configura apariencia y mensaje de bienvenida."
+      ],
+      "tools": [
+        {
+          "name": "Nubion AI"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-entrenar-chatbot-fuentes",
+      "order": 18,
+      "title": "Entrena el chatbot con fuentes controladas",
+      "startSeconds": 5079,
+      "endSeconds": 5208,
+      "priority": "high",
+      "summary": "Carga web, archivos y pares de preguntas y respuestas como base de conocimiento; después reentrena y prueba consultas representativas.",
+      "retentionPoints": [
+        "Usa fuentes vigentes y autorizadas.",
+        "Combina web, documentos y preguntas frecuentes.",
+        "Prueba respuestas correctas, ausentes y ambiguas."
+      ],
+      "steps": [
+        "Añade URL y documentos del negocio.",
+        "Incluye preguntas frecuentes validadas.",
+        "Entrena, prueba y corrige las fuentes."
+      ],
+      "tools": [
+        {
+          "name": "Nubion AI"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-integrar-chatbot-web",
+      "order": 19,
+      "title": "Integra el chatbot en el dominio correcto",
+      "startSeconds": 5238,
+      "endSeconds": 5430,
+      "priority": "high",
+      "summary": "Autoriza el dominio, copia el código de inserción, solicita su integración en la web y comprueba el widget en la página publicada.",
+      "retentionPoints": [
+        "Restringe el widget al dominio previsto.",
+        "Inserta el código sin exponer secretos.",
+        "Recarga y prueba el bot en producción."
+      ],
+      "steps": [
+        "Registra el dominio permitido.",
+        "Copia el fragmento de inserción.",
+        "Añádelo a la web y ejecuta una prueba completa."
+      ],
+      "tools": [
+        {
+          "name": "Nubion AI"
+        },
+        {
+          "name": "Lovable",
+          "url": "https://lovable.dev/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-automatizacion-cuando-entonces",
+      "order": 20,
+      "title": "Modela una automatización como «cuando… entonces…»",
+      "startSeconds": 5498,
+      "endSeconds": 5533,
+      "priority": "standard",
+      "summary": "Expresa el proceso como un evento que dispara una o varias acciones y luego selecciona la plataforma de automatización adecuada.",
+      "retentionPoints": [
+        "Toda automatización comienza con un evento.",
+        "Las acciones deben ser observables y comprobables.",
+        "Elige la plataforma según conectores y complejidad."
+      ],
+      "steps": [
+        "Escribe el evento «cuando». ",
+        "Enumera las acciones «entonces».",
+        "Decide dónde hace falta revisión humana."
+      ],
+      "tools": [
+        {
+          "name": "Zapier",
+          "url": "https://zapier.com/"
+        },
+        {
+          "name": "Make",
+          "url": "https://www.make.com/"
+        },
+        {
+          "name": "n8n",
+          "url": "https://n8n.io/"
+        },
+        {
+          "name": "Power Automate",
+          "url": "https://www.microsoft.com/power-platform/products/power-automate"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-correo-borrador-humano",
+      "order": 21,
+      "title": "Prepara respuestas de correo con revisión humana",
+      "startSeconds": 5559,
+      "endSeconds": 5600,
+      "priority": "standard",
+      "summary": "Haz que la IA lea un correo entrante y redacte un borrador, manteniendo la aprobación humana antes de enviarlo.",
+      "retentionPoints": [
+        "Genera borradores, no envíos autónomos.",
+        "Protege datos confidenciales.",
+        "Revisa tono, destinatario y hechos."
+      ],
+      "steps": [
+        "Detecta el correo entrante.",
+        "Genera un borrador con contexto permitido.",
+        "Solicita revisión y envío humano."
+      ],
+      "tools": []
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-firma-correo-crm",
+      "order": 22,
+      "title": "Convierte firmas de correo en contactos del CRM",
+      "startSeconds": 5615,
+      "endSeconds": 5651,
+      "priority": "standard",
+      "summary": "Extrae datos de la firma, comprueba si el contacto ya existe y crea el registro solo cuando sea nuevo.",
+      "retentionPoints": [
+        "Busca duplicados antes de crear.",
+        "Mapea cada dato al campo correcto.",
+        "Respeta consentimiento y política de contactos."
+      ],
+      "steps": [
+        "Extrae nombre, empresa y datos de contacto.",
+        "Consulta el CRM.",
+        "Crea o actualiza según reglas explícitas."
+      ],
+      "tools": [
+        {
+          "name": "CRM"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-audio-visita-crm",
+      "order": 23,
+      "title": "Pasa notas de voz de una visita al CRM",
+      "startSeconds": 5663,
+      "endSeconds": 5724,
+      "priority": "standard",
+      "summary": "Después de una visita, dicta las observaciones; transcribe, extrae datos estructurados y prepara la actualización del CRM.",
+      "retentionPoints": [
+        "Captura la información cuando aún está fresca.",
+        "Separa hechos de impresiones.",
+        "Confirma los campos antes de guardar."
+      ],
+      "steps": [
+        "Graba la nota con una plantilla verbal.",
+        "Transcribe y extrae campos.",
+        "Revisa y actualiza el registro."
+      ],
+      "tools": [
+        {
+          "name": "CRM"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-reutilizar-idea-canales",
+      "order": 24,
+      "title": "Reutiliza una idea en varios canales",
+      "startSeconds": 5724,
+      "endSeconds": 5782,
+      "priority": "standard",
+      "summary": "Transforma una idea fuente en versiones adaptadas para redes y web, conservando el mensaje central y ajustando el formato.",
+      "retentionPoints": [
+        "Mantén una fuente de verdad.",
+        "Adapta tono y longitud al canal.",
+        "No publiques sin revisión editorial."
+      ],
+      "steps": [
+        "Redacta la idea base.",
+        "Define requisitos por canal.",
+        "Genera, revisa y programa cada variante."
+      ],
+      "tools": [
+        {
+          "name": "Instagram",
+          "url": "https://www.instagram.com/"
+        },
+        {
+          "name": "LinkedIn",
+          "url": "https://www.linkedin.com/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-soporte-whatsapp-multimodal",
+      "order": 25,
+      "title": "Automatiza soporte multimodal con límites claros",
+      "startSeconds": 5782,
+      "endSeconds": 5844,
+      "priority": "standard",
+      "summary": "Procesa mensajes de WhatsApp en distintos formatos y prepara respuestas; si se usa una voz sintética, exige consentimiento explícito, identificación y revisión.",
+      "retentionPoints": [
+        "Define formatos admitidos y tiempos de respuesta.",
+        "Escala consultas legales o sensibles.",
+        "Nunca clones ni suplantes una voz sin consentimiento verificable."
+      ],
+      "steps": [
+        "Clasifica texto, audio e imagen.",
+        "Consulta fuentes autorizadas.",
+        "Genera una respuesta identificada como asistida por IA y escala cuando corresponda."
+      ],
+      "tools": [
+        {
+          "name": "WhatsApp"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-facturas-a-contabilidad",
+      "order": 26,
+      "title": "Clasifica facturas recibidas por correo",
+      "startSeconds": 5846,
+      "endSeconds": 5901,
+      "priority": "standard",
+      "summary": "Detecta facturas, extrae datos, archívalas en la carpeta correcta y prepara su envío a contabilidad, con validación humana antes del registro financiero.",
+      "retentionPoints": [
+        "Verifica proveedor, importe, moneda e impuestos.",
+        "Evita duplicados.",
+        "No contabilices ni pagues automáticamente sin controles."
+      ],
+      "steps": [
+        "Detecta y lee el adjunto.",
+        "Valida campos y duplicados.",
+        "Archiva y remite a revisión contable."
+      ],
+      "tools": []
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-cv-preguntas-sin-decision",
+      "order": 27,
+      "title": "Prepara entrevistas sin delegar la decisión a la IA",
+      "startSeconds": 5903,
+      "endSeconds": 5928,
+      "priority": "standard",
+      "summary": "Usa el CV para sugerir preguntas relacionadas con el puesto, pero no permitas que un puntaje automático descarte o seleccione candidatos.",
+      "retentionPoints": [
+        "La IA puede preparar preguntas, no decidir la contratación.",
+        "Revisa sesgos y relevancia laboral.",
+        "Protege datos personales y documenta el criterio humano."
+      ],
+      "steps": [
+        "Define competencias del puesto.",
+        "Genera preguntas basadas en evidencia del CV.",
+        "Revisa legalidad, sesgo y pertinencia antes de entrevistar."
+      ],
+      "tools": []
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-make-escenario-modulos-filtros",
+      "order": 28,
+      "title": "Comprende escenarios, módulos y filtros en Make",
+      "startSeconds": 6035,
+      "endSeconds": 6293,
+      "priority": "high",
+      "summary": "Modela el flujo como un escenario compuesto por aplicaciones y módulos; usa filtros para decidir qué datos continúan por cada ruta.",
+      "retentionPoints": [
+        "El escenario representa el proceso completo.",
+        "Cada módulo ejecuta una acción o consulta.",
+        "Los filtros impiden que datos incorrectos avancen."
+      ],
+      "steps": [
+        "Dibuja el escenario.",
+        "Asigna una aplicación y operación a cada módulo.",
+        "Añade filtros con condiciones comprobables."
+      ],
+      "tools": [
+        {
+          "name": "Make",
+          "url": "https://www.make.com/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-tipos-disparador",
+      "order": 29,
+      "title": "Elige el tipo de disparador correcto",
+      "startSeconds": 6293,
+      "endSeconds": 6376,
+      "priority": "standard",
+      "summary": "Distingue entre ejecución programada, instantánea y bajo demanda según cómo nace el proceso y la urgencia requerida.",
+      "retentionPoints": [
+        "Programado: revisa en intervalos.",
+        "Instantáneo: reacciona a un evento.",
+        "Bajo demanda: se inicia manualmente o por petición."
+      ],
+      "steps": [
+        "Define el evento de inicio.",
+        "Determina la latencia aceptable.",
+        "Escoge el disparador y prueba repeticiones."
+      ],
+      "tools": [
+        {
+          "name": "Make",
+          "url": "https://www.make.com/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-crear-escenario-make",
+      "order": 30,
+      "title": "Crea y encadena módulos en Make",
+      "startSeconds": 6387,
+      "endSeconds": 6573,
+      "priority": "standard",
+      "summary": "Crea un escenario, selecciona la aplicación, elige el evento u operación y añade el siguiente módulo para construir el flujo.",
+      "retentionPoints": [
+        "Organiza escenarios por proyecto.",
+        "Elige la operación exacta, no solo la aplicación.",
+        "Prueba cada módulo antes de encadenar más."
+      ],
+      "steps": [
+        "Crea o abre una carpeta de escenarios.",
+        "Añade Gmail y selecciona una operación.",
+        "Conecta y prueba el siguiente módulo."
+      ],
+      "tools": [
+        {
+          "name": "Make",
+          "url": "https://www.make.com/"
+        },
+        {
+          "name": "Gmail",
+          "url": "https://mail.google.com/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-lead-ia-sheets-alerta",
+      "order": 31,
+      "title": "Automatiza la calificación operativa de un lead",
+      "startSeconds": 6598,
+      "endSeconds": 6744,
+      "priority": "high",
+      "summary": "Conecta el formulario con un análisis asistido por IA, registra el resultado en Sheets y envía una alerta para que una persona decida el seguimiento.",
+      "retentionPoints": [
+        "Conserva los datos originales del formulario.",
+        "Usa el análisis como apoyo, no como decisión irreversible.",
+        "Envía una alerta accionable al responsable."
+      ],
+      "steps": [
+        "Captura el formulario.",
+        "Extrae necesidades y propone prioridad con criterios explícitos.",
+        "Registra en Sheets y notifica para revisión humana."
+      ],
+      "tools": [
+        {
+          "name": "Make",
+          "url": "https://www.make.com/"
+        },
+        {
+          "name": "Google Sheets",
+          "url": "https://docs.google.com/spreadsheets/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-ejecutar-inspeccionar-flujo",
+      "order": 32,
+      "title": "Ejecuta una prueba y revisa cada salida",
+      "startSeconds": 6764,
+      "endSeconds": 7002,
+      "priority": "standard",
+      "summary": "Lanza el escenario con datos de prueba y verifica estructura, análisis, registro y correo antes de activarlo de forma continua.",
+      "retentionPoints": [
+        "Prueba con casos normales y extremos.",
+        "Inspecciona la salida de cada módulo.",
+        "Corrige mapeos antes de activar."
+      ],
+      "steps": [
+        "Ejecuta una muestra controlada.",
+        "Comprueba datos, recomendación y fila creada.",
+        "Verifica el email y documenta errores."
+      ],
+      "tools": [
+        {
+          "name": "Make",
+          "url": "https://www.make.com/"
+        },
+        {
+          "name": "Google Sheets",
+          "url": "https://docs.google.com/spreadsheets/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-aumentar-equipo-humano",
+      "order": 33,
+      "title": "Automatiza para aumentar al equipo humano",
+      "startSeconds": 7002,
+      "endSeconds": 7030,
+      "priority": "standard",
+      "summary": "Usa la automatización para retirar trabajo repetitivo y mejorar la capacidad del equipo, manteniendo criterio y responsabilidad humanos.",
+      "retentionPoints": [
+        "Automatizar no equivale a eliminar supervisión.",
+        "Reserva a las personas decisiones y excepciones.",
+        "Mide calidad además de velocidad."
+      ],
+      "steps": [
+        "Separa tareas repetitivas de decisiones.",
+        "Automatiza el tramo estable.",
+        "Define revisión, escalado y métricas."
+      ],
+      "tools": []
+    },
+    {
+      "id": "youtube-2BoTWGq0vjY-lesson-priorizar-que-automatizar",
+      "order": 34,
+      "title": "No automatices todo: prioriza por impacto",
+      "startSeconds": 7273,
+      "endSeconds": 7313,
+      "priority": "standard",
+      "summary": "Selecciona procesos cuya automatización mejore productividad, agilidad o rentabilidad; deja fuera tareas inestables o de poco beneficio.",
+      "retentionPoints": [
+        "No todo proceso merece automatizarse.",
+        "Prioriza impacto medible.",
+        "Evita automatizar un proceso defectuoso."
+      ],
+      "steps": [
+        "Lista procesos candidatos.",
+        "Puntúa volumen, estabilidad, riesgo e impacto.",
+        "Empieza por un piloto reversible."
+      ],
+      "tools": []
+    }
+  ]
+}

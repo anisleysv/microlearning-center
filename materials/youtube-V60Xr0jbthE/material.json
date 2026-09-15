@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "1.0.0",
+  "contentVersion": 1,
+  "id": "youtube-V60Xr0jbthE",
+  "sourceId": "youtube:V60Xr0jbthE",
+  "title": "Hoja de ruta para desarrollar competencias aplicadas en IA",
+  "description": "Una selección concisa de un video principalmente comercial: conserva la secuencia de aprendizaje, los ejercicios de diagnóstico y los criterios prácticos para pasar del consumo de herramientas a la construcción de sistemas.",
+  "language": "es",
+  "sourceFile": "./source.json",
+  "lessonsFile": "./lessons.json"
+}

@@ -1,3 +1,4 @@
+import { createLibraryView } from './lib/library-view.mjs';
 import { loadLibrary, loadPackage } from './lib/loader.mjs';
 import { formatDuration, intervalLabel } from './lib/content.mjs';
 import { createStateStore } from './lib/storage.mjs';
@@ -17,6 +18,10 @@ const player = createPlayer({
   onStatus: (message, retry = false) => { if (!busy) { $('statusMessage').textContent = message; if (retry) $('retryButton').hidden = false; } },
   onSpeed: saveSpeed
 });
+const libraryView = createLibraryView({store,selectedId:()=>bundle?.material.id,onChoose:(id,lesson)=>void selectMaterial(id,true,lesson,true)});
+function syncUrl() {
+  const url=new URL(location.href);url.searchParams.set('material',bundle.material.id);url.searchParams.set('lesson',currentLesson().id);history.replaceState(null,'',url);
+}
 function element(tag, text, className) { const node = document.createElement(tag); if (text !== undefined) node.textContent = text; if (className) node.className = className; return node; }
 function renderClipProgress(time = currentLesson().startSeconds) {
   const lesson = currentLesson(), duration = lesson.endSeconds - lesson.startSeconds;
@@ -30,6 +35,7 @@ function renderProgress() {
   $('progressText').textContent = count+' de '+bundle.lessons.length+' completados';
   $('progressBar').style.width = count / bundle.lessons.length * 100 + '%';
   $('completeCheckbox').checked = state.completed.has(currentLesson().id);
+  libraryView.refresh();
 }
 function renderList() {
   const fragment = document.createDocumentFragment();
@@ -70,11 +76,12 @@ function renderLesson() {
   renderLike(); renderProgress(); renderList();
 }
 function prepareLesson(focus = true, message = '') {
-  player.cue(currentLesson()); renderLesson(); renderClipProgress();
+  player.cue(currentLesson()); renderLesson(); renderClipProgress(); syncUrl();
   $('statusMessage').textContent = message || 'Pulsa Play en YouTube cuando quieras comenzar.';
   if (focus) $('lessonTitle').focus({preventScroll:true});
 }
 function persistState() {
+  libraryView.refresh();
   if (!store.save(bundle.material.id,state)) $('storageMessage').textContent = 'No se puede guardar el progreso ni Me gusta; se conservarán durante esta sesión.';
 }
 function finishLesson() {
@@ -112,7 +119,6 @@ function modeButtons() {
 function renderMaterial() {
   const {material,source,stats} = bundle;
   $('materialTitle').textContent = material.title; $('materialDescription').textContent = material.description;
-  $('brandSubtitle').textContent = material.title;
   document.title = 'Microlearning Center · '+material.title;
   document.querySelector('meta[name="description"]').content = material.description;
   document.querySelector('[data-mode="full"]').textContent = 'Completo · '+formatDuration(stats.selectedSeconds);
@@ -123,7 +129,7 @@ function renderMaterial() {
   $('sourceAttribution').textContent = source.attribution.text; $('footerAttribution').textContent = source.attribution.text;
   document.querySelectorAll('[data-source-link], #continueSource').forEach(link=>{link.href = source.url;});
   $('sourceDialogText').textContent = 'Vas a salir de Microlearning Center para visitar «'+source.officialTitle+'», de '+source.author.name+', en YouTube. Allí podrás ver el video completo, acceder al canal y suscribirte al autor.';
-  $('materialSelect').value = material.id; modeButtons();
+  modeButtons();
 }
 function loading(message) {
   busy = true; player.reset();
@@ -138,7 +144,7 @@ function loadError(error) {
   $('loadMessage').textContent = 'No se pudo cargar el material. '+error.message;
   $('retryButton').hidden = false; $('workspace').setAttribute('aria-busy','false');
 }
-async function selectMaterial(id, updateUrl = true) {
+async function selectMaterial(id, updateUrl = true, lessonId, focus = false) {
   const token = ++generation; request?.abort(); request = new AbortController();
   loading('Cargando material…');
   const requested = library.materials.find(item=>item.material.id === id);
@@ -149,32 +155,33 @@ async function selectMaterial(id, updateUrl = true) {
     const next = await loadPackage(item,library.schemas,request.signal);
     if (token !== generation) return;
     bundle = next; state = store.load(bundle.material.id,bundle.lessons);
-    activeMode = 'full'; activeIndex = 0; busy = false;
+    const targetIndex = requested && lessonId ? bundle.lessons.findIndex(lesson=>lesson.id===lessonId) : -1;
+    activeMode = 'full'; activeIndex = Math.max(0,targetIndex); busy = false;
     $('workspace').hidden = false; $('workspace').inert = false; $('curriculum').hidden = false;
     $('workspace').setAttribute('aria-busy','false');
-    $('loadMessage').textContent = requested ? '' : 'El material solicitado no estaba disponible. Se abrió el material predeterminado.';
+    $('loadMessage').textContent = requested ? (lessonId && targetIndex<0 ? 'La microlección solicitada no estaba disponible. Se abrió la primera del material.' : '') : 'El material solicitado no estaba disponible. Se abrió el material predeterminado.';
     document.querySelectorAll('[data-source-link]').forEach(link=>link.hidden = false);
     $('storageMessage').textContent = state.persistent && preferences.available() ? '' : 'El almacenamiento no está disponible; los cambios se conservan durante esta sesión.';
     renderMaterial(); renderLesson(); renderClipProgress();
     $('statusMessage').textContent = 'Pulsa Play en YouTube cuando quieras comenzar.';
-    if (updateUrl) { const url = new URL(location.href); url.searchParams.set('material',bundle.material.id); history.replaceState(null,'',url); }
+    if (updateUrl) syncUrl();
+    if (focus) $('lessonTitle').focus({preventScroll:true});
     void player.setSource(bundle.source,currentLesson(),playbackSpeed);
   } catch (error) { if (token === generation && error.name !== 'AbortError') loadError(error); }
 }
 async function start() {
   const token = ++generation; request?.abort(); request = new AbortController();
-  loading('Cargando materiales…'); $('materialSelect').disabled = true;
+  loading('Cargando materiales…');
   try {
     const nextLibrary = await loadLibrary(request.signal);
     if (token !== generation) return;
     library = nextLibrary;
-    $('materialSelect').replaceChildren(...library.materials.map(item=>{ const option = element('option',item.material.title); option.value = item.material.id; return option; }));
-    $('materialChooser').hidden = library.materials.length < 2; $('materialSelect').disabled = false;
+    libraryView.setData(library);
     if (!library.materials.length) { $('loadMessage').textContent = 'Todavía no hay materiales publicados.'; $('materialTitle').textContent = 'Microlearning Center'; $('materialDescription').textContent = ''; $('retryButton').hidden = false; $('workspace').setAttribute('aria-busy','false'); return; }
-    await selectMaterial(new URL(location.href).searchParams.get('material') || library.materials[0].material.id);
+    const params=new URL(location.href).searchParams;
+    await selectMaterial(params.get('material') || library.materials[0].material.id,true,params.get('lesson'));
   } catch (error) { if (token === generation && error.name !== 'AbortError') loadError(error); }
 }
-$('materialSelect').addEventListener('change',()=>void selectMaterial($('materialSelect').value));
 $('retryButton').addEventListener('click',()=>void start());
 for (const [id,direction] of [['prevButton',-1],['nextButton',1]]) $(id).addEventListener('click',()=>{
   if (busy || activeIndex+direction<0 || activeIndex+direction>=route().length) return;
@@ -207,6 +214,7 @@ document.querySelectorAll('.tooltip-wrap').forEach(wrapper=>{
 });
 document.addEventListener('keydown',event=>{if (event.key==='Escape') document.querySelectorAll('.tooltip-wrap').forEach(wrapper=>wrapper.classList.add('tooltip-dismissed'));});
 window.addEventListener('pagehide',()=>{request?.abort(); player.pause();});
+window.addEventListener('popstate',()=>{if(library){const params=new URL(location.href).searchParams;void selectMaterial(params.get('material')||library.materials[0]?.material.id,true,params.get('lesson'));}});
 void start();
 
 function selectLessonTab(id, focus = false) {

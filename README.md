@@ -5,11 +5,20 @@ Interactive microlearning hub that transforms selected YouTube videos into focus
 
 Convertir videos seleccionados de YouTube en recorridos de microaprendizaje.
 
-La aplicación carga un catálogo explícito y paquetes JSON. Añadir otro material compatible no requiere editar el contenido de `app.js`. El catálogo actual contiene únicamente el material original **IA en 58 minutos**, del video `S6up3AnyARo`:
+La aplicación carga un catálogo explícito y paquetes JSON. Añadir otro material compatible no requiere editar el contenido de `app.js`. El catálogo local contiene cuatro materiales con contenido aprobado. Los cuatro materiales cuentan con contenido y clasificación editorial aprobados. El original **IA en 58 minutos**, del video `S6up3AnyARo`, conserva:
 
 - 15 microlecciones y **58:16** de intervalos seleccionados.
 - Alta prioridad: lecciones **1, 7, 10, 12 y 14**, con **17:19**.
 - Textos editoriales, aprendizajes, prompts e intervalos preservados de la versión publicada.
+
+El segundo material, **Agentes, imágenes y vídeos profesionales con IA** (`6h6306mA3bQ`), contiene 30 microlecciones: **01:21:24** seleccionados y **30:50** prioritarios (lecciones 2, 3, 5, 6, 7, 11, 17, 19, 20, 24, 26 y 27). Sus tres JSON se incorporan sin cambios desde el paquete aprobado, incluida la salvaguarda de la microlección 29.
+
+La biblioteca incluye también:
+
+- **Herramientas y automatizaciones con IA: un sistema práctico de trabajo** (`2BoTWGq0vjY`): 34 microlecciones, **01:12:20** completos y **33:15** prioritarios (3, 4, 5, 8, 11, 13, 17, 18, 19, 28 y 31).
+- **Hoja de ruta para desarrollar competencias aplicadas en IA** (`V60Xr0jbthE`): 10 microlecciones, **06:57** completos y **04:15** prioritarios (1, 2, 5, 8 y 10).
+
+Ambos conservan exactamente los tres JSON aprobados y `editorialStatus: "approved"` en el índice. La publicación de materiales nuevos requiere aprobación técnica, editorial y visual explícita.
 
 ## Ejecución local
 
@@ -30,11 +39,24 @@ YouTube requiere conexión a Internet. La aplicación funciona con HTML, CSS y J
 ```text
 materials/
 ├── catalog.json
+├── library.json
 ├── schema/
 │   ├── source.schema.json
 │   ├── material.schema.json
 │   └── lessons.schema.json
-└── youtube-S6up3AnyARo/
+├── youtube-S6up3AnyARo/
+│   ├── source.json
+│   ├── material.json
+│   └── lessons.json
+├── youtube-6h6306mA3bQ/
+│   ├── source.json
+│   ├── material.json
+│   └── lessons.json
+├── youtube-2BoTWGq0vjY/
+│   ├── source.json
+│   ├── material.json
+│   └── lessons.json
+└── youtube-V60Xr0jbthE/
     ├── source.json
     ├── material.json
     └── lessons.json
@@ -58,7 +80,7 @@ Las comprobaciones entre archivos validan identidades, revisiones, orden, rutas,
 
 ## Incorporar materiales
 
-1. Copia un paquete revisado a `materials/youtube-VIDEO_ID/`. Incluye únicamente sus tres JSON, sin transcripciones ni notas internas.
+1. Solo después de aprobar contenido, QA y clasificación editorial, copia el paquete a `materials/youtube-VIDEO_ID/`. Incluye únicamente sus tres JSON, sin transcripciones ni notas internas.
 2. Ejecuta desde la raíz, con Node.js 20 o posterior:
 
 ```powershell
@@ -74,15 +96,19 @@ node scripts/materials.mjs sync --include youtube-VIDEO_ID
 
 Todos los paquetes deben pasar las validaciones antes de escribir. Un error, un archivo ausente o una carpeta catalogada que desapareció deja el catálogo intacto. La escritura utiliza un archivo temporal y reemplazo final, con comprobación de que el catálogo no cambió mientras se validaba.
 
-El catálogo contiene `schemaVersion` y entradas con `id`, `manifest`, `order`, `status: "published"` y `contentVersion`. Los metadatos editoriales permanecen en el material. Una carpeta fuera del catálogo no es privada si sus archivos se publican: conserva borradores internos fuera de `materials/`.
+El catálogo contiene `schemaVersion` y entradas con `id`, `manifest`, `order`, `status: "published"` y `contentVersion`. Los metadatos editoriales permanecen en el material. Un material pendiente debe permanecer fuera del árbol público, por ejemplo en `context/incoming/`. Solo después de aprobar su contenido, QA y clasificación editorial se copia a `materials/` y se incorpora a `catalog.json`. En un hosting estático, excluir un material del catálogo no impide el acceso directo a sus archivos si ya están incluidos en el repositorio publicado. `library.json` es un índice editorial: no es un mecanismo de seguridad ni de control de acceso.
 
 El script nunca hace commit, push ni despliegue. Revisa el diff y prueba la aplicación antes de autorizar la publicación.
 
 ## Carga, selección y reproducción
 
-El tema se aplica antes de CSS. Después se cargan catálogo, manifiestos y paquete seleccionado, se recupera su estado y se prepara YouTube cuando la API y el material están listos. El selector se muestra cuando hay varios materiales; con uno se muestran solamente título y descripción.
+El tema se aplica antes de CSS. Se cargan y validan los paquetes publicados para buscar por material, título oficial, canal y microlección. La biblioteca izquierda tiene 280 px y puede contraerse; en pantallas menores de 1280 px se abre como un diálogo lateral con foco contenido, cierre con Escape y devolución del foco. En escritorio se abre inicialmente desde 1440 px.
 
-Las cargas comprueban HTTP, JSON, esquema y relaciones. Durante una carga no se puede actuar sobre el contenido anterior; hay reintento para errores. Un catálogo vacío muestra un aviso. La selección se representa mediante `?material=...`, compatible con recargas de GitHub Pages. Si el ID no está en el catálogo, se carga el primer material disponible, se corrige la URL y se muestra un aviso no bloqueante. Los errores de red, JSON, esquema o integridad conservan su mensaje de error y no activan este fallback. Todas las rutas de datos son relativas a sus documentos.
+Los filtros de idioma, temática, estado y Me gusta se combinan entre sí. El estado se deriva de las lecciones completadas: ninguna, algunas o todas; escuchar sin completar no marca un material como iniciado. Los resultados de microlecciones permiten abrirlas directamente. La carga inicial es completa, adecuada al catálogo actual de cuatro materiales: un paquete inválido conserva su error visible. Para un catálogo grande habrá que evaluar un índice de búsqueda y carga diferida.
+
+`materials/library.json` es un índice opcional independiente (`indexVersion: 1`) con temáticas normalizadas, etiquetas y estado editorial. Su ausencia (HTTP 404) permite cargar paquetes 1.0.0 sin filtros temáticos; otros errores siguen visibles. Las temáticas de los cuatro materiales cuentan con aprobación humana y están marcadas con `editorialStatus: "approved"`. La Lección 3 incluye «Automatización de flujos con IA». La Lección 4 no incluye Ética/gobernanza como temática principal. `tags` permanece como una lista vacía hasta definir vocabulario controlado, granularidad y política editorial; no se inventan ni infieren etiquetas. No se infieren desde los títulos. Idioma y autor proceden del paquete; cantidades y duraciones se calculan. Los esquemas y el formato del catálogo 1.0.0 permanecen intactos. `check` valida también este índice; `sync` no lo reescribe.
+
+Las cargas comprueban HTTP, JSON, esquema y relaciones. Durante una carga no se puede actuar sobre el contenido anterior; hay reintento para errores. Un catálogo vacío muestra un aviso. La selección se representa mediante `?material=...&lesson=<ID-estable>`, compatible con enlaces anteriores que solo incluyen material y con recargas de GitHub Pages. Una lección inexistente o ajena al material recupera su primera lección, corrige la URL y muestra un aviso. La lección activa queda en la URL, no en almacenamiento local. Si el ID no está en el catálogo, se carga el primer material disponible, se corrige la URL y se muestra un aviso no bloqueante. Los errores de red, JSON, esquema o integridad conservan su mensaje de error y no activan este fallback. Todas las rutas de datos son relativas a sus documentos.
 
 Cambiar de material pausa y destruye el reproductor anterior. Un identificador de generación y la identidad del reproductor descartan eventos atrasados incluso al volver al mismo video. Existe un único temporizador para actualizar el progreso. Las peticiones anteriores se cancelan y sus resultados se descartan.
 
@@ -119,7 +145,7 @@ Si el almacenamiento falla, el estado sigue funcionando en memoria durante la se
 ## Pruebas
 
 ```powershell
-node --test tests/materials.test.mjs
+node --test tests/materials.test.mjs tests/library.test.mjs
 ```
 
 Las pruebas de contrato y almacenamiento usan únicamente Node.js. Para las de navegador se necesita Playwright y un navegador compatible ya instalados:
@@ -130,13 +156,13 @@ node tests/browser.cjs
 
 Si Playwright está fuera de las rutas normales de Node, `PLAYWRIGHT_MODULE` puede señalar su ruta. `BROWSER_CHANNEL` selecciona el navegador; el valor predeterminado es `msedge`. No se descargan dependencias automáticamente.
 
-Los fixtures del segundo material se sirven solo en memoria y no se añaden al catálogo. Las copias de trabajo para pruebas del validador, capturas y puntos recuperables están en `.local-review/`, ignorada. Las pruebas comprueban errores de JSON, esquemas, identidades, referencias, tiempos, catálogo, migración y aislamiento; el navegador cubre reproducción simulada, estados de carga, reintento, pestañas, temas y tamaños de 320 a 1440 px.
+Las pruebas cargan los cuatro paquetes aprobados; los materiales adicionales de prueba se sirven solo en memoria y no se añaden al catálogo. Las copias de trabajo para pruebas del validador, capturas y puntos recuperables están en `.local-review/`, ignorada. Las pruebas comprueban errores de JSON, esquemas, identidades, referencias, tiempos, catálogo, migración y aislamiento; el navegador cubre reproducción simulada, biblioteca, búsquedas, filtros, enlaces directos, foco del drawer, estados de carga, reintento, pestañas, temas y tamaños de 320 a 1440 px.
 
 La regresión editorial compara las 15 lecciones con el commit publicado `a8c826966d9e11cd9e23096b5961b08aea558812`. Durante esta migración se comprobó además con YouTube real: Play del primer intervalo, finalización, preparación de la segunda lección en pausa y su inicio mediante Play nativo.
 
 ## Publicación e identidad
 
-GitHub Pages continúa configurado desde `main`, carpeta `/ (root)`. Esta migración se mantiene local hasta revisión y autorización; no requiere cambiar Pages.
+GitHub Pages continúa configurado desde `main`, carpeta `/ (root)`. Esta versión mantiene la configuración existente de Pages.
 
 `context/`, `design/`, `skills/`, `.local-review/`, archivos ZIP y metadatos de alojamiento permanecen ignorados. Solo los tres esquemas del empaquetador se copian a `materials/schema/`. Los paquetes dentro de `materials/` sí son contenido público versionado.
 

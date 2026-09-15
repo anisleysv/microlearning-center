@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "1.0.0",
+  "contentVersion": 1,
+  "id": "youtube-2BoTWGq0vjY",
+  "sourceId": "youtube:2BoTWGq0vjY",
+  "title": "Herramientas y automatizaciones con IA: un sistema práctico de trabajo",
+  "description": "Construye un flujo conectado con IA para crear ofertas, presentaciones, sitios web, chatbots y automatizaciones, manteniendo control humano en las decisiones sensibles.",
+  "language": "es",
+  "sourceFile": "./source.json",
+  "lessonsFile": "./lessons.json"
+}

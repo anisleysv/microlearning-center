@@ -1,3 +1,4 @@
+import { validateLibraryIndex } from '../lib/library.mjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -16,7 +17,7 @@ export async function inspect(root = projectRoot, { sync = false } = {}) {
   const entries = validateCatalog(catalog);
   const packages = new Map();
   for (const entry of (await fs.readdir(directory, { withFileTypes: true })).sort((a,b) => a.name < b.name ? -1 : 1)) {
-    if (['catalog.json','schema'].includes(entry.name)) continue;
+    if (['catalog.json','schema','library.json'].includes(entry.name)) continue;
     if (!MATERIAL_ID.test(entry.name) || !entry.isDirectory() || entry.isSymbolicLink()) fail(directory, entry.name, 'contenido inesperado; solo se admiten carpetas de paquetes');
     const folder = path.join(directory,entry.name);
     const names = await fs.readdir(folder);
@@ -30,6 +31,8 @@ export async function inspect(root = projectRoot, { sync = false } = {}) {
     if (!bundle) fail('catalog.json',entry.id,'carpeta ausente; no se elimina automáticamente');
     if (!sync) validateEntry(entry,bundle.material);
   }
+  const indexFile = path.join(directory,'library.json');
+  if (await fs.lstat(indexFile).catch(()=>null)) { await normalFile(indexFile); validateLibraryIndex(await json(indexFile),new Set(packages.keys())); }
   return { catalog, entries, packages, candidates: [...packages.keys()].filter(id => !entries.some(e => e.id === id)) };
 }
 export async function run(args, root = projectRoot, log = console.log) {

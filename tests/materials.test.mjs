@@ -74,10 +74,10 @@ test('sync is explicit, deterministic, preserves order and dry-run never writes'
  const root=await fixture(),file=path.join(root,'materials/catalog.json');
  const second='youtube-abcdefghijk';const b=JSON.parse(JSON.stringify(original).replaceAll('S6up3AnyARo','abcdefghijk'));await fs.mkdir(path.join(root,'materials',second));
  for(const [name,value]of [['source',b.source],['material',b.material],['lessons',b.document]])await fs.writeFile(path.join(root,'materials',second,name+'.json'),JSON.stringify(value));
- const before=await fs.readFile(file);const dry=await run(['sync','--dry-run'],root,()=>{});assert.deepEqual(await fs.readFile(file),before);assert.equal(dry.next.materials.length,1);assert.deepEqual(dry.candidates,[second]);
+ const before=await fs.readFile(file);const dry=await run(['sync','--dry-run'],root,()=>{});assert.deepEqual(await fs.readFile(file),before);assert.equal(dry.next.materials.length,4);assert.deepEqual(dry.candidates,[second]);
  await run(['sync','--dry-run','--include',second],root,()=>{});assert.deepEqual(await fs.readFile(file),before);
  await assert.rejects(run(['sync'],root,()=>{}),/explícitos/);
- await run(['sync','--include',second],root,()=>{});const after=await fs.readFile(file);assert.equal(JSON.parse(after).materials[1].order,2);
+ await run(['sync','--include',second],root,()=>{});const after=await fs.readFile(file);assert.equal(JSON.parse(after).materials[4].order,5);
  await run(['sync','--include',second],root,()=>{});assert.deepEqual(await fs.readFile(file),after);
 });
 function storage(seed={}) {const values=new Map(Object.entries(seed));return{getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,v),values};}

@@ -1,0 +1,562 @@
+{
+  "schemaVersion": "1.0.0",
+  "contentVersion": 1,
+  "materialId": "youtube-6h6306mA3bQ",
+  "lessons": [
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-metodo-segun-modalidad",
+      "order": 1,
+      "title": "Adapta el método de comunicación a cada modalidad",
+      "startSeconds": 950,
+      "endSeconds": 979,
+      "priority": "standard",
+      "summary": "No traslades sin más un método de prompting textual a imágenes o vídeo: cada modalidad necesita instrucciones y controles propios.",
+      "retentionPoints": [
+        "Identifica primero si la salida será texto, imagen o vídeo.",
+        "Usa un marco específico para controlar cada tipo de resultado."
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-control-roce",
+      "order": 2,
+      "title": "Controla entrada, contexto y salida con ROCE",
+      "startSeconds": 1937,
+      "endSeconds": 1998,
+      "priority": "high",
+      "summary": "Estructura la petición definiendo rol, objetivo, contexto y estructura para reducir respuestas genéricas y controlar mejor el resultado.",
+      "retentionPoints": [
+        "Define quién debe ser la IA y qué resultado debe conseguir.",
+        "Aporta el contexto necesario y especifica el formato de salida."
+      ],
+      "steps": [
+        "Escribe el rol.",
+        "Declara el objetivo.",
+        "Añade contexto verificable.",
+        "Fija la estructura de entrega."
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-email-roce",
+      "order": 3,
+      "title": "Redacta un email comercial con un prompt ROCE",
+      "startSeconds": 2041,
+      "endSeconds": 2203,
+      "priority": "high",
+      "summary": "Convierte una tarea comercial concreta en un prompt completo que fija experiencia, destinatario, intención y límites de extensión.",
+      "retentionPoints": [
+        "Describe el escenario comercial y el destinatario con precisión.",
+        "Limita asunto, longitud, párrafos y llamada a la acción."
+      ],
+      "prompt": "Eres un director comercial de una inmobiliaria boutique de Madrid con 15 años de experiencia captando propiedades premium en exclusiva. Redacta un email dirigido al propietario de un piso en el barrio de Salamanca que lleva más de seis meses sin venderse para invitarle a conocer el servicio de venta en exclusiva de Aurora. Usa el PDF adjunto como contexto sobre propuesta de valor, historia, diferenciadores y tono. Entrega un asunto de máximo 8 palabras y un email de máximo 150 palabras y 4 párrafos; puedes añadir una posdata con un dato de impacto.",
+      "tools": [
+        {
+          "name": "ChatGPT",
+          "url": "https://chatgpt.com/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-pdf-contexto-negocio",
+      "order": 4,
+      "title": "Convierte documentos del negocio en contexto reutilizable",
+      "startSeconds": 2206,
+      "endSeconds": 2381,
+      "priority": "standard",
+      "summary": "Adjunta un documento fiable sobre la empresa para que la IA respete su propuesta de valor, historia, tono y diferenciadores al producir contenido.",
+      "retentionPoints": [
+        "Prepara un documento maestro con información estable del negocio.",
+        "Indica expresamente qué partes del documento debe usar la IA.",
+        "Revisa que la salida no invente datos ausentes."
+      ],
+      "tools": [
+        {
+          "name": "ChatGPT",
+          "url": "https://chatgpt.com/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-deep-research-competencia",
+      "order": 5,
+      "title": "Delega un análisis competitivo con investigación profunda",
+      "startSeconds": 2415,
+      "endSeconds": 2565,
+      "priority": "high",
+      "summary": "Usa un modo de investigación profunda para localizar competidores, revisar sus canales, comparar posicionamientos y convertir hallazgos en oportunidades accionables.",
+      "retentionPoints": [
+        "Define mercado, tipo de competidor y fuentes a consultar.",
+        "Pide una comparación homogénea, mapa de posicionamiento, brechas y recomendaciones.",
+        "Valida las conclusiones importantes contra las fuentes citadas."
+      ],
+      "prompt": "Actúa como analista de mercado inmobiliario premium. Identifica entre 6 y 8 competidores relevantes; analiza sus webs, Instagram, LinkedIn y reseñas de Google; compara posicionamiento, propuesta de valor, comunicación y señales de confianza; sintetiza un mapa competitivo, oportunidades no cubiertas y recomendaciones para Aurora. Usa el PDF adjunto como contexto del negocio.",
+      "tools": [
+        {
+          "name": "ChatGPT Deep Research",
+          "url": "https://chatgpt.com/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-anatomia-agente",
+      "order": 6,
+      "title": "Diseña un agente a partir de cinco componentes",
+      "startSeconds": 2609,
+      "endSeconds": 2761,
+      "priority": "high",
+      "summary": "Pasa de pedir tareas aisladas a delegarlas mediante un agente que combina modelo, instrucciones, herramientas, conocimiento y aplicaciones conectadas.",
+      "retentionPoints": [
+        "Modelo: capacidad de razonamiento.",
+        "Instrucciones: función y forma de actuar.",
+        "Herramientas e internet: acciones y consulta externa.",
+        "Conocimiento: contexto persistente.",
+        "Aplicaciones: conexiones necesarias para ejecutar."
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-agente-editor-linkedin",
+      "order": 7,
+      "title": "Crea un agente editorial reutilizable",
+      "startSeconds": 2847,
+      "endSeconds": 3038,
+      "priority": "high",
+      "summary": "Configura un asistente especializado que produzca publicaciones listas para usar con tono, entregables y límites constantes.",
+      "retentionPoints": [
+        "Nombra el agente por función, no por tecnología.",
+        "Define entregables repetibles y reglas contra la invención.",
+        "Haz que solicite información cuando falte contexto."
+      ],
+      "prompt": "Eres Aurora LinkedIn Editor. Creas contenido de LinkedIn para la inmobiliaria Aurora con un tono boutique, exclusivo, criterio inmobiliario y utilidad comercial. Utilizas los archivos de conocimiento para mantener contexto, tono, cartera, objetivos y líneas rojas. Siempre entregas un post listo para publicar, tres ganchos, una idea visual, el objetivo del post y un CTA suave. No inventas datos; si falta información, indícalo.",
+      "tools": [
+        {
+          "name": "ChatGPT GPTs",
+          "url": "https://chatgpt.com/"
+        },
+        {
+          "name": "Gemini Gems",
+          "url": "https://gemini.google.com/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-conocimiento-capacidades-agente",
+      "order": 8,
+      "title": "Alimenta el agente y activa solo lo necesario",
+      "startSeconds": 3039,
+      "endSeconds": 3216,
+      "priority": "standard",
+      "summary": "Carga documentos que representen el negocio y limita las capacidades del agente a las funciones que realmente requiere el flujo.",
+      "retentionPoints": [
+        "Incluye cartera, historia, guía editorial y ejemplos aprobados o rechazados.",
+        "Activa navegación, imágenes o integraciones solo si aportan al encargo.",
+        "Evita mezclar conocimiento estable con instrucciones temporales."
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-probar-mantener-agente",
+      "order": 9,
+      "title": "Prueba y mantén el agente como un activo vivo",
+      "startSeconds": 3217,
+      "endSeconds": 3410,
+      "priority": "standard",
+      "summary": "Valida el agente con una tarea real, comprueba si usa correctamente los documentos y sustituye archivos obsoletos para mantener vigente el contexto.",
+      "retentionPoints": [
+        "Empieza con un caso representativo y revisa trazabilidad y tono.",
+        "Corrige instrucciones o conocimiento, no solo la salida puntual.",
+        "Actualiza los archivos cuando cambie el negocio."
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-seleccionar-herramientas-visuales",
+      "order": 10,
+      "title": "Reduce el catálogo visual a pocas herramientas",
+      "startSeconds": 3449,
+      "endSeconds": 3593,
+      "priority": "standard",
+      "summary": "Selecciona unas pocas herramientas según la tarea —generación general, texto en imagen o vídeo— para evitar dispersión y acelerar el aprendizaje.",
+      "retentionPoints": [
+        "Asocia cada herramienta a un resultado concreto.",
+        "Evalúa calidad, control y facilidad de iteración.",
+        "No bases la elección únicamente en la novedad o en precios que pueden cambiar."
+      ],
+      "tools": [
+        {
+          "name": "ChatGPT",
+          "url": "https://chatgpt.com/"
+        },
+        {
+          "name": "Gemini",
+          "url": "https://gemini.google.com/"
+        },
+        {
+          "name": "Ideogram",
+          "url": "https://ideogram.ai/"
+        },
+        {
+          "name": "Higgsfield",
+          "url": "https://higgsfield.ai/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-modela-imagen",
+      "order": 11,
+      "title": "Estructura imágenes con el marco MODELA",
+      "startSeconds": 3595,
+      "endSeconds": 3813,
+      "priority": "high",
+      "summary": "Construye prompts visuales controlables describiendo Medio, Objeto, Detalles, Estilo, Luz y Atributos.",
+      "retentionPoints": [
+        "Medio: fotografía, ilustración, render u otro soporte.",
+        "Objeto y detalles: sujeto, entorno y elementos visibles.",
+        "Estilo y luz: estética y condiciones de iluminación.",
+        "Atributos: calidad, encuadre, relación de aspecto y otras restricciones."
+      ],
+      "prompt": "Fotografía hiperrealista de un apartamento: terraza luminosa con zona chill-out, estilo profesional, luz de atardecer, detalle arquitectónico visible y colores naturales."
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-sistema-marca-producto",
+      "order": 12,
+      "title": "Define la marca antes de generar piezas visuales",
+      "startSeconds": 3849,
+      "endSeconds": 4066,
+      "priority": "standard",
+      "summary": "Antes de producir anuncios, usa la IA para concretar producto, público, propuesta de valor, tono, identidad y paleta; después genera varias direcciones y selecciona una.",
+      "retentionPoints": [
+        "Documenta concepto, audiencia y propuesta de valor.",
+        "Define tono, paleta e identidad antes de crear variantes.",
+        "Pide códigos HEX y una lámina de referencia reutilizable."
+      ],
+      "steps": [
+        "Crear el concepto de producto.",
+        "Definir público y posicionamiento.",
+        "Generar varias direcciones visuales.",
+        "Elegir una y fijar logo, paleta y reglas."
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-variantes-marketing-contextuales",
+      "order": 13,
+      "title": "Genera variantes de marketing con contexto de marca",
+      "startSeconds": 4101,
+      "endSeconds": 4237,
+      "priority": "standard",
+      "summary": "Combina referencias de producto, identidad y modelo o escena para producir imágenes coherentes adaptadas a redes, web y publicidad.",
+      "retentionPoints": [
+        "Aporta como referencia el producto y la guía visual aprobada.",
+        "Sitúa el producto en un contexto que comunique su beneficio.",
+        "Cambia formato y composición según el canal, no solo el tamaño."
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-configurar-ideogram",
+      "order": 14,
+      "title": "Configura el generador según el canal de salida",
+      "startSeconds": 4391,
+      "endSeconds": 4617,
+      "priority": "standard",
+      "summary": "Antes de generar, ajusta modelo, número de resultados, velocidad y relación de aspecto según dónde se publicará la pieza.",
+      "retentionPoints": [
+        "Elige horizontal 16:9 o vertical 9:16 según el uso.",
+        "Genera suficientes opciones para comparar sin desperdiciar créditos.",
+        "Comprueba que estás entrando al servicio oficial y no a un anuncio patrocinado confuso."
+      ],
+      "tools": [
+        {
+          "name": "Ideogram",
+          "url": "https://ideogram.ai/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-prompt-arquitectura-modela",
+      "order": 15,
+      "title": "Aplica MODELA a una imagen arquitectónica",
+      "startSeconds": 4619,
+      "endSeconds": 4793,
+      "priority": "standard",
+      "summary": "Transforma una intención estética en un prompt visual específico con arquitectura, cámara, entorno, color y formato.",
+      "retentionPoints": [
+        "Describe materiales y rasgos arquitectónicos observables.",
+        "Fija punto de vista, entorno, cielo, color y textura.",
+        "Incluye el formato final dentro de las restricciones."
+      ],
+      "prompt": "Fotografía arquitectónica ultrarrealista de un chalet contemporáneo de lujo en La Moraleja, arquitectura minimalista de hormigón blanco y acero oscuro, ventanales de doble altura, vista frontal ligeramente elevada, acceso de grava y cipreses, cielo azul profundo con nubes altas, tonos cálidos desaturados y grano de película; formato 16:9 fotorrealista.",
+      "tools": [
+        {
+          "name": "Ideogram",
+          "url": "https://ideogram.ai/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-imagen-base-secuencia",
+      "order": 16,
+      "title": "Crea primero una imagen base para toda la secuencia",
+      "startSeconds": 4800,
+      "endSeconds": 4965,
+      "priority": "standard",
+      "summary": "Selecciona el modelo y el formato adecuados, genera una imagen inicial consistente y úsala como punto de partida para las siguientes escenas del vídeo.",
+      "retentionPoints": [
+        "Decide el modelo según el tipo de resultado.",
+        "Fija relación de aspecto y cantidad de salidas.",
+        "Aprueba una referencia inicial antes de ampliar la secuencia."
+      ],
+      "tools": [
+        {
+          "name": "Higgsfield",
+          "url": "https://higgsfield.ai/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-referencias-consistencia-escenas",
+      "order": 17,
+      "title": "Encadena referencias para conservar la consistencia",
+      "startSeconds": 4969,
+      "endSeconds": 5151,
+      "priority": "high",
+      "summary": "Usa cada imagen aprobada como referencia para crear la siguiente estancia o escena y mantener arquitectura, materiales, personaje o producto.",
+      "retentionPoints": [
+        "Carga la imagen anterior como referencia explícita.",
+        "Cambia solo la escena necesaria y conserva los rasgos invariantes.",
+        "Repite el proceso exterior, interior y detalle antes de animar."
+      ],
+      "tools": [
+        {
+          "name": "Higgsfield",
+          "url": "https://higgsfield.ai/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-anuncio-texto-logo",
+      "order": 18,
+      "title": "Integra texto, datos y logo en una creatividad",
+      "startSeconds": 5157,
+      "endSeconds": 5341,
+      "priority": "standard",
+      "summary": "Produce una variante publicitaria indicando jerarquía tipográfica, ubicación, características del producto, logo y formato de publicación.",
+      "retentionPoints": [
+        "Especifica el texto exacto y su jerarquía.",
+        "Incluye solo datos verificables del producto.",
+        "Adapta la composición al formato, por ejemplo 4:5 para Instagram."
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-modela-video-movimiento-variacion",
+      "order": 19,
+      "title": "Extiende MODELA al vídeo con movimiento y variación",
+      "startSeconds": 5452,
+      "endSeconds": 5600,
+      "priority": "high",
+      "summary": "Añade a la descripción visual el movimiento de cámara y una variación temporal para controlar cómo evoluciona cada tramo del vídeo.",
+      "retentionPoints": [
+        "Define un movimiento de cámara concreto: avance, paneo, giro u otro.",
+        "Divide la duración en momentos con acciones o focos diferentes.",
+        "Describe continuidad entre inicio, desarrollo y cierre."
+      ],
+      "prompt": "Movimiento: avance lento de cámara. Variación temporal: primeros 3 segundos en la terraza; siguientes 3 segundos hacia la zona chill-out; últimos 3 segundos mostrando la vista y cerrando el plano."
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-planificar-transicion-imagen-video",
+      "order": 20,
+      "title": "Planifica una transición con imágenes inicial y final",
+      "startSeconds": 5713,
+      "endSeconds": 5908,
+      "priority": "high",
+      "summary": "Define dos fotogramas compatibles y describe una única toma continua que conecte ambos espacios de manera creíble.",
+      "retentionPoints": [
+        "Elige imágenes de inicio y fin con continuidad visual.",
+        "Describe posición inicial de cámara, recorrido y destino.",
+        "Evita movimientos incompatibles con la geometría de las referencias."
+      ],
+      "tools": [
+        {
+          "name": "Higgsfield",
+          "url": "https://higgsfield.ai/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-generar-transicion-video",
+      "order": 21,
+      "title": "Genera y ajusta la transición de imagen a vídeo",
+      "startSeconds": 5909,
+      "endSeconds": 6059,
+      "priority": "standard",
+      "summary": "Selecciona el modelo, duración y opciones de audio, introduce el prompt de cámara y genera una transición breve para evaluar continuidad.",
+      "retentionPoints": [
+        "Empieza con una duración corta que permita iterar.",
+        "Activa voz o audio solo si el objetivo lo requiere.",
+        "Evalúa continuidad, velocidad y artefactos antes de encadenar."
+      ],
+      "prompt": "Vídeo cinematográfico ultrarrealista en una sola toma continua. La cámara comienza en la terraza exterior, aproximadamente a tres metros de la ventana, y realiza un dolly-in lento hasta atravesar el ventanal y entrar en el salón.",
+      "tools": [
+        {
+          "name": "Higgsfield",
+          "url": "https://higgsfield.ai/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-encadenar-planos-anuncio",
+      "order": 22,
+      "title": "Encadena planos y convierte la secuencia en anuncio",
+      "startSeconds": 6061,
+      "endSeconds": 6341,
+      "priority": "standard",
+      "summary": "Usa el final de cada clip como inicio del siguiente para construir una visita continua y añade una transición final hacia la creatividad con texto.",
+      "retentionPoints": [
+        "Reutiliza el fotograma final como referencia del siguiente clip.",
+        "Mantén dirección y velocidad de cámara entre tramos.",
+        "Separa la secuencia visual de la capa final de anuncio y texto."
+      ],
+      "steps": [
+        "Exterior a salón.",
+        "Salón a suite.",
+        "Escena limpia a variante con mensaje comercial."
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-iterar-consistencia",
+      "order": 23,
+      "title": "Itera hasta corregir consistencia y movimiento",
+      "startSeconds": 6390,
+      "endSeconds": 6580,
+      "priority": "standard",
+      "summary": "Trata la primera generación como prototipo: revisa identidad, producto, arquitectura y cámara, y vuelve a generar cambiando una variable cada vez.",
+      "retentionPoints": [
+        "No des por bueno el primer resultado.",
+        "Identifica si el fallo está en referencia, prompt, modelo o movimiento.",
+        "Cambia una variable por iteración para aprender qué mejora el resultado."
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-problema-antes-herramienta",
+      "order": 24,
+      "title": "Empieza por el dolor operativo, no por la herramienta",
+      "startSeconds": 6789,
+      "endSeconds": 6867,
+      "priority": "high",
+      "summary": "Detecta primero una fricción diaria, define para qué quieres resolverla y solo entonces elige la IA o automatización adecuada.",
+      "retentionPoints": [
+        "Formula el problema en términos de tiempo, coste, calidad o riesgo.",
+        "Define el resultado deseado antes de comparar herramientas.",
+        "Prioriza tareas frecuentes y de bajo valor manual."
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-comparar-modelos-misma-tarea",
+      "order": 25,
+      "title": "Compara modelos usando exactamente la misma tarea",
+      "startSeconds": 7051,
+      "endSeconds": 7254,
+      "priority": "standard",
+      "summary": "Elige una tarea real y ejecuta el mismo caso en varios asistentes para decidir cuál encaja mejor por resultado y flujo, no por reputación general.",
+      "retentionPoints": [
+        "Usa la misma entrada, restricciones y criterio de evaluación.",
+        "Compara calidad, tiempo de revisión y facilidad de uso.",
+        "Conserva el ganador por tipo de tarea, no necesariamente uno para todo."
+      ],
+      "tools": [
+        {
+          "name": "Claude",
+          "url": "https://claude.ai/"
+        },
+        {
+          "name": "ChatGPT",
+          "url": "https://chatgpt.com/"
+        },
+        {
+          "name": "Gemini",
+          "url": "https://gemini.google.com/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-voz-a-plan-accion",
+      "order": 26,
+      "title": "Convierte notas de voz en un plan de acción",
+      "startSeconds": 7290,
+      "endSeconds": 7458,
+      "priority": "high",
+      "summary": "Cuando hablar sea más rápido que escribir, dicta ideas, copia la transcripción y pide a la IA que las ordene como acciones concretas.",
+      "retentionPoints": [
+        "Captura el pensamiento sin detenerte a editar.",
+        "Pega la transcripción completa como contexto.",
+        "Pide claridad, tareas y próximos pasos; revisa antes de ejecutar."
+      ],
+      "prompt": "Pásame estas ideas que te acabo de decir en limpio. ¿Qué tengo que hacer?",
+      "tools": [
+        {
+          "name": "ChatGPT",
+          "url": "https://chatgpt.com/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-proyectos-agentes-clientes",
+      "order": 27,
+      "title": "Prepara sesiones de cliente con proyectos y agentes",
+      "startSeconds": 7461,
+      "endSeconds": 7606,
+      "priority": "high",
+      "summary": "Crea un espacio por cliente con objetivos y transcripciones, y usa agentes entrenados en tu método para completar el trabajo previo antes de la sesión individual.",
+      "retentionPoints": [
+        "Separa el contexto por cliente para evitar mezclas.",
+        "Carga objetivos y transcripciones de sesiones anteriores.",
+        "Automatiza el pretrabajo, por ejemplo convertir una idea en objetivos SMART.",
+        "Reserva la sesión humana para decisiones, matices y acompañamiento."
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-productizar-metodo-agente",
+      "order": 28,
+      "title": "Productiza tu método en un agente de acompañamiento",
+      "startSeconds": 7736,
+      "endSeconds": 7774,
+      "priority": "standard",
+      "summary": "Convierte una metodología repetible de consultoría, formación o mentoría en un agente que guíe al cliente entre sesiones y amplíe el valor del servicio.",
+      "retentionPoints": [
+        "Documenta los pasos y criterios de tu método.",
+        "Configura el agente para guiar, preguntar y preparar entregables.",
+        "Usa el agente como complemento del servicio profesional."
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-avatar-ia-servicio",
+      "order": 29,
+      "title": "Explora avatares de IA para escalar contenido",
+      "startSeconds": 8095,
+      "endSeconds": 8336,
+      "priority": "standard",
+      "summary": "El video muestra cómo una grabación breve puede servir para crear un avatar que reproduzca gestos, labios y expresión, y plantea convertir esa capacidad en un servicio de contenido. Salvaguarda editorial: úsalo únicamente con consentimiento explícito y respetando los derechos de imagen y voz, la divulgación del uso de IA y las normas aplicables.",
+      "retentionPoints": [
+        "Graba una muestra clara y representativa para entrenar el avatar.",
+        "Prueba el resultado antes de usarlo en contenido público.",
+        "Combina la generación del avatar con edición antes de publicar.",
+        "Obtén consentimiento explícito y respeta los derechos de imagen y voz, la divulgación del uso de IA y las normas legales o de plataforma aplicables."
+      ],
+      "tools": [
+        {
+          "name": "HeyGen",
+          "url": "https://www.heygen.com/"
+        }
+      ]
+    },
+    {
+      "id": "youtube-6h6306mA3bQ-lesson-automatizacion-como-sistema",
+      "order": 30,
+      "title": "Conecta modelos y automatizaciones como un sistema",
+      "startSeconds": 8540,
+      "endSeconds": 8652,
+      "priority": "standard",
+      "summary": "Distingue entre modelos que generan o razonan y automatizaciones que conectan pasos, especialmente para tareas repetitivas o creativas de poco valor manual.",
+      "retentionPoints": [
+        "Asigna al modelo la parte que requiere interpretación o generación.",
+        "Automatiza la transferencia de datos y los pasos repetibles.",
+        "Mantén revisión humana en decisiones de impacto o información sensible."
+      ]
+    }
+  ]
+}
