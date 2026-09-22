@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://www.google.com" />
   <script src="./preferences.js"></script>
   <script src="./theme.js"></script>
+  <script src="./i18n.js"></script>
   <link rel="icon" type="image/svg+xml" sizes="any" href="./assets/branding/microlearning-center-logo.svg" />
   <link rel="preload" href="./assets/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="./styles.css" />
@@ -16,22 +17,28 @@
 <body>
   <header class="topbar">
     <div class="brand">
-      <button id="libraryToggle" class="library-toggle" aria-label="Abrir biblioteca" aria-expanded="false" aria-controls="libraryPanel"><span aria-hidden="true">☰</span></button>
+      <button id="libraryToggle" class="library-toggle" data-i18n-aria-label="library.open" aria-label="Open library" aria-expanded="false" aria-controls="libraryPanel"><span aria-hidden="true">☰</span></button>
       <img class="brand-logo" src="./assets/branding/microlearning-center-logo.svg" width="48" height="48" alt="" />
       <div>
         <strong>Microlearning Center</strong>
-        <span id="brandSubtitle">Biblioteca de microaprendizaje</span>
+        <span id="brandSubtitle" data-i18n="brand.subtitle">Microlearning library</span>
       </div>
     </div>
     <div class="progress-summary" aria-live="polite">
       <span id="progressText">—</span>
       <div class="progress-track"><span id="progressBar"></span></div>
     </div>
-    <label class="theme-control">Tema
-      <select id="themeSelect" aria-label="Tema de color">
-        <option value="system">Sistema</option>
-        <option value="light">Claro</option>
-        <option value="dark">Oscuro</option>
+    <label class="theme-control"><span data-i18n="language.label">Language</span>
+      <select id="localeSelect" aria-label="Language">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+      </select>
+    </label>
+    <label class="theme-control"><span data-i18n="theme.label">Theme</span>
+      <select id="themeSelect" aria-label="Color theme">
+        <option value="system" data-i18n="theme.system">System</option>
+        <option value="light" data-i18n="theme.light">Light</option>
+        <option value="dark" data-i18n="theme.dark">Dark</option>
       </select>
     </label>
   </header>
@@ -40,18 +47,18 @@
   <div class="app-layout">
     <div id="libraryDock">
       <aside id="libraryPanel" class="library-panel" aria-labelledby="libraryTitle">
-        <div class="library-heading"><h2 id="libraryTitle">Biblioteca</h2><button id="libraryClose" class="library-toggle" aria-label="Cerrar biblioteca"><span aria-hidden="true">✕</span></button></div>
-        <p class="library-intro">Encuentra tu próxima ruta</p>
-        <label class="library-search">Buscar<input id="librarySearch" type="search" placeholder="Material, canal o microlección" /></label>
+        <div class="library-heading"><h2 id="libraryTitle" data-i18n="library.title">Library</h2><button id="libraryClose" class="library-toggle" data-i18n-aria-label="library.close" aria-label="Close library"><span aria-hidden="true">✕</span></button></div>
+        <p class="library-intro" data-i18n="library.intro">Find your next learning path</p>
+        <label class="library-search"><span data-i18n="library.search">Search</span><input id="librarySearch" type="search" data-i18n-placeholder="library.searchPlaceholder" placeholder="Material, channel, or micro-lesson" /></label>
         <div class="library-filters">
-          <label>Idioma<select id="languageFilter"><option value="">Todos los idiomas</option></select></label>
-          <label>Temática<select id="topicFilter"><option value="">Todas las temáticas</option></select></label>
-          <label>Estado<select id="statusFilter"><option value="">Todos los estados</option><option value="not-started">No iniciado</option><option value="in-progress">En progreso</option><option value="completed">Completado</option></select></label>
-          <label class="library-likes"><input id="likedFilter" type="checkbox" /> Con microlecciones que me gustan</label>
-          <button id="clearFilters" class="text-button">Limpiar filtros</button>
+          <label><span data-i18n="library.language">Content language</span><select id="languageFilter"><option value="" data-i18n="library.allLanguages">All languages</option></select></label>
+          <label><span data-i18n="library.topic">Topic</span><select id="topicFilter"><option value="" data-i18n="library.allTopics">All topics</option></select></label>
+          <label><span data-i18n="library.status">Status</span><select id="statusFilter"><option value="" data-i18n="library.allStatuses">All statuses</option><option value="not-started" data-i18n="library.notStarted">Not started</option><option value="in-progress" data-i18n="library.inProgress">In progress</option><option value="completed" data-i18n="library.completed">Completed</option></select></label>
+          <label class="library-likes"><input id="likedFilter" type="checkbox" /> <span data-i18n="library.liked">With micro-lessons I like</span></label>
+          <button id="clearFilters" class="text-button" data-i18n="library.clear">Clear filters</button>
         </div>
-        <p id="libraryCount" class="library-count" role="status">Cargando biblioteca…</p>
-        <p id="libraryEmpty" hidden>No hay resultados. Prueba otra búsqueda o limpia los filtros.</p>
+        <p id="libraryCount" class="library-count" role="status" data-i18n="library.loading">Loading library…</p>
+        <p id="libraryEmpty" hidden data-i18n="library.empty">No results. Try another search or clear the filters.</p>
         <ul id="libraryResults" class="library-results"></ul>
       </aside>
     </div>
@@ -64,20 +71,20 @@
       </div>
       <p id="materialDescription"></p>
       <p id="fileNotice" hidden>Abre esta aplicación mediante un servidor HTTP local; no se admite file://. Consulta las instrucciones del README.</p>
-      <p id="loadMessage" role="status">Cargando materiales…</p>
+      <p id="loadMessage" role="status" data-i18n="load.materials">Loading materials…</p>
       <p id="storageMessage" role="status"></p>
-      <button id="retryButton" class="icon-button" hidden>Reintentar carga</button>
-      <noscript>Activa JavaScript para cargar los materiales.</noscript>
+      <button id="retryButton" class="icon-button" hidden data-i18n="load.retry">Retry loading</button>
+      <noscript data-i18n="noscript">Enable JavaScript to load the materials.</noscript>
     </section>
-    <section id="workspace" hidden class="workspace" aria-label="Reproductor y lección activa">
+    <section id="workspace" hidden class="workspace" data-i18n-aria-label="workspace.label" aria-label="Player and active lesson">
       <div class="player-column">
         <div class="mode-row">
-          <div class="segmented-control" role="group" aria-label="Recorrido">
-            <button class="mode-button active" data-mode="full" aria-pressed="true">Completo</button>
-            <button class="mode-button" data-mode="priority" aria-describedby="priorityHelp" aria-pressed="false">Prioritario</button>
+          <div class="segmented-control" role="group" data-i18n-aria-label="route.label" aria-label="Learning path">
+            <button class="mode-button active" data-mode="full" aria-pressed="true" data-i18n="route.full">Full</button>
+            <button class="mode-button" data-mode="priority" aria-describedby="priorityHelp" aria-pressed="false" data-i18n="route.priority">Priority</button>
           </div>
           <label class="speed-control">
-            Velocidad
+            <span data-i18n="speed">Speed</span>
             <select id="speedSelect" aria-label="Velocidad de reproducción">
               <option value="1">1×</option>
               <option value="1.25">1.25×</option>
@@ -88,20 +95,20 @@
           </label>
         </div>
 
-        <p id="priorityHelp" class="captions-help" hidden>Este material no contiene microlecciones de alta prioridad.</p>
+        <p id="priorityHelp" class="captions-help" hidden data-i18n="priority.none">This material has no high-priority micro-lessons.</p>
         <div id="playerHost" class="video-shell">
           <div id="player"></div>
         </div>
-        <p class="captions-help">Puedes activar, ocultar o cambiar el idioma de los subtítulos mediante CC y Configuración ⚙ en el reproductor de YouTube. Las opciones disponibles dependen del video original.</p>
+        <p class="captions-help" data-i18n="captions.help">You can enable, hide, or change caption language using CC and Settings ⚙ in the YouTube player. Available options depend on the original video.</p>
 
-        <nav class="transport" aria-label="Navegación entre microlecciones">
+        <nav class="transport" data-i18n-aria-label="transport.label" aria-label="Micro-lesson navigation">
           <div class="tooltip-wrap">
-            <button id="prevButton" class="icon-button" aria-label="Microlección anterior" aria-describedby="prevTooltip">← <span>Anterior</span></button>
+            <button id="prevButton" class="icon-button" aria-label="Microlección anterior" aria-describedby="prevTooltip">← <span data-i18n="previous">Previous</span></button>
             <span id="prevTooltip" class="tooltip" role="tooltip" hidden></span>
           </div>
           <span id="lessonCounter" class="lesson-counter">—</span>
           <div class="tooltip-wrap tooltip-end">
-            <button id="nextButton" class="icon-button" aria-label="Siguiente microlección" aria-describedby="nextTooltip"><span>Siguiente</span> →</button>
+            <button id="nextButton" class="icon-button" aria-label="Siguiente microlección" aria-describedby="nextTooltip"><span data-i18n="next">Next</span> →</button>
             <span id="nextTooltip" class="tooltip" role="tooltip"></span>
           </div>
         </nav>
@@ -110,51 +117,51 @@
 
       <article class="lesson-card" aria-labelledby="lessonTitle">
         <div class="lesson-meta">
-          <span id="lessonNumber" class="lesson-number">Microlección</span>
+          <span id="lessonNumber" class="lesson-number" data-i18n="lesson">Micro-lesson</span>
           <span id="lessonTime" class="time-pill" role="progressbar" aria-label="Progreso de la microlección" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">—</span>
-          <span id="priorityBadge" class="priority-badge">Alta prioridad</span>
+          <span id="priorityBadge" class="priority-badge" data-i18n="highPriority">High priority</span>
         </div>
         <h2 id="lessonTitle" tabindex="-1">Microlección</h2>
         <p id="lessonSummary" class="lesson-summary"></p>
-        <div class="lesson-tabs" role="tablist" aria-label="Información de la microlección">
-          <button id="takeawayTab" role="tab" aria-controls="takeawayPanel" aria-selected="true">Qué debes retener</button>
-          <button id="promptTab" role="tab" aria-controls="promptBlock" aria-selected="false" tabindex="-1" hidden>Plantilla útil</button>
-          <button id="sourceTab" role="tab" aria-controls="sourcePanel" aria-selected="false" tabindex="-1">Fuente original</button>
+        <div class="lesson-tabs" role="tablist" data-i18n-aria-label="tabs.label" aria-label="Micro-lesson information">
+          <button id="takeawayTab" role="tab" aria-controls="takeawayPanel" aria-selected="true" data-i18n="takeaways">Key takeaways</button>
+          <button id="promptTab" role="tab" aria-controls="promptBlock" aria-selected="false" tabindex="-1" hidden data-i18n="prompt">Useful template</button>
+          <button id="sourceTab" role="tab" aria-controls="sourcePanel" aria-selected="false" tabindex="-1" data-i18n="source">Original source</button>
         </div>
         <div class="lesson-panels">
         <div id="takeawayPanel" class="takeaway-block" role="tabpanel" aria-labelledby="takeawayTab" tabindex="0">
           <div class="takeaway-heading">
-            <h3>Qué debes retener</h3>
+            <h3 data-i18n="takeaways">Key takeaways</h3>
             <div class="tooltip-wrap tooltip-end">
               <button id="likeButton" class="like-button" aria-pressed="false" aria-label="Marcar la microlección 1 como útil" aria-describedby="likeTooltip">
                 <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path class="like-hand" d="M10 20V10l3.6-6.5c.6-1.1 2.4-.7 2.4.7V9h3a2 2 0 0 1 2 2.4l-1.3 6.2A3 3 0 0 1 16.8 20Z" /><rect class="like-cuff" x="3" y="10" width="4" height="10" rx="1" /></svg>
               </button>
-              <span id="likeTooltip" class="tooltip" role="tooltip">Me resulta útil</span>
+              <span id="likeTooltip" class="tooltip" role="tooltip" data-i18n="like">This is helpful</span>
             </div>
           </div>
           <ul id="lessonTakeaways"></ul>
-          <div id="stepsBlock" class="lesson-extra" hidden><h3>Pasos</h3><ol id="lessonSteps"></ol></div>
-          <div id="toolsBlock" class="lesson-extra" hidden><h3>Herramientas</h3><ul id="lessonTools"></ul></div>
+          <div id="stepsBlock" class="lesson-extra" hidden><h3 data-i18n="steps">Steps</h3><ol id="lessonSteps"></ol></div>
+          <div id="toolsBlock" class="lesson-extra" hidden><h3 data-i18n="tools">Tools</h3><ul id="lessonTools"></ul></div>
         </div>
         <div id="promptBlock" class="prompt-block" role="tabpanel" aria-labelledby="promptTab" tabindex="0" hidden>
           <div class="prompt-heading">
-            <h3>Plantilla útil</h3>
-            <button id="copyPromptButton" class="copy-button">Copiar</button>
+            <h3 data-i18n="prompt">Useful template</h3>
+            <button id="copyPromptButton" class="copy-button" data-i18n="copy">Copy</button>
           </div>
           <pre id="lessonPrompt"></pre>
         </div>
         <aside id="sourcePanel" class="source-card" role="tabpanel" aria-labelledby="sourceTab" tabindex="0" hidden>
-          <h3 id="sourceHeading">Fuente original</h3>
+          <h3 id="sourceHeading" data-i18n="source">Original source</h3>
           <p id="sourceTitle"></p>
-          <p>Canal: <strong id="sourceAuthor"></strong></p>
-          <p>Todas las microlecciones proceden de este video.</p>
+          <p><span data-i18n="source.channel">Channel:</span> <strong id="sourceAuthor"></strong></p>
+          <p data-i18n="source.all">All micro-lessons come from this video.</p>
           <p id="sourceAttribution"></p>
-          <a data-source-link hidden target="_blank" rel="noopener noreferrer">Ver video original y canal en YouTube</a>
+          <a data-source-link hidden target="_blank" rel="noopener noreferrer" data-i18n="source.link">View original video and channel on YouTube</a>
         </aside>
         </div>
         <label class="complete-control">
           <input id="completeCheckbox" type="checkbox" />
-          <span>Marcar esta lección como completada</span>
+          <span data-i18n="complete">Mark this lesson as complete</span>
         </label>
       </article>
     </section>
@@ -162,10 +169,10 @@
     <section id="curriculum" hidden class="curriculum" aria-labelledby="curriculumTitle">
       <div class="section-heading">
         <div>
-          <span class="eyebrow">MAPA DEL RECORRIDO</span>
-          <h2 id="curriculumTitle">Mapa del recorrido</h2>
+          <span class="eyebrow" data-i18n="map.eyebrow">LEARNING PATH MAP</span>
+          <h2 id="curriculumTitle" data-i18n="map.title">Learning path map</h2>
         </div>
-        <button id="resetButton" class="text-button">Reiniciar progreso</button>
+        <button id="resetButton" class="text-button" data-i18n="progress.reset">Reset progress</button>
       </div>
       <div id="lessonList" class="lesson-list"></div>
     </section>
@@ -173,17 +180,17 @@
 
   <footer>
     <p id="footerAttribution"></p>
-    <a data-source-link hidden target="_blank" rel="noopener noreferrer">Abrir video original ↗</a>
+    <a data-source-link hidden target="_blank" rel="noopener noreferrer" data-i18n="footer.source">Open original video ↗</a>
   </footer>
     </div>
   </div>
 
   <dialog id="sourceDialog" aria-labelledby="sourceDialogTitle" aria-describedby="sourceDialogText">
-    <h2 id="sourceDialogTitle">Abrir YouTube</h2>
-    <p id="sourceDialogText">Vas a salir de Microlearning Center para visitar la fuente original en YouTube. Allí podrás ver el video completo, acceder al canal y suscribirte al autor.</p>
+    <h2 id="sourceDialogTitle" data-i18n="dialog.title">Open YouTube</h2>
+    <p id="sourceDialogText" data-i18n="dialog.text">You are leaving Microlearning Center to visit the original source on YouTube. There you can watch the full video, access the channel, and subscribe to its creator.</p>
     <div class="dialog-actions">
-      <button id="cancelSource" class="icon-button" autofocus>Cancelar</button>
-      <a id="continueSource" class="primary-button" target="_blank" rel="noopener noreferrer">Continuar a YouTube</a>
+      <button id="cancelSource" class="icon-button" autofocus data-i18n="dialog.cancel">Cancel</button>
+      <a id="continueSource" class="primary-button" target="_blank" rel="noopener noreferrer" data-i18n="dialog.continue">Continue to YouTube</a>
     </div>
   </dialog>
   <script type="module" src="./app.js"></script>

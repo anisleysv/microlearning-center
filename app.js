@@ -6,10 +6,13 @@ import { createPlayer } from './lib/player.mjs';
 
 const $ = id => document.getElementById(id);
 const preferences = window.MicrolearningPreferences;
+const i18n = window.MicrolearningI18n;
+const t = (key, values) => i18n.t(key, values);
 const store = createStateStore();
 let library, bundle, state, activeMode = 'full', activeIndex = 0;
 let busy = true, generation = 0, request;
 let playbackSpeed = preferences.get().playbackSpeed;
+let locale = preferences.get().locale;
 const route = () => bundle ? (activeMode === 'priority' ? bundle.lessons.filter(lesson => lesson.priority === 'high') : bundle.lessons) : [];
 const currentLesson = () => route()[activeIndex];
 const player = createPlayer({
@@ -18,7 +21,7 @@ const player = createPlayer({
   onStatus: (message, retry = false) => { if (!busy) { $('statusMessage').textContent = message; if (retry) $('retryButton').hidden = false; } },
   onSpeed: saveSpeed
 });
-const libraryView = createLibraryView({store,selectedId:()=>bundle?.material.id,onChoose:(id,lesson)=>void selectMaterial(id,true,lesson,true)});
+const libraryView = createLibraryView({store,selectedId:()=>bundle?.material.id,onChoose:(id,lesson)=>void selectMaterial(id,true,lesson,true),t,locale:()=>locale});
 function syncUrl() {
   const url=new URL(location.href);url.searchParams.set('material',bundle.material.id);url.searchParams.set('lesson',currentLesson().id);history.replaceState(null,'',url);
 }
@@ -28,11 +31,11 @@ function renderClipProgress(time = currentLesson().startSeconds) {
   const ratio = Math.min(1,Math.max(0,(time - lesson.startSeconds)/duration));
   $('lessonTime').style.setProperty('--lesson-progress',ratio * 100 + '%');
   $('lessonTime').setAttribute('aria-valuenow',String(Math.round(ratio * 100)));
-  $('lessonTime').setAttribute('aria-valuetext',formatDuration(Math.floor(ratio * duration))+' de '+formatDuration(duration));
+  $('lessonTime').setAttribute('aria-valuetext',t('lessonCounter',{current:formatDuration(Math.floor(ratio * duration)),total:formatDuration(duration)}));
 }
 function renderProgress() {
   const count = bundle.lessons.filter(l=>state.completed.has(l.id)).length;
-  $('progressText').textContent = count+' de '+bundle.lessons.length+' completados';
+  $('progressText').textContent = t('progress',{count,total:bundle.lessons.length});
   $('progressBar').style.width = count / bundle.lessons.length * 100 + '%';
   $('completeCheckbox').checked = state.completed.has(currentLesson().id);
   libraryView.refresh();
@@ -47,8 +50,8 @@ function renderList() {
     button.append(element('span',String(lesson.order).padStart(2,'0'),'item-number'));
     const copy = element('span',undefined,'item-copy');
     copy.append(element('strong',lesson.title),element('span',intervalLabel(lesson)));
-    if (lesson.priority === 'high') copy.append(element('span','Alta prioridad','item-priority'));
-    copy.append(element('span',state.completed.has(lesson.id)?'Completada':'Pendiente'));
+    if (lesson.priority === 'high') copy.append(element('span',t('highPriority'),'item-priority'));
+    copy.append(element('span',state.completed.has(lesson.id)?t('status.complete'):t('status.pending')));
     button.append(copy); fragment.append(button);
   }
   $('lessonList').replaceChildren(fragment);
@@ -56,8 +59,8 @@ function renderList() {
 function textList(id, values) { $(id).replaceChildren(...values.map(value=>element('li',value))); }
 function renderLesson() {
   const lesson = currentLesson();
-  $('lessonCounter').textContent = (activeIndex + 1)+' de '+route().length;
-  $('lessonNumber').textContent = 'Microlección '+String(lesson.order).padStart(2,'0');
+  $('lessonCounter').textContent = t('lessonCounter',{current:activeIndex + 1,total:route().length});
+  $('lessonNumber').textContent = t('lesson')+' '+String(lesson.order).padStart(2,'0');
   $('lessonTime').textContent = intervalLabel(lesson);
   $('priorityBadge').hidden = lesson.priority !== 'high';
   $('lessonTitle').textContent = lesson.title; $('lessonSummary').textContent = lesson.summary;
@@ -72,42 +75,42 @@ function renderLesson() {
   $('toolsBlock').hidden = !lesson.tools?.length;
   $('promptTab').hidden = !lesson.prompt; $('lessonPrompt').textContent = lesson.prompt || '';
   selectLessonTab('takeawayTab');
-  updateNavigation('prev',route()[activeIndex-1],'Anterior'); updateNavigation('next',route()[activeIndex+1],'Siguiente');
+  updateNavigation('prev',route()[activeIndex-1],t('previous')); updateNavigation('next',route()[activeIndex+1],t('next'));
   renderLike(); renderProgress(); renderList();
 }
 function prepareLesson(focus = true, message = '') {
   player.cue(currentLesson()); renderLesson(); renderClipProgress(); syncUrl();
-  $('statusMessage').textContent = message || 'Pulsa Play en YouTube cuando quieras comenzar.';
+  $('statusMessage').textContent = message || t('start');
   if (focus) $('lessonTitle').focus({preventScroll:true});
 }
 function persistState() {
   libraryView.refresh();
-  if (!store.save(bundle.material.id,state)) $('storageMessage').textContent = 'No se puede guardar el progreso ni Me gusta; se conservarán durante esta sesión.';
+  if (!store.save(bundle.material.id,state)) $('storageMessage').textContent = t('storage.progress');
 }
 function finishLesson() {
   const lesson = currentLesson(); state.completed.add(lesson.id); persistState();
-  if (activeIndex + 1 < route().length) { activeIndex++; prepareLesson(true,'Microlección '+lesson.order+' completada. La siguiente está preparada y en pausa.'); }
+  if (activeIndex + 1 < route().length) { activeIndex++; prepareLesson(true,t('finish.next',{order:lesson.order})); }
   else {
     player.pause(); renderLesson(); renderClipProgress(lesson.endSeconds);
-    $('statusMessage').textContent = 'Recorrido finalizado: '+route().filter(l=>state.completed.has(l.id)).length+' de '+route().length+' completadas. Selecciona una microlección en el mapa para revisarla.';
+    $('statusMessage').textContent = t('finish.all',{count:route().filter(l=>state.completed.has(l.id)).length,total:route().length});
   }
 }
 function updateNavigation(prefix, destination, action) {
   $(prefix+'Button').disabled = !destination;
   $(prefix+'Tooltip').hidden = !destination;
   $(prefix+'Tooltip').textContent = destination ? action+': '+destination.title : '';
-  $(prefix+'Button').setAttribute('aria-label',destination ? action+': '+destination.title : action+' (no disponible)');
+  $(prefix+'Button').setAttribute('aria-label',destination ? action+': '+destination.title : t('nav.unavailable',{action}));
 }
 function renderLike() {
   const lesson = currentLesson(), selected = state.likes.has(lesson.id);
   $('likeButton').setAttribute('aria-pressed',String(selected));
-  $('likeButton').setAttribute('aria-label',(selected?'Quitar la valoración de la microlección ':'Marcar la microlección ')+lesson.order+(selected?'':' como útil'));
-  $('likeTooltip').textContent = selected ? 'Quitar Me gusta' : 'Me resulta útil';
+  $('likeButton').setAttribute('aria-label',selected?t('like.remove',{order:lesson.order}):t('like.add',{order:lesson.order}));
+  $('likeTooltip').textContent = selected ? t('like.removeTooltip') : t('like.addTooltip');
 }
 function saveSpeed(speed) {
   if (![1,1.25,1.5,1.75,2].includes(speed)) return;
   playbackSpeed = speed; $('speedSelect').value = String(speed);
-  if (!preferences.update({playbackSpeed:speed})) $('storageMessage').textContent = 'No se puede guardar la velocidad; se conservará durante esta sesión.';
+  if (!preferences.update({playbackSpeed:speed})) $('storageMessage').textContent = t('storage.speed');
 }
 function modeButtons() {
   document.querySelectorAll('.mode-button').forEach(button=>{
@@ -121,14 +124,14 @@ function renderMaterial() {
   $('materialTitle').textContent = material.title; $('materialDescription').textContent = material.description;
   document.title = 'Microlearning Center · '+material.title;
   document.querySelector('meta[name="description"]').content = material.description;
-  document.querySelector('[data-mode="full"]').textContent = 'Completo · '+formatDuration(stats.selectedSeconds);
-  document.querySelector('[data-mode="priority"]').textContent = 'Prioritario · '+formatDuration(stats.prioritySeconds);
+  document.querySelector('[data-mode="full"]').textContent = t('material.full',{duration:formatDuration(stats.selectedSeconds)});
+  document.querySelector('[data-mode="priority"]').textContent = t('material.priority',{duration:formatDuration(stats.prioritySeconds)});
   $('priorityHelp').hidden = bundle.lessons.some(l=>l.priority === 'high');
-  $('curriculumTitle').textContent = stats.count+' ideas, una ruta clara';
+  $('curriculumTitle').textContent = t('material.ideas',{count:stats.count});
   $('sourceTitle').textContent = source.officialTitle; $('sourceAuthor').textContent = source.author.name;
   $('sourceAttribution').textContent = source.attribution.text; $('footerAttribution').textContent = source.attribution.text;
   document.querySelectorAll('[data-source-link], #continueSource').forEach(link=>{link.href = source.url;});
-  $('sourceDialogText').textContent = 'Vas a salir de Microlearning Center para visitar «'+source.officialTitle+'», de '+source.author.name+', en YouTube. Allí podrás ver el video completo, acceder al canal y suscribirte al autor.';
+  $('sourceDialogText').textContent = t('source.leave',{title:source.officialTitle,author:source.author.name});
   modeButtons();
 }
 function loading(message) {
@@ -141,17 +144,17 @@ function loading(message) {
   document.querySelectorAll('[data-source-link]').forEach(link=>link.hidden = true);
 }
 function loadError(error) {
-  $('loadMessage').textContent = 'No se pudo cargar el material. '+error.message;
+  $('loadMessage').textContent = t('load.error',{error:error.message});
   $('retryButton').hidden = false; $('workspace').setAttribute('aria-busy','false');
 }
 async function selectMaterial(id, updateUrl = true, lessonId, focus = false) {
   const token = ++generation; request?.abort(); request = new AbortController();
-  loading('Cargando material…');
+  loading(t('load.material'));
   const requested = library.materials.find(item=>item.material.id === id);
   // Only an unknown catalog ID can fall back; loading/validation errors stay visible.
   const item = requested || library.materials[0];
   try {
-    if (!item) throw Error('El material solicitado no está en el catálogo. Selecciona otro material.');
+    if (!item) throw Error(t('material.unavailable'));
     const next = await loadPackage(item,library.schemas,request.signal);
     if (token !== generation) return;
     bundle = next; state = store.load(bundle.material.id,bundle.lessons);
@@ -159,11 +162,11 @@ async function selectMaterial(id, updateUrl = true, lessonId, focus = false) {
     activeMode = 'full'; activeIndex = Math.max(0,targetIndex); busy = false;
     $('workspace').hidden = false; $('workspace').inert = false; $('curriculum').hidden = false;
     $('workspace').setAttribute('aria-busy','false');
-    $('loadMessage').textContent = requested ? (lessonId && targetIndex<0 ? 'La microlección solicitada no estaba disponible. Se abrió la primera del material.' : '') : 'El material solicitado no estaba disponible. Se abrió el material predeterminado.';
+    $('loadMessage').textContent = requested ? (lessonId && targetIndex<0 ? t('lesson.unavailable') : '') : t('material.unavailable');
     document.querySelectorAll('[data-source-link]').forEach(link=>link.hidden = false);
-    $('storageMessage').textContent = state.persistent && preferences.available() ? '' : 'El almacenamiento no está disponible; los cambios se conservan durante esta sesión.';
+    $('storageMessage').textContent = state.persistent && preferences.available() ? '' : t('storage.unavailable');
     renderMaterial(); renderLesson(); renderClipProgress();
-    $('statusMessage').textContent = 'Pulsa Play en YouTube cuando quieras comenzar.';
+    $('statusMessage').textContent = t('start');
     if (updateUrl) syncUrl();
     if (focus) $('lessonTitle').focus({preventScroll:true});
     void player.setSource(bundle.source,currentLesson(),playbackSpeed);
@@ -171,13 +174,13 @@ async function selectMaterial(id, updateUrl = true, lessonId, focus = false) {
 }
 async function start() {
   const token = ++generation; request?.abort(); request = new AbortController();
-  loading('Cargando materiales…');
+  loading(t('load.materials'));
   try {
     const nextLibrary = await loadLibrary(request.signal);
     if (token !== generation) return;
     library = nextLibrary;
     libraryView.setData(library);
-    if (!library.materials.length) { $('loadMessage').textContent = 'Todavía no hay materiales publicados.'; $('materialTitle').textContent = 'Microlearning Center'; $('materialDescription').textContent = ''; $('retryButton').hidden = false; $('workspace').setAttribute('aria-busy','false'); return; }
+    if (!library.materials.length) { $('loadMessage').textContent = t('library.none'); $('materialTitle').textContent = 'Microlearning Center'; $('materialDescription').textContent = ''; $('retryButton').hidden = false; $('workspace').setAttribute('aria-busy','false'); return; }
     const params=new URL(location.href).searchParams;
     await selectMaterial(params.get('material') || library.materials[0].material.id,true,params.get('lesson'));
   } catch (error) { if (token === generation && error.name !== 'AbortError') loadError(error); }
@@ -196,14 +199,17 @@ document.querySelectorAll('.mode-button').forEach(button=>button.addEventListene
   if (busy || button.disabled) return; activeMode=button.dataset.mode; activeIndex=0; modeButtons(); prepareLesson();
 }));
 $('speedSelect').value = String(playbackSpeed);
+$('localeSelect').value = locale;
+i18n.apply();
+$('localeSelect').addEventListener('change',()=>{ locale=$('localeSelect').value; preferences.update({locale}); i18n.setLocale(locale); if(library) libraryView.setData(library); if(!busy){renderMaterial(); renderLesson();} });
 $('speedSelect').addEventListener('change',()=>{saveSpeed(Number($('speedSelect').value)); player.setSpeed(playbackSpeed);});
 $('completeCheckbox').addEventListener('change',()=>{ if (busy) return; const id=currentLesson().id; $('completeCheckbox').checked?state.completed.add(id):state.completed.delete(id); persistState(); renderProgress(); renderList(); });
 $('likeButton').addEventListener('click',()=>{if (busy) return; const id=currentLesson().id; state.likes.has(id)?state.likes.delete(id):state.likes.add(id); renderLike(); persistState();});
 $('resetButton').addEventListener('click',()=>{if (busy) return; state.completed.clear(); prepareLesson(); persistState();});
 $('copyPromptButton').addEventListener('click',async()=>{
   if (busy) return; const token=generation;
-  try { await navigator.clipboard.writeText(currentLesson().prompt || ''); if (token===generation) $('statusMessage').textContent='Plantilla copiada.'; }
-  catch { if (token===generation) $('statusMessage').textContent='No se pudo copiar. Selecciona la plantilla y copia el texto manualmente.'; }
+  try { await navigator.clipboard.writeText(currentLesson().prompt || ''); if (token===generation) $('statusMessage').textContent=t('copy.success'); }
+  catch { if (token===generation) $('statusMessage').textContent=t('copy.error'); }
 });
 document.querySelectorAll('[data-source-link]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault(); if (!busy) $('sourceDialog').showModal();}));
 $('cancelSource').addEventListener('click',()=>$('sourceDialog').close());

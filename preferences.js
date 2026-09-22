@@ -2,8 +2,9 @@
   const key = 'microlearning-center:preferences:v2';
   const speeds = [1, 1.25, 1.5, 1.75, 2];
   const themes = ['system', 'light', 'dark'];
-  const defaults = { storageVersion: 2, theme: 'system', playbackSpeed: 1.5 };
-  const normalize = value => ({ ...defaults, theme: themes.includes(value?.theme) ? value.theme : defaults.theme, playbackSpeed: speeds.includes(value?.playbackSpeed) ? value.playbackSpeed : defaults.playbackSpeed });
+  const locales = ['en', 'es'];
+  const defaults = { storageVersion: 2, theme: 'system', playbackSpeed: 1.5, locale: 'en' };
+  const normalize = value => ({ ...defaults, theme: themes.includes(value?.theme) ? value.theme : defaults.theme, playbackSpeed: speeds.includes(value?.playbackSpeed) ? value.playbackSpeed : defaults.playbackSpeed, locale: locales.includes(value?.locale) ? value.locale : defaults.locale });
   let memory = { ...defaults }, available = true;
   try {
     const saved = localStorage.getItem(key);
