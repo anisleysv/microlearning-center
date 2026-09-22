@@ -28,19 +28,24 @@
       <span id="progressText">—</span>
       <div class="progress-track"><span id="progressBar"></span></div>
     </div>
-    <label class="theme-control"><span data-i18n="language.label">Language</span>
-      <select id="localeSelect" aria-label="Language">
-        <option value="en">English</option>
-        <option value="es">Español</option>
-      </select>
-    </label>
-    <label class="theme-control"><span data-i18n="theme.label">Theme</span>
-      <select id="themeSelect" aria-label="Color theme">
-        <option value="system" data-i18n="theme.system">System</option>
-        <option value="light" data-i18n="theme.light">Light</option>
-        <option value="dark" data-i18n="theme.dark">Dark</option>
-      </select>
-    </label>
+    <details class="settings-menu">
+      <summary class="settings-toggle" data-i18n-aria-label="settings.label" aria-label="Settings" title="Settings"><span aria-hidden="true">⚙</span></summary>
+      <div class="settings-panel">
+        <label class="theme-control"><span data-i18n="language.label">Language</span>
+          <select id="localeSelect" aria-label="Language">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+          </select>
+        </label>
+        <label class="theme-control"><span data-i18n="theme.label">Theme</span>
+          <select id="themeSelect" aria-label="Color theme">
+            <option value="system" data-i18n="theme.system">System</option>
+            <option value="light" data-i18n="theme.light">Light</option>
+            <option value="dark" data-i18n="theme.dark">Dark</option>
+          </select>
+        </label>
+      </div>
+    </details>
   </header>
 
   <dialog id="libraryDrawer" class="library-drawer" aria-labelledby="libraryTitle"></dialog>
