@@ -1,0 +1,20 @@
+{
+  "name": "microlearning-center",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "generate:seo": "node scripts/generate-seo.mjs",
+    "validate:seo": "node scripts/validate-site-metadata.mjs",
+    "prebuild": "npm run generate:seo",
+    "build": "vite build",
+    "preview": "vite preview",
+    "validate:content": "node scripts/materials.mjs check",
+    "test": "node --test tests/materials.test.mjs tests/library.test.mjs",
+    "test:browser": "node tests/browser.cjs"
+  },
+  "devDependencies": {
+    "vite": "^8.3.0"
+  }
+}

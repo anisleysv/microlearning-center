@@ -12,9 +12,9 @@ const id='youtube-S6up3AnyARo';
 const names=['source','material','lessons'];
 // Hashes of the authorized files; tests do not depend on the ignored skill folder.
 const authorizedSchemaHashes={"source":"b70a41051fb0da126936219f4acf2474522e2f197d59b221fed9089c7245eef8","material":"995867c89d5f397b1d3156596329a19a4ca72deb23455aec7e4fb0b0109d528e","lessons":"fe2ea81d69e15cc4ca8c383978ecbd9c37b75c70000f47523e54fcffe74d7464"};
-const schemas=Object.fromEntries(await Promise.all(names.map(async n=>[n,JSON.parse(await fs.readFile(new URL('../materials/schema/'+n+'.schema.json',import.meta.url),'utf8'))])));
+const schemas=Object.fromEntries(await Promise.all(names.map(async n=>[n,JSON.parse(await fs.readFile(new URL('../public/materials/schema/'+n+'.schema.json',import.meta.url),'utf8'))])));
 const read=async p=>JSON.parse(await fs.readFile(path.join(projectRoot,p),'utf8'));
-const original={source:await read('materials/'+id+'/source.json'),material:await read('materials/'+id+'/material.json'),document:await read('materials/'+id+'/lessons.json')};
+const original={source:await read('public/materials/'+id+'/source.json'),material:await read('public/materials/'+id+'/material.json'),document:await read('public/materials/'+id+'/lessons.json')};
 const clone=()=>structuredClone(original);
 const old=execFileSync('git',['show','a8c826966d9e11cd9e23096b5961b08aea558812:app.js'],{cwd:projectRoot,encoding:'utf8'});
 const oldLessons=JSON.parse(JSON.stringify(vm.runInNewContext(old.slice(0,old.indexOf('\nlet player;'))+'\nlessons')));
@@ -26,7 +26,7 @@ test('exact editorial preservation and required totals',()=>{
  assert.deepEqual(migrated,oldLessons);
 });
 test('schemas are exact copies; all supplied keywords supported',async()=>{
- for(const n of names){assert.equal(createHash('sha256').update(await fs.readFile(path.join(projectRoot,'materials/schema/'+n+'.schema.json'))).digest('hex'),authorizedSchemaHashes[n]);checkSchemaSupport(schemas[n]);}
+ for(const n of names){assert.equal(createHash('sha256').update(await fs.readFile(path.join(projectRoot,'public/materials/schema/'+n+'.schema.json'))).digest('hex'),authorizedSchemaHashes[n]);checkSchemaSupport(schemas[n]);}
 });
 for(const [name,mutate,pattern] of [
  ['incompatible version',b=>b.material.schemaVersion='2.0.0',/schemaVersion/],
@@ -55,25 +55,25 @@ test('catalog rejects duplicates and traversal; empty supported',()=>{
 async function fixture() {
  const review=path.join(projectRoot,'.local-review');await fs.mkdir(review,{recursive:true});
  const root=await fs.mkdtemp(path.join(review,'validator-'));
- await fs.cp(path.join(projectRoot,'materials'),path.join(root,'materials'),{recursive:true});return root;
+ await fs.cp(path.join(projectRoot,'public','materials'),path.join(root,'public','materials'),{recursive:true});return root;
 }
 test('missing file and JSON corruption leave catalog intact',async()=>{
  for(const corrupt of [false,true]){
-  const root=await fixture(), catalog=path.join(root,'materials/catalog.json');const before=await fs.readFile(catalog);
-  const file=path.join(root,'materials',id,'source.json');if(corrupt)await fs.writeFile(file,'{');else await fs.unlink(file);
+  const root=await fixture(), catalog=path.join(root,'public/materials/catalog.json');const before=await fs.readFile(catalog);
+  const file=path.join(root,'public','materials',id,'source.json');if(corrupt)await fs.writeFile(file,'{');else await fs.unlink(file);
   await assert.rejects(run(['sync','--include',id],root,()=>{}),corrupt?/JSON inválido/:/ausente/);
   assert.deepEqual(await fs.readFile(catalog),before);
  }
 });
 test('absent catalog folder is not removed automatically',async()=>{
- const root=await fixture(),file=path.join(root,'materials/catalog.json');const catalog=JSON.parse(await fs.readFile(file));catalog.materials[0].id='youtube-abcdefghijk';catalog.materials[0].manifest='./youtube-abcdefghijk/material.json';await fs.writeFile(file,JSON.stringify(catalog));
+ const root=await fixture(),file=path.join(root,'public/materials/catalog.json');const catalog=JSON.parse(await fs.readFile(file));catalog.materials[0].id='youtube-abcdefghijk';catalog.materials[0].manifest='./youtube-abcdefghijk/material.json';await fs.writeFile(file,JSON.stringify(catalog));
  await assert.rejects(run(['sync','--include',id],root,()=>{}),/carpeta ausente/);
  assert.deepEqual(JSON.parse(await fs.readFile(file)),catalog);
 });
 test('sync is explicit, deterministic, preserves order and dry-run never writes',async()=>{
- const root=await fixture(),file=path.join(root,'materials/catalog.json');
- const second='youtube-abcdefghijk';const b=JSON.parse(JSON.stringify(original).replaceAll('S6up3AnyARo','abcdefghijk'));await fs.mkdir(path.join(root,'materials',second));
- for(const [name,value]of [['source',b.source],['material',b.material],['lessons',b.document]])await fs.writeFile(path.join(root,'materials',second,name+'.json'),JSON.stringify(value));
+ const root=await fixture(),file=path.join(root,'public/materials/catalog.json');
+ const second='youtube-abcdefghijk';const b=JSON.parse(JSON.stringify(original).replaceAll('S6up3AnyARo','abcdefghijk'));await fs.mkdir(path.join(root,'public','materials',second));
+ for(const [name,value]of [['source',b.source],['material',b.material],['lessons',b.document]])await fs.writeFile(path.join(root,'public','materials',second,name+'.json'),JSON.stringify(value));
  const before=await fs.readFile(file);const dry=await run(['sync','--dry-run'],root,()=>{});assert.deepEqual(await fs.readFile(file),before);assert.equal(dry.next.materials.length,4);assert.deepEqual(dry.candidates,[second]);
  await run(['sync','--dry-run','--include',second],root,()=>{});assert.deepEqual(await fs.readFile(file),before);
  await assert.rejects(run(['sync'],root,()=>{}),/explícitos/);

@@ -1,6 +1,32 @@
 # Microlearning Center
 Interactive microlearning hub that transforms selected YouTube videos into focused learning paths with automated clips, actionable summaries, reusable prompts, priority routes, and progress tracking.
 
+## Live demo
+
+[Microlearning Center](https://microlearning-center.us/) is deployed as a static site on DigitalOcean. It uses query parameters for stable material and lesson deep links, so it remains one single-page application without a server runtime.
+
+## Technical profile
+
+- **Frontend:** semantic HTML, modern CSS, ECMAScript modules, Vanilla JavaScript, and Vite 8 for local development and production builds.
+- **Content engineering:** versioned JSON learning packages, JSON Schema validation, deterministic synchronization, stable lesson IDs, and editorial metadata.
+- **Product quality:** bilingual interface, system/light/dark themes, responsive library drawer, keyboard navigation, accessible labels, focus management, and local progress persistence.
+- **Delivery:** npm lockfile, GitHub Actions validation and Pages deployment, plus a static DigitalOcean build using the same `dist/` artifact.
+- **Search readiness:** canonical URL, Open Graph and Twitter metadata, generated `robots.txt`, and a generated XML sitemap.
+
+## Repository map
+
+| Path | Responsibility |
+| --- | --- |
+| `index.html` | Accessible document shell, metadata, and Vite entry point. |
+| `app.js` and `lib/` | UI orchestration, package loading, validation, player controls, library filtering, and client state. |
+| `preferences.js`, `theme.js`, `i18n.js` | Persisted preferences, color theme initialization, and English/Spanish interface strings. |
+| `styles.css` and `assets/` | Application styles, locally hosted Inter font, logo, and branding assets. |
+| `public/materials/` | Public, versioned source/material/lesson JSON packages and their schemas. |
+| `public/robots.txt`, `public/sitemap.xml` | Generated crawler directives and canonical site map. |
+| `scripts/` | Content validation/synchronization and SEO metadata generation/validation. |
+| `tests/` | Node contract tests and optional Playwright browser coverage. |
+| `.github/workflows/` | CI validation and GitHub Pages deployment of `dist/`. |
+
 ## Propósito
 
 Convertir videos seleccionados de YouTube en recorridos de microaprendizaje.
@@ -20,24 +46,25 @@ La biblioteca incluye también:
 
 Ambos conservan exactamente los tres JSON aprobados y `editorialStatus: "approved"` en el índice. La publicación de materiales nuevos requiere aprobación técnica, editorial y visual explícita.
 
-## Ejecución local
+## Desarrollo y compilación con Vite
 
-Se necesita un servidor HTTP; abrir `index.html` mediante `file://` no está soportado.
+El proyecto conserva JavaScript nativo y usa Vite únicamente para desarrollo y compilación. Sigue siendo una sola aplicación estática: no incorpora backend, SSR, autenticación ni base de datos. Abrir `index.html` mediante `file://` no está soportado.
 
-Desde la raíz del proyecto, con Python 3 disponible:
+Instala las dependencias una vez y ejecuta el servidor de desarrollo:
 
 ```powershell
-python -m http.server 8000 --bind 127.0.0.1
+npm install
+npm run dev
 ```
 
-Abre [la aplicación local](http://127.0.0.1:8000). Si Windows no encuentra `python`, usa la ruta completa de tu ejecutable Python o un servidor HTTP estático equivalente. No hacen falta módulos de Python adicionales. Detén el servidor con Ctrl+C.
+Abre la URL que Vite muestra en la terminal. Para crear el artefacto de producción ejecuta `npm run build`; Vite genera `dist/`. DigitalOcean debe usar `npm ci && npm run build` como comando de compilación y `dist` como directorio de salida. Es una Static Site y no consume recursos de backend de DigitalOcean.
 
-YouTube requiere conexión a Internet. La aplicación funciona con HTML, CSS y JavaScript, sin compilación, backend, autenticación ni base de datos.
+YouTube requiere conexión a Internet. La aplicación usa HTML, CSS y JavaScript nativo; Vite solo compila el artefacto estático. No incorpora backend, autenticación ni base de datos.
 
 ## Paquetes y contrato 1.0.0
 
 ```text
-materials/
+public/materials/
 ├── catalog.json
 ├── library.json
 ├── schema/
@@ -80,7 +107,7 @@ Las comprobaciones entre archivos validan identidades, revisiones, orden, rutas,
 
 ## Incorporar materiales
 
-1. Solo después de aprobar contenido, QA y clasificación editorial, copia el paquete a `materials/youtube-VIDEO_ID/`. Incluye únicamente sus tres JSON, sin transcripciones ni notas internas.
+1. Solo después de aprobar contenido, QA y clasificación editorial, copia el paquete a `public/materials/youtube-VIDEO_ID/`. Incluye únicamente sus tres JSON, sin transcripciones ni notas internas.
 2. Ejecuta desde la raíz, con Node.js 20 o posterior:
 
 ```powershell
@@ -96,7 +123,7 @@ node scripts/materials.mjs sync --include youtube-VIDEO_ID
 
 Todos los paquetes deben pasar las validaciones antes de escribir. Un error, un archivo ausente o una carpeta catalogada que desapareció deja el catálogo intacto. La escritura utiliza un archivo temporal y reemplazo final, con comprobación de que el catálogo no cambió mientras se validaba.
 
-El catálogo contiene `schemaVersion` y entradas con `id`, `manifest`, `order`, `status: "published"` y `contentVersion`. Los metadatos editoriales permanecen en el material. Un material pendiente debe permanecer fuera del árbol público, por ejemplo en `context/incoming/`. Solo después de aprobar su contenido, QA y clasificación editorial se copia a `materials/` y se incorpora a `catalog.json`. En un hosting estático, excluir un material del catálogo no impide el acceso directo a sus archivos si ya están incluidos en el repositorio publicado. `library.json` es un índice editorial: no es un mecanismo de seguridad ni de control de acceso.
+El catálogo contiene `schemaVersion` y entradas con `id`, `manifest`, `order`, `status: "published"` y `contentVersion`. Los metadatos editoriales permanecen en el material. Un material pendiente debe permanecer fuera del árbol público, por ejemplo en `context/incoming/`. Solo después de aprobar su contenido, QA y clasificación editorial se copia a `public/materials/` y se incorpora a `catalog.json`. En un hosting estático, excluir un material del catálogo no impide el acceso directo a sus archivos si ya están incluidos en el repositorio publicado. `library.json` es un índice editorial: no es un mecanismo de seguridad ni de control de acceso.
 
 El script nunca hace commit, push ni despliegue. Revisa el diff y prueba la aplicación antes de autorizar la publicación.
 
@@ -106,7 +133,7 @@ El tema se aplica antes de CSS. Se cargan y validan los paquetes publicados para
 
 Los filtros de idioma, temática, estado y Me gusta se combinan entre sí. El estado se deriva de las lecciones completadas: ninguna, algunas o todas; escuchar sin completar no marca un material como iniciado. Los resultados de microlecciones permiten abrirlas directamente. La carga inicial es completa, adecuada al catálogo actual de cuatro materiales: un paquete inválido conserva su error visible. Para un catálogo grande habrá que evaluar un índice de búsqueda y carga diferida.
 
-`materials/library.json` es un índice opcional independiente (`indexVersion: 1`) con temáticas normalizadas, etiquetas y estado editorial. Su ausencia (HTTP 404) permite cargar paquetes 1.0.0 sin filtros temáticos; otros errores siguen visibles. Las temáticas de los cuatro materiales cuentan con aprobación humana y están marcadas con `editorialStatus: "approved"`. La Lección 3 incluye «Automatización de flujos con IA». La Lección 4 no incluye Ética/gobernanza como temática principal. `tags` permanece como una lista vacía hasta definir vocabulario controlado, granularidad y política editorial; no se inventan ni infieren etiquetas. No se infieren desde los títulos. Idioma y autor proceden del paquete; cantidades y duraciones se calculan. Los esquemas y el formato del catálogo 1.0.0 permanecen intactos. `check` valida también este índice; `sync` no lo reescribe.
+`public/materials/library.json` es un índice opcional independiente (`indexVersion: 1`) con temáticas normalizadas, etiquetas y estado editorial. Su ausencia (HTTP 404) permite cargar paquetes 1.0.0 sin filtros temáticos; otros errores siguen visibles. Las temáticas de los cuatro materiales cuentan con aprobación humana y están marcadas con `editorialStatus: "approved"`. La Lección 3 incluye «Automatización de flujos con IA». La Lección 4 no incluye Ética/gobernanza como temática principal. `tags` permanece como una lista vacía hasta definir vocabulario controlado, granularidad y política editorial; no se inventan ni infieren etiquetas. No se infieren desde los títulos. Idioma y autor proceden del paquete; cantidades y duraciones se calculan. Los esquemas y el formato del catálogo 1.0.0 permanecen intactos. `check` valida también este índice; `sync` no lo reescribe.
 
 Las cargas comprueban HTTP, JSON, esquema y relaciones. Durante una carga no se puede actuar sobre el contenido anterior; hay reintento para errores. Un catálogo vacío muestra un aviso. La selección se representa mediante `?material=...&lesson=<ID-estable>`, compatible con enlaces anteriores que solo incluyen material y con recargas de GitHub Pages. Una lección inexistente o ajena al material recupera su primera lección, corrige la URL y muestra un aviso. La lección activa queda en la URL, no en almacenamiento local. Si el ID no está en el catálogo, se carga el primer material disponible, se corrige la URL y se muestra un aviso no bloqueante. Los errores de red, JSON, esquema o integridad conservan su mensaje de error y no activan este fallback. Todas las rutas de datos son relativas a sus documentos.
 
@@ -162,9 +189,9 @@ La regresión editorial compara las 15 lecciones con el commit publicado `a8c826
 
 ## Publicación e identidad
 
-GitHub Pages continúa configurado desde `main`, carpeta `/ (root)`. Esta versión mantiene la configuración existente de Pages.
+GitHub Pages se publica desde GitHub Actions mediante `.github/workflows/deploy-pages.yml`, que valida el contenido, ejecuta pruebas y publica `dist/`. En Settings → Pages, selecciona **GitHub Actions** como fuente. DigitalOcean usa el mismo artefacto `dist`.
 
-`context/`, `design/`, `skills/`, `.local-review/`, archivos ZIP y metadatos de alojamiento permanecen ignorados. Solo los tres esquemas del empaquetador se copian a `materials/schema/`. Los paquetes dentro de `materials/` sí son contenido público versionado.
+`context/`, `design/`, `skills/`, `.local-review/`, archivos ZIP y metadatos de alojamiento permanecen ignorados. Solo los tres esquemas del empaquetador se copian a `public/materials/schema/`. Los paquetes dentro de `public/materials/` sí son contenido público versionado.
 
 El logotipo SVG actual conserva Play y el aro segmentado e incorpora el ajuste aprobado de la pieza de rompecabezas ámbar. Ya no es una copia idéntica del SVG de referencia. Esta migración no modifica el logo ni el favicon.
 
