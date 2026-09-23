@@ -8,7 +8,7 @@ async function json(file) { try { return parseJson(await fs.readFile(file, 'utf8
 async function normalDirectory(file) { const stat = await fs.lstat(file); if (!stat.isDirectory() || stat.isSymbolicLink()) fail(file, '$', 'se requiere una carpeta local sin enlace simbólico'); }
 async function normalFile(file) { const stat = await fs.lstat(file).catch(() => null); if (!stat?.isFile() || stat.isSymbolicLink()) fail(file, '$', 'archivo ausente o enlace no permitido'); }
 export async function inspect(root = projectRoot, { sync = false } = {}) {
-  const directory = path.join(root, 'materials');
+  const directory = path.join(root, 'public', 'materials');
   await normalDirectory(directory); await normalDirectory(path.join(directory, 'schema'));
   const schemas = {};
   for (const name of ['source','material','lessons']) { const file = path.join(directory,'schema',name + '.schema.json'); await normalFile(file); schemas[name] = await json(file); checkSchemaSupport(schemas[name], file); }
@@ -59,7 +59,7 @@ export async function run(args, root = projectRoot, log = console.log) {
   }
   const next = { schemaVersion: CONTRACT, materials: entries };
   validateCatalog(next);
-  const file = path.join(root,'materials/catalog.json');
+  const file = path.join(root,'public','materials','catalog.json');
   const before = await fs.readFile(file,'utf8'), after = JSON.stringify(next,null,2)+'\n';
   log('Catálogo resultante:\n' + after);
   log(before === after ? 'Sin diferencias.' : '--- catalog.json actual\n+++ catalog.json propuesto\n' + before.trimEnd().split('\n').map(l=>'-'+l).join('\n') + '\n' + after.trimEnd().split('\n').map(l=>'+'+l).join('\n'));

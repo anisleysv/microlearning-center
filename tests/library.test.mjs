@@ -7,11 +7,11 @@ import {libraryEntry,filterLibrary,validateLibraryIndex,normalizeSearch} from '.
 import {formatDuration} from '../lib/content.mjs';
 const hashes={"source":"af0b59f76a68b280e61e5e1922981af86d31880276caf1855cb05a5ada1e25b2","material":"13b006f5b81276547596d658b9860310825e9037c3d7a870891a493ddc77fdcc","lessons":"bed32297c446e4f82f03c7b8ef2b33c2455bb872f1d40e4bab959bb30cb5e87b"};
 const inspection=await inspect();
-const index=JSON.parse(await fs.readFile(new URL('../materials/library.json',import.meta.url),'utf8'));
+const index=JSON.parse(await fs.readFile(new URL('../public/materials/library.json',import.meta.url),'utf8'));
 const empty={completed:new Set(),likes:new Set()};
 const entries=[...inspection.packages.values()].map(bundle=>libraryEntry({bundle},index,empty));
 test('approved second package is byte-identical and retains all metrics and lesson 29 safeguard',async()=>{
- for(const name of ['source','material','lessons'])assert.equal(createHash('sha256').update(await fs.readFile(new URL('../materials/youtube-6h6306mA3bQ/'+name+'.json',import.meta.url))).digest('hex'),hashes[name]);
+ for(const name of ['source','material','lessons'])assert.equal(createHash('sha256').update(await fs.readFile(new URL('../public/materials/youtube-6h6306mA3bQ/'+name+'.json',import.meta.url))).digest('hex'),hashes[name]);
  const b=inspection.packages.get('youtube-6h6306mA3bQ');assert.equal(b.lessons.length,30);assert.equal(b.stats.selectedSeconds,4884);assert.equal(b.stats.prioritySeconds,1850);assert.equal(formatDuration(4884),'01:21:24');assert.deepEqual(b.lessons.filter(l=>l.priority==='high').map(l=>l.order),[2,3,5,6,7,11,17,19,20,24,26,27]);assert.match(b.lessons[28].summary,/consentimiento explícito/);
 });
 test('optional index preserves contract 1.0.0 and derived metrics are calculated',()=>{
@@ -47,7 +47,7 @@ const newPackageHashes={
 
 test('lessons 3 and 4 retain approved bytes, exact metrics and approved classification',async()=>{
  for(const [id,count,total,priority,orders] of [['youtube-2BoTWGq0vjY',34,4340,1995,[3,4,5,8,11,13,17,18,19,28,31]],['youtube-V60Xr0jbthE',10,417,255,[1,2,5,8,10]]]){
-  for(const name of ['source','material','lessons'])assert.equal(createHash('sha256').update(await fs.readFile(new URL('../materials/'+id+'/'+name+'.json',import.meta.url))).digest('hex'),newPackageHashes[id][name]);
+  for(const name of ['source','material','lessons'])assert.equal(createHash('sha256').update(await fs.readFile(new URL('../public/materials/'+id+'/'+name+'.json',import.meta.url))).digest('hex'),newPackageHashes[id][name]);
   const b=inspection.packages.get(id);assert.equal(b.lessons.length,count);assert.equal(b.stats.selectedSeconds,total);assert.equal(b.stats.prioritySeconds,priority);assert.deepEqual(b.lessons.filter(l=>l.priority==='high').map(l=>l.order),orders);const metadata=index.materials.find(m=>m.id===id);assert.equal(metadata.editorialStatus,'approved');assert.deepEqual(metadata.tags,[]);
  }
  assert.deepEqual(inspection.entries.map(e=>e.id),['youtube-S6up3AnyARo','youtube-6h6306mA3bQ','youtube-2BoTWGq0vjY','youtube-V60Xr0jbthE']);
