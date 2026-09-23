@@ -1,6 +1,32 @@
 # Microlearning Center
 Interactive microlearning hub that transforms selected YouTube videos into focused learning paths with automated clips, actionable summaries, reusable prompts, priority routes, and progress tracking.
 
+## Live demo
+
+[Microlearning Center](https://microlearning-center.us/) is deployed as a static site on DigitalOcean. It uses query parameters for stable material and lesson deep links, so it remains one single-page application without a server runtime.
+
+## Technical profile
+
+- **Frontend:** semantic HTML, modern CSS, ECMAScript modules, Vanilla JavaScript, and Vite 8 for local development and production builds.
+- **Content engineering:** versioned JSON learning packages, JSON Schema validation, deterministic synchronization, stable lesson IDs, and editorial metadata.
+- **Product quality:** bilingual interface, system/light/dark themes, responsive library drawer, keyboard navigation, accessible labels, focus management, and local progress persistence.
+- **Delivery:** npm lockfile, GitHub Actions validation and Pages deployment, plus a static DigitalOcean build using the same `dist/` artifact.
+- **Search readiness:** canonical URL, Open Graph and Twitter metadata, generated `robots.txt`, and a generated XML sitemap.
+
+## Repository map
+
+| Path | Responsibility |
+| --- | --- |
+| `index.html` | Accessible document shell, metadata, and Vite entry point. |
+| `app.js` and `lib/` | UI orchestration, package loading, validation, player controls, library filtering, and client state. |
+| `preferences.js`, `theme.js`, `i18n.js` | Persisted preferences, color theme initialization, and English/Spanish interface strings. |
+| `styles.css` and `assets/` | Application styles, locally hosted Inter font, logo, and branding assets. |
+| `public/materials/` | Public, versioned source/material/lesson JSON packages and their schemas. |
+| `public/robots.txt`, `public/sitemap.xml` | Generated crawler directives and canonical site map. |
+| `scripts/` | Content validation/synchronization and SEO metadata generation/validation. |
+| `tests/` | Node contract tests and optional Playwright browser coverage. |
+| `.github/workflows/` | CI validation and GitHub Pages deployment of `dist/`. |
+
 ## Propósito
 
 Convertir videos seleccionados de YouTube en recorridos de microaprendizaje.
