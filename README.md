@@ -27,6 +27,10 @@ Interactive microlearning hub that transforms selected YouTube videos into focus
 | `tests/` | Node contract tests and optional Playwright browser coverage. |
 | `.github/workflows/` | CI validation and GitHub Pages deployment of `dist/`. |
 
+## License
+
+This repository is publicly visible for professional review and portfolio demonstration. It is proprietary software; reuse, modification, distribution, and derivative works require prior written permission. See [LICENSE](LICENSE).
+
 ## Propósito
 
 Convertir videos seleccionados de YouTube en recorridos de microaprendizaje.
